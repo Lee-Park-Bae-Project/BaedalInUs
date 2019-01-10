@@ -16,31 +16,31 @@ db.once('open', function(){
   console.log('Connected!');
 });
 
-var testSchema = mongoose.Schema({
-    key:'string',
-    value:'string'
-});
-
-var testModel = mongoose.model('test', testSchema);
-
-var testData = new testModel({key:'new Key', value:'new value'});
-
-testData.save(function(error, data){
-  if(error){
-    console.log(error);
-  } else{
-    console.log('saved!');
-  }
-});
-
-testModel.find(function(err, data){
-  console.log('--- Read all ---');
-  if(err){
-    console.log(err);
-  } else{
-    console.log(data);
-  }
-});
+// var testSchema = mongoose.Schema({
+//     key:'string',
+//     value:'string'
+// });
+//
+// var testModel = mongoose.model('test', testSchema);
+//
+// var testData = new testModel({key:'new Key', value:'new value'});
+//
+// testData.save(function(error, data){
+//   if(error){
+//     console.log(error);
+//   } else{
+//     console.log('saved!');
+//   }
+// });
+//
+// testModel.find(function(err, data){
+//   console.log('--- Read all ---');
+//   if(err){
+//     console.log(err);
+//   } else{
+//     console.log(data);
+//   }
+// });
 
 
 /* GET users listing. */
