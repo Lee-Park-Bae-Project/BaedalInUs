@@ -27,14 +27,14 @@ router.post('/', (req, res) => {
     collection.find({id: id}).toArray((err, result) => {
         if (err) return res.json(err);
 
-        console.log(result);
-
         if (result.length != 0) {
             // 아이디 있는 경우
-            console.log(result);
             console.log(result[0]);
-
-            res.end('id is registered : ' + result[0].id);
+            if(result[0].pw == pw){
+                res.end('login ok');
+            } else{
+                res.end('password is not correct');
+            }
 
         } else {
             // 아이디 없는 경우
