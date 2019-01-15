@@ -9,13 +9,7 @@ db.once('open', function () {
     console.log('Connected!');
 });
 
-const userSchema = mongoose.Schema({
-    id: String,
-    pw: String
-});
-
-// const users = mongoose.model('users', userSchema);
-const collection = db.collection('users');
+var user = require('../models/user');
 
 router.post('/', (req, res) => {
     var id = req.query.id.toString();
@@ -24,12 +18,12 @@ router.post('/', (req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
 
-    collection.find({id: id}).toArray((err, result) => {
+    user.find({id: id}, (err, result) => {
         if (err) return res.json(err);
 
         if (result.length != 0) {
             // 아이디 있는 경우
-            console.log(result[0]);
+            console.log(result);
             if(result[0].pw == pw){
                 res.end('login ok');
             } else{
@@ -41,7 +35,6 @@ router.post('/', (req, res) => {
             res.end('id is not registered');
         }
     });
-
 
 });
 

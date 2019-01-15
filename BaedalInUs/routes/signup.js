@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const crypto = require('crypto');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
@@ -10,45 +11,37 @@ db.once('open', function () {
     console.log('Connected!');
 });
 
-const userSchema = mongoose.Schema({
-    id: String,
-    pw: String
-});
-
-const users = mongoose.model('users', userSchema);
-const collection = db.collection('users');
+var user = require('../models/user');
 
 router.get('/', (req, res) => {
     res.render('signup');
 });
 
 router.post('/signup', (req, res) => {
-    users.find({}, (err, data) => {
+    user.find({}, (err, data) => {
         if (err) return res.json(err);
+        // console.log(data);
     });
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
 
-    var id = req.query.id.toString();
-    var pw = req.query.pw.toString();
+    let id = req.query.id.toString();
+    let pw = req.query.pw.toString();
+    // console.log("id : " + id + " pw : " + pw);
 
     //id 중복검사
-    collection.find({id: id}).toArray((err, result) => {
-        if (err) return res.json(err);
+    user.find({id:id}, (err, result)=>{
+        if(err) return res.json(err);
 
-        if (result.length != 0) {
+        if(result.length!=0){
             res.end('already exists');
-        } else {
-            var newData = new users({id: id, pw: pw});
+        } else{
+            var newData = new user({id:id, pw:pw});
             newData.save();
-            console.log("id : " + id + " pw : " + pw);
-
-            users.find({}, (err, data) => {
-                if (err) return res.json(err);
-            });
 
             res.end('id is registered');
         }
+
     });
 
 
@@ -60,11 +53,11 @@ router.post('/delete', (req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
 
-    collection.find({id:id}).toArray((err, result)=>{
+    user.find({id:id}, (err, result)=>{
         if(err) return res.json(err);
 
         if (result.length != 0) {
-            collection.deleteOne({id: id}, (err, result) => {
+            user.deleteOne({id: id}, (err, result) => {
                 if (err) return res.json(err);
                 res.end(id + " is deleted");
 

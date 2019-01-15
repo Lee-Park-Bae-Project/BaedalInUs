@@ -1,16 +1,8 @@
 const mongoose = require('mongoose');
 
-/*
-user collection의 형태
- */
-// const userSchema = mongoose.Schema({
-//     id:String,
-//     password:String,
-// });
-
 const userSchema = mongoose.Schema({
     id: String,
-    password: String,
+    pw: String,
 });
 
 /*
@@ -24,5 +16,6 @@ userSchema.methods.comparePassword = function (inputPassword, cb) {
         cb('error');
     }
 };
+// users: collection 이름
 
-module.exports = mongoose.model('users', userSchema, 'users');
+module.exports = mongoose.model('User', userSchema, 'users');
