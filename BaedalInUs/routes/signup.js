@@ -39,7 +39,7 @@ router.post('/signup', (req, res) => {
         if (result.length != 0) {
             res.end('already exists');
         } else {
-            var newData = new users({id: id, password: pw});
+            var newData = new users({id: id, pw: pw});
             newData.save();
             console.log("id : " + id + " pw : " + pw);
 
