@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
 });
 
 const users = mongoose.model('users', userSchema);
-
+const collection = db.collection('users');
 
 router.get('/', (req,res)=>{
    res.render('signup');
@@ -26,22 +26,36 @@ router.post('/signup', (req, res)=>{
     users.find({}, (err, data) => {
         if (err) return res.json(err);
     });
-    //id 중복검사 해야함
-    console.log(req.query);
+    res.statusCode=200;
+    res.setHeader('Content-Type', 'text/plain');
+
     var id = req.query.id.toString();
     var pw = req.query.pw.toString();
 
-    var newData = new users({id:id, password:pw});
-    newData.save();
-    console.log("id : " + id + " pw : " + pw);
+    //id 중복검사
+    console.log('fuck');
+    collection.find({id:id}).toArray((err, result)=>{
+        if(err) return res.json(err);
+        if(result.length != 0){
+            res.end('already exists');
+        } else{
+            var newData = new users({id:id, password:pw});
+            newData.save();
+            console.log("id : " + id + " pw : " + pw);
 
-    users.find({}, (err, data) => {
-        if (err) return res.json(err);
+            users.find({}, (err, data) => {
+                if (err) return res.json(err);
+            });
+
+            res.end('id is registered');
+        }
     });
 
-    res.statusCode=200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('db updated');
+
+
+
 });
+
+
 
 module.exports = router;

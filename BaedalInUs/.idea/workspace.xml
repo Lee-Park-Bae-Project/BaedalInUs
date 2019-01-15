@@ -48,14 +48,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="ejs" value="492" />
-          <entry key="js" value="6334" />
+          <entry key="js" value="6739" />
           <entry key="txt" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="EJS" value="492" />
-          <entry key="JavaScript" value="6334" />
+          <entry key="JavaScript" value="6739" />
           <entry key="PLAIN_TEXT" value="8" />
         </counts>
       </usages-collector>
@@ -120,8 +120,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/signup.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="36" column="4" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="4" />
+            <state relative-caret-position="256">
+              <caret line="49" column="40" selection-start-line="49" selection-start-column="40" selection-end-line="49" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -175,7 +175,9 @@
       <find>message</find>
       <find>user</find>
       <find>u</find>
+      <find>d</find>
       <find>didi</find>
+      <find>fuck</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -310,12 +312,12 @@
       <workItem from="1547101217899" duration="757000" />
       <workItem from="1547441102595" duration="961000" />
       <workItem from="1547442290554" duration="4059000" />
-      <workItem from="1547448291479" duration="16663000" />
+      <workItem from="1547448291479" duration="18096000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25621000" />
+    <option name="totallyTimeSpent" value="27054000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="23" width="1440" height="828" extended-state="6" />
@@ -475,8 +477,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/signup.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="36" column="4" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="4" />
+        <state relative-caret-position="256">
+          <caret line="49" column="40" selection-start-line="49" selection-start-column="40" selection-end-line="49" selection-end-column="40" />
         </state>
       </provider>
     </entry>
