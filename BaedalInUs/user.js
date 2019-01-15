@@ -11,13 +11,6 @@ user collection의 형태
 const userSchema = mongoose.Schema({
     id: String,
     password: String,
-    name: String,
-    email: String,
-    kakaoID: String,
-    intro: String,
-    orderNum: Number,
-    dlvNum: Number,
-    star: Number
 });
 
 /*

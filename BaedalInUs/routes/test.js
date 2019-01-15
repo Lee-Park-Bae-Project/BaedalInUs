@@ -35,7 +35,7 @@ const testSchema = mongoose.Schema({
 testModel : 데이터가 들어갈 collection 이름
 testSchema 형태의 데이터를 넣겠다.
  */
-const data = mongoose.model('testModel', testSchema);
+    const data = mongoose.model('testModel', testSchema);
 
 router.get('/', function (req, res) {
     res.send('mongodb test page');
@@ -49,7 +49,6 @@ router.get('/create', function (req, res) {
 
     var newData = new data({firstname: "junjun", lastname: "leelee"});
     newData.save(); // 데이터 저장
-
 
     data.find({}, (err, myData) => {
         if (err) return res.json(err);

@@ -5,14 +5,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 const passport = require('passport');
-const passportConfig = require('./passport');
-passportConfig(passport);
+// const passportConfig = require('./passport');
+// passportConfig(passport);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testRouter = require('./routes/test');
 var apiTestRouter = require('./routes/apiTest');
-var loginRouter = require('./routes/login');
+// var loginRouter = require('./routes/login');
 var signupRouter = require('./routes/signup');
 
 
@@ -37,7 +37,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/test', testRouter);
 app.use('/api', apiTestRouter);
-app.use('/login', loginRouter);
+// app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 
 

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 
+
 router.get('/', (req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
@@ -16,7 +17,7 @@ router.post('/', (req, res) => {
     var pw = req.query.pw;
     console.log(id);
     console.log(pw);
-    res.end('id: ' + id + ' pw : ' + pw);
+    res.json(req.query);
 });
 
 module.exports = router;
