@@ -11,7 +11,7 @@ db.once('open', function () {
 
 const userSchema = mongoose.Schema({
     id: String,
-    password: String
+    pw: String
 });
 
 // const users = mongoose.model('users', userSchema);
