@@ -18,28 +18,28 @@ const userSchema = mongoose.Schema({
 const users = mongoose.model('users', userSchema);
 const collection = db.collection('users');
 
-router.get('/', (req,res)=>{
-   res.render('signup');
+router.get('/', (req, res) => {
+    res.render('signup');
 });
 
-router.post('/signup', (req, res)=>{
+router.post('/signup', (req, res) => {
     users.find({}, (err, data) => {
         if (err) return res.json(err);
     });
-    res.statusCode=200;
+    res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
 
     var id = req.query.id.toString();
     var pw = req.query.pw.toString();
 
     //id 중복검사
-    console.log('fuck');
-    collection.find({id:id}).toArray((err, result)=>{
-        if(err) return res.json(err);
-        if(result.length != 0){
+    collection.find({id: id}).toArray((err, result) => {
+        if (err) return res.json(err);
+
+        if (result.length != 0) {
             res.end('already exists');
-        } else{
-            var newData = new users({id:id, password:pw});
+        } else {
+            var newData = new users({id: id, password: pw});
             newData.save();
             console.log("id : " + id + " pw : " + pw);
 
@@ -52,10 +52,29 @@ router.post('/signup', (req, res)=>{
     });
 
 
+});
+
+router.post('/delete', (req, res) => {
+    var id = req.query.id.toString();
+
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+
+    collection.find({id:id}).toArray((err, result)=>{
+        if(err) return res.json(err);
+
+        if (result.length != 0) {
+            collection.deleteOne({id: id}, (err, result) => {
+                if (err) return res.json(err);
+                res.end(id + " is deleted");
+
+            });
+        } else {
+            res.end('no matching id');
+        }
+    });
 
 
 });
-
-
 
 module.exports = router;

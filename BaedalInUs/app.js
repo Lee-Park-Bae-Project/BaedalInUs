@@ -9,10 +9,9 @@ const passport = require('passport');
 // passportConfig(passport);
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var testRouter = require('./routes/test');
 var apiTestRouter = require('./routes/apiTest');
-// var loginRouter = require('./routes/login');
+var loginRouter = require('./routes/login');
 var signupRouter = require('./routes/signup');
 
 
@@ -34,10 +33,9 @@ app.use(passport.initialize()); // req 객체 내애 apassport 설정을 심음
 app.use(passport.session()); // req.session 객체에 passport 정보를 저장함
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/test', testRouter);
 app.use('/api', apiTestRouter);
-// app.use('/login', loginRouter);
+app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 
 
