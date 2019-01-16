@@ -12,7 +12,7 @@ userSchema.method('makeSalt', function(){
     return Math.round(new Date().valueOf()/Math.random());
 });
 
-userSchema.static('encryptPassword', function(password, salt){
+userSchema.method('encryptPassword', function(password, salt){
     // 솔트값 이용해서 base64 string 으로 해시값 생성 방식은 sha512
     return crypto.createHmac('sha512', salt).update(password).digest('base64');
 });
@@ -21,7 +21,7 @@ userSchema.static('authenticate', function(userPw, password, userSalt){
     console.log('userPw : ' + userPw);
     console.log('userSalt : ' + userSalt);
     console.log('password : ' + password);
-    let test = this.encryptPassword(userPw, userSalt);
+    let test = crypto.createHmac('sha512', userSalt).update(userPw).digest('base64');
     console.log('password : ' + test);
     return password == test;
 });
