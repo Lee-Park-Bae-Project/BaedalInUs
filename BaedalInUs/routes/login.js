@@ -9,11 +9,11 @@ db.once('open', function () {
     console.log('Connected!');
 });
 
-var user = require('../models/user');
+const user = require('../models/user');
 
 router.post('/', (req, res) => {
-    var id = req.query.id.toString();
-    var pw = req.query.pw.toString();
+    const id = req.query.id.toString();
+    const pw = req.query.pw.toString();
 
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
@@ -23,8 +23,10 @@ router.post('/', (req, res) => {
 
         if (result.length != 0) {
             // 아이디 있는 경우
-            console.log(result);
-            if(result[0].pw == pw){
+            // console.log(result);
+            // console.log(user.authenticate(pw, result[0].password, result[0].salt));
+
+            if(user.authenticate(pw, result[0].password, result[0].salt)){
                 res.end('login ok');
             } else{
                 res.end('password is not correct');
