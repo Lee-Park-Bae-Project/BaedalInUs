@@ -2,20 +2,11 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
-const db = mongoose.connection;
-// db 열기
-db.once('open', function () {
-    console.log('Connected!');
-});
-
 const user = require('../models/user');
 router.get('/', (req, res) => {
     let session = req.session;
     console.log(session.user_uid);
     res.render('login', {session: session});
-
 });
 
 router.get('/logout', (req, res) => {

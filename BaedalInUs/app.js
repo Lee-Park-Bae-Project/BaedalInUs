@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const mongoose = require('mongoose');
 
 // const passport = require('passport');
 // const passportConfig = require('./passport');
@@ -46,6 +47,15 @@ app.use('/test', testRouter);
 app.use('/api', apiTestRouter);
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
+
+
+mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
+const db = mongoose.connection;
+// db 열기
+db.once('open', function () {
+    console.log('Connected!');
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

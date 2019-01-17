@@ -1,20 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
 var mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
-
-var db = mongoose.connection;
-
-db.on('error', function () {
-    console.log('Connection Failed!');
-});
-
-// db 열기
-db.once('open', function () {
-    console.log('Connected!');
-});
 
 /*
 Create: 데이터 생성
@@ -114,7 +100,6 @@ router.post('/session', (req,res,next)=>{
         console.log('id : ' + id);
         console.log(`pw : ${pw}`);
     })
-
 
 });
 

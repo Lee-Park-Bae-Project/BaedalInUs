@@ -4,12 +4,12 @@ const session = require('express-session');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
-var db = mongoose.connection;
+// var db = mongoose.connection;
 
-// db 열기
-db.once('open', function () {
-    console.log('Connected!');
-});
+// // db 열기
+// db.once('open', function () {
+//     console.log('Connected!');
+// });
 
 var user = require('../models/user');
 
