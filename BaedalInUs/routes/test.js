@@ -93,6 +93,31 @@ router.get('/update', function(req,res){
     });
 });
 
+///////////////////////////////////// session test /////////////////////////////////////
+
+const user = require('../models/user');
+router.get('/welcome', (req,res)=>{
+    res.send('welcome!');
+});
+
+router.get('/session', (req,res)=>{
+   res.render('login');
+});
+
+router.post('/session', (req,res,next)=>{
+    let body = req.body;
+    user.find({id:body.id}, (err, result)=>{
+        if(err) return res.json(err);
+        let id = body.id;
+        let pw = body.pw;
+
+        console.log('id : ' + id);
+        console.log(`pw : ${pw}`);
+    })
+
+
+});
+
 
 
 module.exports = router;

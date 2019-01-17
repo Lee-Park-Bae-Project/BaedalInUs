@@ -1,37 +1,60 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
 
-var mongoose = require('mongoose');
+
 mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
-var db = mongoose.connection;
+const db = mongoose.connection;
 // db 열기
 db.once('open', function () {
     console.log('Connected!');
 });
 
 const user = require('../models/user');
+router.get('/', (req, res) => {
+    let session = req.session;
+    console.log(session.user_uid);
+    res.render('login', {session: session});
+
+});
+
+router.get('/logout', (req, res) => {
+    console.log('in logout // get');
+    let session = req.session;
+    console.log(session.user_uid);
+    if(session.user_uid){
+        // 세션 삭제
+        req.session.destroy(function(err){
+            if(err) console.log(err);
+        });
+    }
+    console.log('after delete session');
+    console.log(session.user_uid);
+    res.redirect('/login');
+});
 
 router.post('/', (req, res) => {
-    const id = req.query.id.toString();
-    const pw = req.query.pw.toString();
+    const id = req.body.id.toString();
+    const pw = req.body.pw.toString();
+    // console.log(`id: ${id}`);
+    // console.log(`pw: ${pw}`);
 
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
+    // res.statusCode = 200;
+    // res.setHeader('Content-Type', 'text/plain');
 
     user.find({id: id}, (err, result) => {
         if (err) return res.json(err);
 
         if (result.length != 0) {
             // 아이디 있는 경우
-            // console.log(result);
-            // console.log(user.authenticate(pw, result[0].password, result[0].salt));
-
-            if(user.authenticate(pw, result[0].password, result[0].salt)){
-                res.end('login ok');
-            } else{
+            if (user.authenticate(pw, result[0].password, result[0].salt)) {
+                console.log(`authenticate complete`);
+                req.session.user_uid = id;
+                res.redirect('/login');
+            } else {
+                console.log(`authenticate fail`);
                 res.end('password is not correct');
             }
-
         } else {
             // 아이디 없는 경우
             res.end('id is not registered');
