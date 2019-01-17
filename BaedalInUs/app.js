@@ -15,9 +15,9 @@ const testRouter = require('./routes/test');
 const apiTestRouter = require('./routes/apiTest');
 const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
+const mailRouter = require('./routes/mail');
 
 const app = express();
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,6 +47,7 @@ app.use('/test', testRouter);
 app.use('/api', apiTestRouter);
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
+app.use('/mail', mailRouter);
 
 
 mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
