@@ -13,9 +13,13 @@ const apiTestRouter = require('./routes/apiTest');
 const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
 const mailRouter = require('./routes/mail');
+const connect = require('./mongo');
 
 var usersRouter = require('./routes/users');
 var app = express();
+
+connect();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,13 +51,6 @@ app.use('/api', apiTestRouter);
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 app.use('/mail', mailRouter);
-
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
-const db = mongoose.connection;
-// db 열기
-db.once('open', function () {
-    console.log('Connected!');
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

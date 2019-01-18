@@ -4,7 +4,8 @@ const crypto = require('crypto');
 const userSchema = mongoose.Schema({
     id: String,
     pw: String,
-    salt: String
+    salt: String,
+    lock:Boolean
 });
 
 userSchema.method('makeSalt', function(){

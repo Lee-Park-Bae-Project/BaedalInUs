@@ -30,20 +30,23 @@ export default {
       })
         .then(
           (response) => {
-            console.log('----------------------response--------------');
-            console.log(response);
-            console.log(response.status);
-            if(response.status == 200){
-              console.log(`200`);
-              console.log(response);
-              if(response.data.complete){
-                alert(`login success`);
-              } else{
-                alert('wrong password');
+            console.log('----------------------response--------------')
+            console.log(response)
+            console.log(response.status)
+            if (response.status == 200) {
+              console.log(`200`)
+              console.log(response)
+              if (response.data.complete) {
+                // alert(`login success`)
+                this.$router.push('/main') // Login 페이지로 보내줌
+
+
+              } else {
+                alert('wrong password')
               }
-            } else if(response.status==201){
-              console.log(`201`);
-              alert('no matching id');
+            } else if (response.status == 201) {
+              console.log(`201`)
+              alert('no matching id')
             }
           },
           (error) => {
