@@ -25,34 +25,39 @@ router.get('/logout', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const id = req.body.id.toString();
-    const pw = req.body.pw.toString();
-    // console.log(`id: ${id}`);
-    // console.log(`pw: ${pw}`);
+    console.log(`in /login post`);
+    console.log(req.body);
+    const id = req.body.user.id.toString();
+    const pw = req.body.user.pw.toString();
+    console.log(`id: ${id}`);
+    console.log(`pw: ${pw}`);
 
     // res.statusCode = 200;
     // res.setHeader('Content-Type', 'text/plain');
 
     user.find({id: id}, (err, result) => {
         if (err) return res.json(err);
+        console.log(`-------------------result-----------------`);
+        console.log(result);
 
         if (result.length != 0) {
             // 아이디 있는 경우
             if (user.authenticate(pw, result[0].password, result[0].salt)) {
                 console.log(`authenticate complete`);
                 req.session.user_uid = id;
-                res.redirect('/login');
+                res.status(200).json({complete:true}); // 성공 status code
+                console.log(res);
+                // res.redirect('/login');
             } else {
                 console.log(`authenticate fail`);
-                res.end('password is not correct');
+                res.status(200).json({complete:false}); // 실패 status code
             }
         } else {
             // 아이디 없는 경우
-            res.end('id is not registered');
+            res.status(201).json({complete:false});
+            // res.end('id is not registered');
         }
     });
-
 });
-
 
 module.exports = router;

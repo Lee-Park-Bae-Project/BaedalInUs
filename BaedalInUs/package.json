@@ -6,23 +6,26 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "bcrypt": "^3.0.3",
+    "bootstrap": "^4.2.1",
+    "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "~1.4.3",
-    "crypto": "^1.0.1",
     "debug": "~2.6.9",
-    "ejs": "~2.5.7",
+    "ejs": "^2.5.9",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
     "http-errors": "~1.6.2",
+    "jquery": "^3.3.1",
     "mongodb": "^3.1.10",
-    "mongoose": "^5.4.3",
+    "mongoose": "^5.4.4",
     "morgan": "~1.9.0",
     "nodemailer": "^5.1.1",
-    "passport": "^0.4.0",
-    "passport-kakao": "0.0.5",
-    "passport-local": "^1.0.0",
-    "vue": "^2.5.22",
-    "vue-cli": "^2.9.6",
-    "vuex": "^3.0.1"
-  }
+    "npm": "^6.5.0",
+    "vue": "^2.5.22"
+  },
+  "main": "app.js",
+  "devDependencies": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
