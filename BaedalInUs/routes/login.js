@@ -23,7 +23,7 @@ router.get('/logout', (req, res) => {
     console.log(session.user_uid);
     res.redirect('/login');
 });
-
+//
 router.post('/', (req, res) => {
     console.log(`in /login post`);
     console.log(req.body);
