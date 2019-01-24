@@ -1,13 +1,18 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <top-vue></top-vue>
+    <!--<img src="./assets/logo.png">-->
     <router-view/>
+    <bottom-vue></bottom-vue>
   </div>
 </template>
 
 <script>
+import TopVue from "./components/TopVue";
+import BottomVue from "./components/BottomVue";
 export default {
-  name: 'App'
+  name: 'App',
+  components: {TopVue, BottomVue}
 }
 </script>
 

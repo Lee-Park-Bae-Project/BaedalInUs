@@ -7,10 +7,27 @@ import IndexPage from '@/components/IndexPage.vue'
 import LoginPage from '@/components/LoginPage.vue'
 import SignUpPage from '@/components/SignUpPage.vue'
 import MainPage from '@/components/MainPage.vue'
+import ChatPage from '@/components/ChatPage.vue'
+import UserPage from '@/components/UsersVue'
+import ChatRooms from '@/components/ChatRooms'
 
 export default new Router({
   mode: 'history',
   routes: [
+    {
+      path:'/ChatRooms',
+      component:ChatRooms
+    },
+    {
+      path:'/userList',
+      name:'UsersVue',
+      component:UserPage
+    },
+    {
+      path:'/chat',
+      name:'ChatPage',
+      component:ChatPage
+    },
     {
       path: '/',
       name: 'IndexPage',
