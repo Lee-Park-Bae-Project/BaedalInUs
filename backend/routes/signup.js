@@ -38,7 +38,6 @@ router.post('/', (req, res) => {
         if(result.length!=0){
             console.log(`if`);
             res.statusCode = 204; // 자원 생성 실패
-            res.end('0');
             console.log(res);
             // res.redirect('/signup');
         } else{
@@ -49,7 +48,6 @@ router.post('/', (req, res) => {
             // req.session.destroy();  // 세션 삭제
             // res.clearCookie('sid'); // 세션 쿠키 삭제
             res.statusCode = 201; // 자원 생성 완료
-            res.end('1');
             // res.redirect('/login');
         }
     });

@@ -28,7 +28,13 @@
       return {
         users: [],
         socket: io('localhost:3000'),
-
+        room:{
+          senderOID:'',
+          senderID:'',
+          receiverOID:'',
+          receiverID:'',
+          message:'',
+        },
       }
     },
     methods: {
@@ -51,14 +57,48 @@
             alert(error)
           })
       },
+      sendMessage(senderOID, senderID, receiverOID, receiverID, message){
+        this.$http.post('/chat/makeRoom', {
+          room:{
+            senderOID:senderOID,
+            senderID:senderID,
+            receiverOID:receiverOID,
+            receiverID:receiverID,
+            message:message
+          }
+        })
+          .then(
+            (res)=>{
+              console.log(`---------------result--------------`);
+              console.log(res);
+              if(res.status === 201){
+                alert(`메시지를 보냈습니다.`);
+              } else if(res.status === 202){
+                alert(`잠시 후 다시 시도해 주십시오`);
+              }
+            }
+          )
+          .catch(err=>{
+            alert(err);
+          })
+      },
       UserMenu(id, oid) {
         // 메시지 보내는 창 띄우기
         console.log(`oid: ${oid} id : ${id}`);
-        let senderOID = localStorage.getItem('userOid');
-        let receiverOID = oid;
-        console.log(`serderOID : ${senderOID} receiverOID : ${receiverOID}`);
+        const senderOID = localStorage.getItem('userOID');
+        const senderID = localStorage.getItem('userID');
 
-        let newMsg = prompt('메시지를 입력하세여');  // 처음 보낼 메시지 입력
+        const receiverOID = oid;
+        const receiverID = id;
+
+        console.log(`senderOID : ${senderOID} senderID : ${senderID}`);
+        console.log(`receiverOID : ${receiverOID} receiverID : ${receiverID}`);
+
+        let message = prompt('메시지를 입력하세여');  // 처음 보낼 메시지 입력
+        console.log(`newMSG : ${message}`);
+
+
+        this.sendMessage(senderOID, senderID, receiverOID, receiverID, message);
       }
     },
     mounted() {

@@ -9,33 +9,27 @@
         name: "ChatRooms",
       data(){
           return {
+            user:{
+              id:localStorage.getItem('userID'),
+              oid:localStorage.getItem('userOID')
+            },
             chatRooms:[], // 채팅방 리스트들
           }
       },
       methods:{
-        getChatRooms:function(){
-          this.$http.post('/getChatRooms', {
-            user: this.user
+        getChatRooms:function(event){
+          this.$http.post('/chat/getChatRooms', {
+            user:this.user
           })
             .then(
-              (response) => {
+              (res) => {
                 console.log('----------------------response--------------')
-                console.log(response)
-                console.log(response.status)
-                if (response.status == 200) {
-                  console.log(`200`)
-                  console.log(response)
-                  if (response.data.complete) {
-                    // 로컬 스토리지에 아이디 저장하기
-                    localStorage.setItem('userId', this.user.id);
-                    localStorage.setItem('userOid', response.data.oid);
-                    this.$router.push('/userList') // 유저목록 페이지로 보내줌
-                  } else {
-                    alert('wrong password')
-                  }
-                } else if (response.status == 201) {
-                  console.log(`201`);
-                  alert('no matching id')
+                console.log(res);
+                if (res.status === 200) {
+                  console.log(res);
+                  this.chatRooms = res.data;
+                } else if (res.status === 204) {
+                  console.log(`no chat rooms`);
                 }
               },
               (error) => {
@@ -47,9 +41,9 @@
             })
         }
       },
-      created:{
-          // 채팅방 목록 불러오기
-
+      created(){
+        console.log(`created`);
+        this.getChatRooms();  // 채팅방 목록 불러오기
       },
     }
 </script>

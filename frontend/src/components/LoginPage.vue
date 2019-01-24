@@ -38,8 +38,8 @@
                 console.log(response)
                 if (response.data.complete) {
                   // 로컬 스토리지에 아이디 저장하기
-                  localStorage.setItem('userId', this.user.id);
-                  localStorage.setItem('userOid', response.data.oid);
+                  localStorage.setItem('userID', this.user.id);
+                  localStorage.setItem('userOID', response.data.oid);
                   this.$router.push('/userList') // 유저목록 페이지로 보내줌
                 } else {
                   alert('wrong password')

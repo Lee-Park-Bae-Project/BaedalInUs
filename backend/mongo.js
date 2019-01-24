@@ -26,5 +26,6 @@ module.exports = () => {
     });
     require('./models/user');
     require('./models/order');
+    require('./models/rooms');
 
 };
