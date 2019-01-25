@@ -3,7 +3,7 @@
     <top-vue></top-vue>
     <!--<img src="./assets/logo.png">-->
     <router-view/>
-    <bottom-vue></bottom-vue>
+    <!--<bottom-vue></bottom-vue>-->
   </div>
 </template>
 
@@ -24,5 +24,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  display:inline-block;
 }
 </style>

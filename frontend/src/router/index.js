@@ -10,10 +10,15 @@ import MainPage from '@/components/MainPage.vue'
 import ChatPage from '@/components/ChatPage.vue'
 import UserPage from '@/components/UsersVue'
 import ChatRooms from '@/components/ChatRooms'
+import ChatRoom from '@/components/ChatRoom'
 
 export default new Router({
   mode: 'history',
   routes: [
+    {
+      path:'/chatroom/:roomID',
+      component:ChatRoom
+    },
     {
       path:'/ChatRooms',
       component:ChatRooms
