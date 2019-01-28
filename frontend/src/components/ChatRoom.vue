@@ -52,42 +52,13 @@
 </script>
 
 <style scoped>
-  #top_container {
-    align-content: center;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 50px;
-  }
+  /*#top_container {*/
+    /*align-content: center;*/
+    /*position: absolute;*/
+    /*left: 50%;*/
+    /*transform: translateX(-50%);*/
+    /*margin: 50px;*/
+  /*}*/
 
-  #send_bar {
-
-  }
-
-  #nav-scroller {
-    text-align: left;
-  }
-
-  #text_area {
-    max-width: 800px;
-
-  }
-
-  #chat_header {
-    text-align: center;
-  }
-
-  #my_chat {
-    text-align: justify;
-    text-align-last: right;
-    -moz-text-align-last: right;
-    /*text-align:right;*/
-    /*display:block;*/
-  }
-
-  #your_chat {
-    text-align: left;
-    /*display:block*/
-  }
 
 </style>

@@ -1,10 +1,43 @@
 <template>
   <div id="SignUp">
+
     <div> Sign Up </div>
-    Name22222 : <input v-model="user.name" placeholder="name"> <br />
-    ID : <input v-model="user.id" placeholder="ID"> <br />
-    Password : <input v-model="user.pw" type="password"  placeholder="password">
-    <button v-on:click="signUp" >SignUp</button>
+    <table id="signUpForm">
+      <tr>
+        <td>
+          <span>name:</span>
+        </td>
+        <td>
+          <input v-model="user.name" placeholder="name">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span>ID:</span>
+        </td>
+        <td>
+          <input v-model="user.id" placeholder="ID">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span>password:</span>
+        </td>
+        <td>
+          <input v-model="user.pw" type="password"  placeholder="password">
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <button v-on:click="signUp">SignUp</button>
+        </td>
+      </tr>
+    </table>
+
+    <!--Name : <input v-model="user.name" placeholder="name"> <br />-->
+    <!--ID : <input v-model="user.id" placeholder="ID"> <br />-->
+    <!--Password : <input v-model="user.pw" type="password"  placeholder="password">-->
+    <!--<button v-on:click="signUp" >SignUp</button>-->
   </div>
 </template>
 
@@ -47,3 +80,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+  #SignUp{
+    margin-top: 100px;
+  }
+  #signUpForm{
+    text-align: center;
+    display: inline-block;
+  }
+</style>

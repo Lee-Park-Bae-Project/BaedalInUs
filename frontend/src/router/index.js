@@ -3,25 +3,24 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
-import IndexPage from '@/components/IndexPage.vue'
 import LoginPage from '@/components/LoginPage.vue'
 import SignUpPage from '@/components/SignUpPage.vue'
 import MainPage from '@/components/MainPage.vue'
 import ChatPage from '@/components/ChatPage.vue'
 import UserPage from '@/components/UsersVue'
-import ChatRooms from '@/components/ChatRooms'
+import ChatRoomList from '@/components/ChatRoomList'
 import ChatRoom from '@/components/ChatRoom'
 
 export default new Router({
   mode: 'history',
   routes: [
     {
-      path:'/chatroom/:roomID',
-      component:ChatRoom
+      path:'/chatroomlist',
+      component:ChatRoomList
     },
     {
-      path:'/ChatRooms',
-      component:ChatRooms
+      path:'/chatroom/:roomID',
+      component:ChatRoom
     },
     {
       path:'/userList',
@@ -34,22 +33,17 @@ export default new Router({
       component:ChatPage
     },
     {
-      path: '/',
-      name: 'IndexPage',
-      component: IndexPage
-    },
-    {
       path:'/login',
       name: 'LoginPage',
       component: LoginPage
     },
     {
-      path:'/signup',
+      path:'/SignUpPage',
       name:'SignUpPage',
       component:SignUpPage
     },
     {
-      path:'/main',
+      path:'/',
       name:'MainPage',
       component:MainPage
     }

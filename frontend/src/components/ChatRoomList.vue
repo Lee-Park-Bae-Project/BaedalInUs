@@ -1,12 +1,12 @@
 <template>
-    <div>
-
+    <div id="top_container">
+      <p>chat list</p>
     </div>
 </template>
 
 <script>
     export default {
-        name: "ChatRooms",
+        name: "ChatRoomList",
       data(){
           return {
             user:{
@@ -49,5 +49,10 @@
 </script>
 
 <style scoped>
+  #top_container {
+    width: 70%;
+    height: 70%;
+    margin: 40px auto;
 
+  }
 </style>
