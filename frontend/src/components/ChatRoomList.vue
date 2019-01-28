@@ -17,6 +17,7 @@
           }
       },
       methods:{
+          // 채팅방 리스트 가져오기
         getChatRooms:function(event){
           this.$http.post('/chat/getChatRooms', {
             user:this.user

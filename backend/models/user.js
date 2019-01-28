@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
     lock:Boolean,
     rooms:[
         {
-            roomID:{type:mongoose.Schema.Types.ObjectId, ref:"Room"} // 유저가 참여중인 방 목록
+            roomID:{type:String} // 유저가 참여중인 방 목록
         }
     ]
 });

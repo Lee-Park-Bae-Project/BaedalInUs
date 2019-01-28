@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const users = require('./user');
 
 const roomsSchema = mongoose.Schema({
     roomID: {type: String}, // 참여자1 id, 참여자2 id 조합
@@ -42,4 +43,18 @@ roomsSchema.virtual('setRoomID').set(function (user1, user2) {
     console.log(`in virtual`);
     this.roomID = this.makeRandomRoomID();
 });
+
+roomsSchema.static('makeRoomID', function(){
+    let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+    let string_length = 20;
+    let randomstring = '';
+    for (var i = 0; i < string_length; i++) {
+        var rnum = Math.floor(Math.random() * chars.length);
+        randomstring += chars.substring(rnum, rnum + 1);
+    }
+    return randomstring;
+});
+
+
+
 module.exports = mongoose.model('Room', roomsSchema, 'rooms');

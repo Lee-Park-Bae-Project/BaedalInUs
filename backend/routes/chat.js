@@ -7,27 +7,22 @@ const users = require('../models/user');
 
 // 채팅 목록 반환
 router.post('/getChatRooms', (req, res) => {
-    console.log(`in chat / getChatRooms`);
-    const userOID = req.body.user.oid.toString();
-    const userID = req.body.user.id.toString();
+    let userID = req.body.user.id;
+    let userOID = req.body.user.id;
 
-    console.log(`userOID : ${userOID}`);
     console.log(`userID : ${userID}`);
+    console.log(`userOID : ${userOID}`);
 
-    rooms.find({$or: [{'user1': userOID}, {'user2': userOID}]}, (err, result) => {
-        if (err) return res.json(err);
+    users.findOne({"id": userID}, (err, result) => {
+        if (err) res.json(err);
 
+        console.log('---------result----------');
         console.log(result);
-        console.log(result.length);
-        if (result.length !== 0) {
-            res.status(200).json(result);
-        } else {
-            res.status(204);
-        }
-
     });
+
 });
 
+// 처음 대화일떄 대화방 만들기
 router.post('/makeRoom', (req, res) => {
     console.log(`in chat / makeRoom`);
     console.log(req.body);
@@ -64,18 +59,18 @@ router.post('/makeRoom', (req, res) => {
     // });
 
     // (user1 = senderOID && user2 = receiverOID) || (user1 = receiverOID && user2 == senderOID)
-    rooms.findOneAndUpdate({
-            $or: [{'user1': senderOID, 'user2': receiverOID}, {
-                'user1': receiverOID,
-                'user2': senderOID
-            }]
-        },{$push:{
-            messages:{
-                sender: senderID,
-                message: message,
-                created: Date.now()
+    rooms.findOneAndUpdate(
+        {
+            $or: [{'user1': senderOID, 'user2': receiverOID}, {'user1': receiverOID, 'user2': senderOID}]
+        }, {
+            $push: {
+                messages: {
+                    sender: senderID,
+                    message: message,
+                    created: Date.now()
+                }
             }
-        }}, (err, result) => {
+        }, (err, result) => {
             if (err) {
                 res.json(err);
             }
@@ -89,8 +84,10 @@ router.post('/makeRoom', (req, res) => {
             }
             else {
                 console.log(`없다`);
+                let newRoomID = rooms.makeRoomID();
+                console.log(`newRoomID : ${newRoomID}`);
                 let newRoom = new rooms({
-                        // roomID: rooms.setRoomID(senderOID, receiverOID),
+                        roomID: newRoomID,
                         user1: senderOID,
                         user2: receiverOID,
                         messages: [
@@ -103,14 +100,48 @@ router.post('/makeRoom', (req, res) => {
                         updated: Date.now()
                     }
                 );
-                newRoom.setRoomID = 1;
+
+
+
 
                 // 저장
                 newRoom.save()
                     .then(() => {
                         // 저장완료
                         console.log(`in save then`);
-                        res.status(201).json({});
+                        users.findOneAndUpdate(
+                            {'id':senderID},
+                            {
+                                $push:{
+                                    rooms:{
+                                        roomID:newRoomID
+                                    }
+                                }
+                            }, (err, result)=>{
+                                if(err) res.json(err);
+                                console.log(`유저 콜렉션에 roomid 저장`);
+                                console.log(result);
+
+                                users.findOneAndUpdate(
+                                    {'id':receiverID},
+                                    {
+                                        $push:{
+                                            rooms:{
+                                                roomID:newRoomID
+                                            }
+                                        }
+                                    }, (err, result)=>{
+                                        if(err) res.json(err);
+                                        console.log(`유저 콜렉션에 roomid 저장`);
+                                        console.log(result);
+                                        res.status(201).json({});
+
+                                    }
+                                );
+
+                            }
+                        );
+
                     })
                     .catch(() => {
                         // 저장 실패
@@ -165,18 +196,5 @@ router.post('/makeRoom', (req, res) => {
 })
 ;
 
-// 아이디로 내 채팅목록 찾기
-router.post('/getChatRooms', (req, res) => {
-    let userID = req.body.user.id;
-    let userOID = req.body.user.id;
 
-    console.log(`userID : ${userID}`);
-    console.log(`userOID : ${userOID}`);
-
-    rooms.find({$or: {"user1": userOID, "user2": userOID}}, (err, result) => {
-        if (err) res.json(err);
-        console.log(result);
-    })
-
-});
 module.exports = router;
