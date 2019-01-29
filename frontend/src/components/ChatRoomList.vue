@@ -1,6 +1,14 @@
 <template>
     <div id="top_container">
       <p>chat list</p>
+      <p>{{this.chatRooms.length}}</p>
+      <div id="chatRoomLists">
+        <ul>
+          <li v-for="room in chatRooms">
+            <span>{{room.value}}</span>
+          </li>
+        </ul>
+      </div>
     </div>
 </template>
 
@@ -27,8 +35,8 @@
                 console.log('----------------------response--------------')
                 console.log(res);
                 if (res.status === 200) {
-                  console.log(res);
                   this.chatRooms = res.data;
+                  console.log(this.chatRooms);
                 } else if (res.status === 204) {
                   console.log(`no chat rooms`);
                 }

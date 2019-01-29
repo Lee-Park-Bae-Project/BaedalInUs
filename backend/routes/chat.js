@@ -5,20 +5,106 @@ const mongoose = require('mongoose');
 const rooms = require('../models/rooms');
 const users = require('../models/user');
 
+
+function makeRet(user1, user2, sender, msg, updated) {
+    let ret = {
+        user1ID: user1,
+        user2ID: user2,
+        sender: sender,
+        message: msg,
+        updated: updated
+    };
+
+    return ret;
+}
+
+// function getRoomInfo(roomID) {
+//     return new Promise(function (resolve, reject) {
+//         console.log(`getRoomInfo start ${roomID}`);
+//
+//         rooms.findOne({'roomID': roomID})
+//             .then((result) => {
+//                 console.log(`result : ${result}`);
+//                 resolve(makeRet(result.user1, result.user2, result.messages[0].sender, result.messages[0].message, result.updated));
+//             })
+//             .catch((err) => reject(err))
+//     })
+// }
+//
+// async function promise2(roomIDs) {
+//     console.log(`promise2 start : ${roomIDs.length}`);
+//     let ret = [];
+//
+//     // roomIDList.push(await Promise.all(roomIDs.map(async i => await extRoomID(i))));
+//     // return ret.push(await Promise.all(roomIDList.map(async i => await getRoomInfo(i))));
+//
+//     try {
+//         for (let i = 0; i < roomIDs.length; i++) {
+//             let temp = await getRoomInfo(roomIDs[i].roomID);
+//             console.log(`----------temp----------`);
+//             console.log(temp);
+//             ret.push(temp);
+//         }
+//         return ret;
+//
+//     } catch (err) {
+//         return {error: err}
+//     }
+//
+//
+// }
+//
+// function promise1(userID) {
+//     return new Promise(function (resolve, reject) {
+//         console.log(`promise1 start ${userID}`);
+//
+//         users.findOne({'id': userID})
+//             .then((result) => {
+//                 resolve(result.rooms)
+//             })
+//             .catch((err) => reject(err))
+//     })
+// }
+
+
+
 // 채팅 목록 반환
 router.post('/getChatRooms', (req, res) => {
     let userID = req.body.user.id;
-    let userOID = req.body.user.id;
-
+    let userOID = req.body.user.oid;
+    let ret=[];
     console.log(`userID : ${userID}`);
     console.log(`userOID : ${userOID}`);
 
-    users.findOne({"id": userID}, (err, result) => {
-        if (err) res.json(err);
+    function getRoomInfoPromise(roomID){
+        return new Promise(function (resolve, reject){
+            rooms.findOne({'roomID':roomID}, (err, result)=>{
+                if(err) reject(err);
+                resolve(makeRet(result.user1ID, result.user2ID, result.messages[0].sender, result.messages[0].message, result.updated));
+            })
+        })
+    }
 
-        console.log('---------result----------');
-        console.log(result);
+    async function getRoomInfo(rooms){
+        let len = rooms.length;
+        for(let i=0;i<len;i++){
+            let t = await getRoomInfoPromise(rooms[i].roomID);
+            console.log(t);
+            ret.push(t);
+            console.log(ret);
+        }
+        res.status(200).json({complete:ret});
+
+    }
+
+
+    users.findOne({'id': userID}, (err, result) => {
+        if (err) res.status(204).json(err);
+        getRoomInfo(result.rooms);
+
     });
+
+
 
 });
 
@@ -90,6 +176,8 @@ router.post('/makeRoom', (req, res) => {
                         roomID: newRoomID,
                         user1: senderOID,
                         user2: receiverOID,
+                        user1ID: senderID,
+                        user2ID: receiverID,
                         messages: [
                             {
                                 sender: senderID, // 보낸사람
@@ -102,36 +190,34 @@ router.post('/makeRoom', (req, res) => {
                 );
 
 
-
-
                 // 저장
                 newRoom.save()
                     .then(() => {
                         // 저장완료
                         console.log(`in save then`);
                         users.findOneAndUpdate(
-                            {'id':senderID},
+                            {'id': senderID},
                             {
-                                $push:{
-                                    rooms:{
-                                        roomID:newRoomID
+                                $push: {
+                                    rooms: {
+                                        roomID: newRoomID
                                     }
                                 }
-                            }, (err, result)=>{
-                                if(err) res.json(err);
+                            }, (err, result) => {
+                                if (err) res.json(err);
                                 console.log(`유저 콜렉션에 roomid 저장`);
                                 console.log(result);
 
                                 users.findOneAndUpdate(
-                                    {'id':receiverID},
+                                    {'id': receiverID},
                                     {
-                                        $push:{
-                                            rooms:{
-                                                roomID:newRoomID
+                                        $push: {
+                                            rooms: {
+                                                roomID: newRoomID
                                             }
                                         }
-                                    }, (err, result)=>{
-                                        if(err) res.json(err);
+                                    }, (err, result) => {
+                                        if (err) res.json(err);
                                         console.log(`유저 콜렉션에 roomid 저장`);
                                         console.log(result);
                                         res.status(201).json({});

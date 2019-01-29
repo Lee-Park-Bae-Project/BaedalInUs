@@ -5,6 +5,8 @@ const roomsSchema = mongoose.Schema({
     roomID: {type: String}, // 참여자1 id, 참여자2 id 조합
     user1: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, // 참여자1
     user2: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, // 참여자2
+    user1ID: {type: String},
+    user2ID: {type: String},
     messages: [
         {
             sender: {type: String, required: true}, // 보낸사람
@@ -44,7 +46,7 @@ roomsSchema.virtual('setRoomID').set(function (user1, user2) {
     this.roomID = this.makeRandomRoomID();
 });
 
-roomsSchema.static('makeRoomID', function(){
+roomsSchema.static('makeRoomID', function () {
     let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
     let string_length = 20;
     let randomstring = '';
@@ -54,7 +56,6 @@ roomsSchema.static('makeRoomID', function(){
     }
     return randomstring;
 });
-
 
 
 module.exports = mongoose.model('Room', roomsSchema, 'rooms');
