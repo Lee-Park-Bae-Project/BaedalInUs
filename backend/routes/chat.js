@@ -100,8 +100,6 @@ router.post('/sendNewMsg', (req, res) => {
     console.log(`roomID : ${roomID}`);
     console.log(`socketID : ${socketID}`);
 
-
-
     // 디비에 새로운 메시지 추가
     rooms.findOneAndUpdate({'roomID':roomID}, {$push:{messages:{sender:sender,message:newMsg, created:created}}} )
         .then(
@@ -111,7 +109,6 @@ router.post('/sendNewMsg', (req, res) => {
                 // 여기서 마지막 데이터가 잘못들어감
                 console.log('-----------------------------');
                 console.log('sender : ' + sender);
-                console.log('receiver : ' + )
                 console.log('message : ' + newMsg);
                 console.log('created : ' + created);
                 console.log('-----------------------------');
@@ -183,14 +180,14 @@ router.post('/makeRoom', (req, res) => {
 
             if (result) {
                 // 있으니까 데이터 추가만 하면댐
-                console.log(`있다`);
+                console.log(`방있음`);
                 console.log(result);
                 // 저장 완료
                 res.status(201).json({});
             }
             else {
-                console.log(`없다`);
-                let newRoomID = rooms.makeRoomID();
+                console.log(`방 없음`);
+                let newRoomID = rooms.makeRoomID(); // rooms에 static method
                 console.log(`newRoomID : ${newRoomID}`);
                 let newRoom = new rooms({
                         roomID: newRoomID,

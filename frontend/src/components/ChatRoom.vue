@@ -2,27 +2,6 @@
   <div class="outer">
     <div class="inner">
 
-      <!--<b-card id="textArea">-->
-      <!--<b-nav pills slot="header">-->
-      <!--<nav-item id="chat_header">-->
-      <!--&lt;!&ndash;상대방 아이디 표시&ndash;&gt;-->
-      <!--<span v-if="this.user.id === chats.user1ID">{{chat.user2ID}}</span>-->
-      <!--<span v-else="this.user.id === chats.user2ID">{{chat.user1ID}}</span>-->
-      <!--</nav-item>-->
-      <!--<b-dropdown-divider></b-dropdown-divider>-->
-      <!--</b-nav>-->
-      <!--<b-card-body id="nav-scroller" ref="content" style="position:relative; height:300px; overflow-y:scroll;">-->
-      <!--<div v-for="chat in testchats.messages">-->
-      <!--<div v-if="user.id === chat.sender">-->
-      <!--<p id="myChat">{{chat.message}}</p>-->
-      <!--</div>-->
-      <!--<div v-else="this.user.id === chat.sender">-->
-      <!--<p id="othersChat">{{chat.message}}</p>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</b-card-body>-->
-      <!--</b-card>-->
-
       <div v-id="chats !== undefined">
         <li v-model="chats">{{chats.updated}}</li>
       </div>
@@ -136,11 +115,9 @@
               if(res.status === 200){
                 // 메시지 저장 성공 -> result chats.messages에 추가
                 console.log(`----------------새로들어갈 메시지---------------`);
-                console.log(res.data.newMsg);
                 this.chats.messages.push(res.data.newMsg);
                 this.chats.updated = res.data.created; // 업데이트된 시각 == 마지막 메시지의 생성 시간
                 console.log(`-----------------new msg added--------------`);
-                console.log(this.chats.messages);
 
               } else if(res.status === 201){
                 console.log(res.data.error);
@@ -160,14 +137,13 @@
 
       this.getChatRoom(this.roomID);
 
+      // socket.io
       this.socket.on('connect', ()=>{
         console.log(`connected : ${this.socket.id}`);
 
         this.socket.emit('newSocket', this.user.id, this.socket.id);  // 서버에게 아이디, 소켓아이디 전달
 
-
       });
-
 
     },
     watch:{

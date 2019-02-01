@@ -16,7 +16,7 @@ module.exports = (server) => {
         console.log(`connection : ${socket.id}, ${socket.handshake.query}`);
 
 
-        // 유저에게 새로운 소켓 할당
+        // 유저에게 새로운 소켓 할당 from ChatRoom.vue
         socket.on('newSocket', (userID, socketID)=>{
             console.log('newSocket : ' + userID + " " + socketID);
             // 디비에 소켓아이디 저장
@@ -31,9 +31,9 @@ module.exports = (server) => {
                 )
         });
 
+        //-----------------------------------------------------------------
         // 사람 들어왔을떄
         socket.on('join', (roomID, fn)=>{
-
             console.log(`socket on join`);
             socket.join(roomID, ()=>{
                 console.log("Join", roomID, Object.keys(socket.rooms));
