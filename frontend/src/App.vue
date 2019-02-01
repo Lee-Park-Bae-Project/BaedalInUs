@@ -28,7 +28,6 @@
     margin-top: 60px;
   }
 
-
   body {
     background-color: #E2904B;
   }

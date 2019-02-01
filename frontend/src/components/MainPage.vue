@@ -19,9 +19,7 @@
         console.log(`logout button clicked`);
         this.$router.push('/login') // Login 페이지로 보내줌
       }
-
     },
-
     components: {
       SearchBar
     }

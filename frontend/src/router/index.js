@@ -19,7 +19,7 @@ export default new Router({
       component:ChatRoomList
     },
     {
-      path:'/chatroom/:roomID',
+      path:'/chatroom/:roomID', // roomID 의 채팅방으로 이동
       component:ChatRoom
     },
     {

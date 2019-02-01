@@ -6,94 +6,45 @@ const rooms = require('../models/rooms');
 const users = require('../models/user');
 
 
-function makeRet(user1, user2, sender, msg, updated) {
+function makeRet(user1, user2, sender, msg, updated, roomID) {
     let ret = {
         user1ID: user1,
         user2ID: user2,
         sender: sender,
         message: msg,
-        updated: updated
-    };
+        updated: updated,
+        roomID: roomID,
+    }
 
     return ret;
 }
-
-// function getRoomInfo(roomID) {
-//     return new Promise(function (resolve, reject) {
-//         console.log(`getRoomInfo start ${roomID}`);
-//
-//         rooms.findOne({'roomID': roomID})
-//             .then((result) => {
-//                 console.log(`result : ${result}`);
-//                 resolve(makeRet(result.user1, result.user2, result.messages[0].sender, result.messages[0].message, result.updated));
-//             })
-//             .catch((err) => reject(err))
-//     })
-// }
-//
-// async function promise2(roomIDs) {
-//     console.log(`promise2 start : ${roomIDs.length}`);
-//     let ret = [];
-//
-//     // roomIDList.push(await Promise.all(roomIDs.map(async i => await extRoomID(i))));
-//     // return ret.push(await Promise.all(roomIDList.map(async i => await getRoomInfo(i))));
-//
-//     try {
-//         for (let i = 0; i < roomIDs.length; i++) {
-//             let temp = await getRoomInfo(roomIDs[i].roomID);
-//             console.log(`----------temp----------`);
-//             console.log(temp);
-//             ret.push(temp);
-//         }
-//         return ret;
-//
-//     } catch (err) {
-//         return {error: err}
-//     }
-//
-//
-// }
-//
-// function promise1(userID) {
-//     return new Promise(function (resolve, reject) {
-//         console.log(`promise1 start ${userID}`);
-//
-//         users.findOne({'id': userID})
-//             .then((result) => {
-//                 resolve(result.rooms)
-//             })
-//             .catch((err) => reject(err))
-//     })
-// }
-
-
 
 // 채팅 목록 반환
 router.post('/getChatRooms', (req, res) => {
     let userID = req.body.user.id;
     let userOID = req.body.user.oid;
-    let ret=[];
+    let ret = [];
     console.log(`userID : ${userID}`);
     console.log(`userOID : ${userOID}`);
 
-    function getRoomInfoPromise(roomID){
-        return new Promise(function (resolve, reject){
-            rooms.findOne({'roomID':roomID}, (err, result)=>{
-                if(err) reject(err);
-                resolve(makeRet(result.user1ID, result.user2ID, result.messages[0].sender, result.messages[0].message, result.updated));
+    function getRoomInfoPromise(roomID) {
+        return new Promise(function (resolve, reject) {
+            rooms.findOne({'roomID': roomID}, (err, result) => {
+                if (err) reject(err);
+                let len = result.messages.length;
+                resolve(makeRet(result.user1ID, result.user2ID, result.messages[len - 1].sender, result.messages[len - 1].message, result.updated, roomID));
             })
         })
     }
 
-    async function getRoomInfo(rooms){
+    async function getRoomInfo(rooms) {
         let len = rooms.length;
-        for(let i=0;i<len;i++){
+        for (let i = 0; i < len; i++) {
             let t = await getRoomInfoPromise(rooms[i].roomID);
             console.log(t);
             ret.push(t);
-            console.log(ret);
         }
-        res.status(200).json({complete:ret});
+        res.status(200).json({ret});
 
     }
 
@@ -104,6 +55,75 @@ router.post('/getChatRooms', (req, res) => {
 
     });
 
+
+});
+
+// 특정 room 반환
+router.post('/getRoom/:roomID', (req, res) => {
+    let roomID = req.params.roomID;
+
+    console.log(`req.params : ${req.params}`);
+    console.log(`roomID : ${roomID}`);
+
+    rooms.findOne({'roomID': roomID}, (err, result) => {
+        if (err) res.status(202);
+
+        console.log(result);
+        res.status(200).json(result);
+    });
+
+
+    // rooms.findOne({'roomID':roomID})
+    //     .then(
+    //         (result)=>{
+    //             console.log(result);
+    //             res.status(200).json({result});
+    //         }
+    //     )
+    //     .catch((err)=>{
+    //         res.status(202)
+    //     });
+
+
+});
+
+// 새로운 메시지 왔을떄
+router.post('/sendNewMsg', (req, res) => {
+    let sender = req.body.sender;
+    let newMsg = req.body.newMsg;
+    let roomID = req.body.roomID;
+    let socketID = req.body.socketID;
+    let created = Date.now();
+
+    console.log(`sender : ${sender}`);
+    console.log(`newMsg : ${newMsg}`);
+    console.log(`roomID : ${roomID}`);
+    console.log(`socketID : ${socketID}`);
+
+
+
+    // 디비에 새로운 메시지 추가
+    rooms.findOneAndUpdate({'roomID':roomID}, {$push:{messages:{sender:sender,message:newMsg, created:created}}} )
+        .then(
+            (result)=>{
+                // console.log(result);
+                let len = result.messages.length;
+                // 여기서 마지막 데이터가 잘못들어감
+                console.log('-----------------------------');
+                console.log('sender : ' + sender);
+                console.log('receiver : ' + )
+                console.log('message : ' + newMsg);
+                console.log('created : ' + created);
+                console.log('-----------------------------');
+
+                res.status(200).json({complete:true, newMsg:{sender:sender, message:newMsg, created:created}});
+            }
+        )
+        .catch(
+            (err)=>{
+                res.status(201).json({complete:false, error:err});
+            }
+        )
 
 
 });

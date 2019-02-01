@@ -1,5 +1,9 @@
 const SocketIO = require('socket.io');
+const users = require('./models/user');
 
+function setSocketID(socketID, userID){
+
+}
 
 module.exports = (server) => {
     const io = SocketIO(server);
@@ -10,6 +14,22 @@ module.exports = (server) => {
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         console.log(`새로운 클라이언트 접속! ${ip}, ${socket.id}, ${req.ip}`);
         console.log(`connection : ${socket.id}, ${socket.handshake.query}`);
+
+
+        // 유저에게 새로운 소켓 할당
+        socket.on('newSocket', (userID, socketID)=>{
+            console.log('newSocket : ' + userID + " " + socketID);
+            // 디비에 소켓아이디 저장
+            users.findOneAndUpdate({'id':userID}, {$set:{'socketID':socketID}})
+                .then(
+                    (result)=>{
+                        console.log(result);
+                    }
+                )
+                .catch(
+                    (err)=>console.log(err)
+                )
+        });
 
         // 사람 들어왔을떄
         socket.on('join', (roomID, fn)=>{

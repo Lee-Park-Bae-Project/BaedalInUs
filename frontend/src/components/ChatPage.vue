@@ -87,7 +87,7 @@
         // roomid의 방으로 join 함
         this.socket.emit('join', roomid, ()=>{
           // 서버가 방 Join에 실패했는데 내가 참여한 방 이름을 함부로 바꾸면 안되니까 서버에게 이 명령을 위임함
-          this.socket.emit('leave', this.joinedRoom); // 현재 방을 나간다.
+          this.socket.emit('lㅔeave', this.joinedRoom); // 현재 방을 나간다.
           this.joinedRoom = roomid;
           console.log(this.rooms);
         });

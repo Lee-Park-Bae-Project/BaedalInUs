@@ -1,64 +1,225 @@
 <template>
-  <div id="top_container">
+  <div class="outer">
+    <div class="inner">
 
-    <b-card id="text_area">
-      <b-nav pills slot="header">
-        <nav-item id="chat_header">chat room</nav-item>
-        <b-dropdown-divider></b-dropdown-divider>
-      </b-nav>
-      <b-card-body id="nav-scroller" ref="content" style="position:relative; height:300px; overflow-y:scroll;">
-        <div v-for="chat in chatObjects">
-          <div v-if="chat.owner===1" id="my_chat"><p style="text-align: right">{{chat.msg}}</p></div>
-          <div v-else="chat.owner==='1'" id="your_chat"><p style="text-align:left">{{chat.msg}}</p></div>
-        </div>
-      </b-card-body>
-    </b-card>
-    <!--<b-form-textarea id="textarea1" v-model="text" placeholder="Enter something" :rows="4" :max-rows="10">-->
-    <!--</b-form-textarea>-->
+      <!--<b-card id="textArea">-->
+      <!--<b-nav pills slot="header">-->
+      <!--<nav-item id="chat_header">-->
+      <!--&lt;!&ndash;상대방 아이디 표시&ndash;&gt;-->
+      <!--<span v-if="this.user.id === chats.user1ID">{{chat.user2ID}}</span>-->
+      <!--<span v-else="this.user.id === chats.user2ID">{{chat.user1ID}}</span>-->
+      <!--</nav-item>-->
+      <!--<b-dropdown-divider></b-dropdown-divider>-->
+      <!--</b-nav>-->
+      <!--<b-card-body id="nav-scroller" ref="content" style="position:relative; height:300px; overflow-y:scroll;">-->
+      <!--<div v-for="chat in testchats.messages">-->
+      <!--<div v-if="user.id === chat.sender">-->
+      <!--<p id="myChat">{{chat.message}}</p>-->
+      <!--</div>-->
+      <!--<div v-else="this.user.id === chat.sender">-->
+      <!--<p id="othersChat">{{chat.message}}</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</b-card-body>-->
+      <!--</b-card>-->
 
-    <div id="send_bar">
-      <b-container>
-        <b-row class="my-1">
-          <b-col sm="10">
-            <b-form-input id="input-small" type="text" placeholder="Enter message"></b-form-input>
-          </b-col>
-          <button>send</button>
-        </b-row>
-      </b-container>
+      <div v-id="chats !== undefined">
+        <li v-model="chats">{{chats.updated}}</li>
+      </div>
+      <b-card id="textArea" >
+
+        <b-nav pills slot="header">
+          <nav-item id="chatHeader">
+            <!--상대방 아이디 표시-->
+              <span v-if="chats !== undefined && this.user.id === chats.user1ID">{{chats.user2ID}}</span>
+              <span v-else>{{chats.user1ID}}</span>
+          </nav-item>
+          <b-dropdown-divider></b-dropdown-divider>
+        </b-nav>
+        <!--메시지들 표시-->
+        <b-card-body id="nav-scroller" ref="content" style="position:relative; height:300px; overflow-y:scroll;">
+          <div v-for="chat in chats.messages">
+            <div v-if="user.id === chat.sender">
+              <p id="myChat">{{chat.message}}</p>
+            </div>
+            <div v-else="this.user.id === chat.sender">
+              <p id="othersChat">{{chat.message}}</p>
+            </div>
+          </div>
+        </b-card-body>
+      </b-card>
+      <div>
+        <input id="newMsg" v-model="newMsg">
+        <button id="btnSend" @click="sendNewMsg">전송</button>
+      </div>
 
     </div>
-
-
   </div>
+
 </template>
 
 <script>
+  import io from 'socket.io-client';
+
   export default {
     name: "ChatRoom",
     data() {
       return {
+        roomID: this.$route.params.roomID,
         text: '',
-        chatObjects:[]
+        chats: {},
+        user: {
+          id: localStorage.getItem('userID'),
+          oid: localStorage.getItem('userOID'),
+        },
+        newMsg: '',
+        socket: io('localhost:3000'),
+        testchats: {
+          created: "2019-01-31T14:22:12.472Z",
+          messages: [
+            {
+              created: "2019-01-31T14:22:12.466Z",
+              message: "msg1",
+              sender: "test1"
+            },
+            {
+              created: "2019-01-31T14:22:12.466Z",
+              message: "msg2",
+              sender: "test1"
+            },
+            {
+              created: "2019-01-31T14:22:12.466Z",
+              message: "msg3",
+              sender: "test2"
+            }
+          ],
+          roomID: "xk4QEnaGeDEJbOenNrOu",
+          user1: "5c530481f6d2eb28eb03c5c0",
+          user1ID: "test1",
+          user2: "5c530486f6d2eb28eb03c5c1",
+          user2ID: "test2",
+          updated: "2019-01-31T14:22:12.466Z"
+        }
       }
     },
-    mounted(){
-      this.chatObjects.push({owner:1, msg:'hi im juno', time:1111});
-      this.chatObjects.push({owner:1, msg:'fuckyou', time:1111});
-      this.chatObjects.push({owner:2, msg:'123', time:2222});
-      this.chatObjects.push({owner:1, msg:'hihihihi', time:33333});
-      this.chatObjects.push({owner:2, msg:'123123123', time:123123});
+    methods: {
+      // 채팅방 불러옴
+      getChatRoom: function (roomid) {
+        this.roomID = this.roomID.substring(1, this.roomID.length);
+        this.$http.post(`/chat/getRoom/${this.roomID}`)
+          .then(
+            (res) => {
+              if (res.status === 200) {
+                this.chats = res.data;
+                console.log(this.chats.user1ID);
+                console.log(this.chats.user2ID);
+                console.log(this.chats);
+              } else if (res.status === 202) {
+                alert('error');
+              }
+            }
+          ).catch((err) => {
+          alert(err.response.data.error)
+        })
+      },
+      // 새로운 메시지 보냄
+      sendNewMsg: function () {
+        this.$http.post('/chat/sendNewMsg', {
+          sender: this.user.id,
+          newMsg: this.newMsg,
+          roomID: this.chats.roomID,
+          socketID:this.socket.id
+        })
+          .then(
+            (res) => {
+              console.log(res);
+              if(res.status === 200){
+                // 메시지 저장 성공 -> result chats.messages에 추가
+                console.log(`----------------새로들어갈 메시지---------------`);
+                console.log(res.data.newMsg);
+                this.chats.messages.push(res.data.newMsg);
+                this.chats.updated = res.data.created; // 업데이트된 시각 == 마지막 메시지의 생성 시간
+                console.log(`-----------------new msg added--------------`);
+                console.log(this.chats.messages);
+
+              } else if(res.status === 201){
+                console.log(res.data.error);
+                alert(res.data.error);
+              }
+            }
+          )
+          .catch(
+            (err) => {
+              alert(err);
+            }
+          );
+        this.newMsg='';
+      },
+    },
+    created() {
+
+      this.getChatRoom(this.roomID);
+
+      this.socket.on('connect', ()=>{
+        console.log(`connected : ${this.socket.id}`);
+
+        this.socket.emit('newSocket', this.user.id, this.socket.id);  // 서버에게 아이디, 소켓아이디 전달
+
+
+      });
+
+
+    },
+    watch:{
+      chats:function(data){
+        console.log('chats is modified');
+        console.log(data);
+      }
     }
+
   }
 </script>
 
 <style scoped>
-  /*#top_container {*/
-    /*align-content: center;*/
-    /*position: absolute;*/
-    /*left: 50%;*/
-    /*transform: translateX(-50%);*/
-    /*margin: 50px;*/
-  /*}*/
 
+  .outer {
+    font-family: "Franklin Gothic Demi";
+    /*width: 80%;*/
+    text-align: center;
+    padding: 20px;
+    margin: 15px;
+  }
+
+  .inner {
+    display: inline-block;
+    width: 100%;
+
+  }
+
+  #myChat {
+    text-align: right;
+  }
+
+  #newMsg {
+    width: 90%;
+    float: left;
+  }
+
+  #btnSend {
+    width: 10%;
+  }
+
+  #othersChat {
+    text-align: left;
+  }
+
+  #textArea {
+    width: 100%;
+
+  }
+
+  #chatHeader{
+    font-size:20px;
+  }
 
 </style>

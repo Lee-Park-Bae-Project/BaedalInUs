@@ -8,9 +8,11 @@ const userSchema = mongoose.Schema({
     lock:Boolean,
     rooms:[
         {
-            roomID:{type:String} // 유저가 참여중인 방 목록
+            roomID:{type:String}, // 유저가 참여중인 방 목록
+            uncheckedMsg:{type:Number}
         }
-    ]
+    ],
+    socketID:String
 });
 
 userSchema.method('makeSalt', function(){
