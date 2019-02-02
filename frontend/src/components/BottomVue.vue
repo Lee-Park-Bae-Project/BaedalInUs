@@ -1,6 +1,5 @@
 <template>
   <div id="top_container">
-    <p>this is Bottom Vue</p>
     <p>©2019 LeeParkBae</p>
   </div>
 </template>

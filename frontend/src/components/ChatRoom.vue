@@ -2,9 +2,6 @@
   <div class="outer">
     <div class="inner">
 
-      <div v-id="chats !== undefined">
-        <li v-model="chats">{{chats.updated}}</li>
-      </div>
       <b-card id="textArea" >
 
         <b-nav pills slot="header">
@@ -28,7 +25,7 @@
         </b-card-body>
       </b-card>
       <div>
-        <input id="newMsg" v-model="newMsg">
+        <input id="newMsg" v-model="newMsg" v-on:keyup.enter="sendNewMsg"> <!--엔터로 클릭이벤트-->
         <button id="btnSend" @click="sendNewMsg">전송</button>
       </div>
 
@@ -132,6 +129,10 @@
           );
         this.newMsg='';
       },
+      scrollToLastMessage:function(){
+        // 마지막 메시지까지 스크롤
+
+      }
     },
     created() {
 
@@ -151,6 +152,10 @@
         console.log('chats is modified');
         console.log(data);
       }
+    },
+    ready: function(){
+      console.log(`document is ready`);
+      this.
     }
 
   }
