@@ -1,10 +1,17 @@
 <template>
-  <div id="login">
-    <div>Login</div>
-    <input v-model="user.id" placeholder="ID"><br/>
-    <input v-model="user.pw" type="password" placeholder="password"><br/>
-    <button v-on:click="login">login</button>
-    <a v-bind:href="url.singUpURL">Sign up</a>
+  <div class="outer">
+    <div class="inner">
+      <div class="form_box">
+        <h1>LOG IN </h1>
+
+        <input v-model="user.id" placeholder="your ID"><br/>
+        <input v-model="user.pw" type="password" placeholder="your password"><br/>
+        <button @click="login">login</button>
+        <button @click="signUp">Sign Up</button>
+
+
+      </div>
+    </div>
   </div>
 </template>
 
@@ -17,15 +24,12 @@
         user: {
           id: '',
           pw: ''
-        },
-        url: {
-          singUpURL: '/SignUpPage'
         }
       }
     },
     methods: {
       login: function (event) {
-        this.$http.post('/login', {
+        this.$http.post('/auth/login', {
           user: this.user
         })
           .then(
@@ -56,14 +60,38 @@
           .catch(error => {
             alert(error)
           })
+      },
+      signUp:function(){
+        this.$router.push('/signup'); //  sign up 페이지로 보내줌
       }
     }
   }
 </script>
 
 <style scoped>
-  #login{
-    margin-top:100px;
-
+  .outer {
+    font-family: "Franklin Gothic Demi";
+    width: 100%;
+    text-align: center;
   }
+  .inner {
+    display: inline-block;
+  }
+  .form_box {
+    margin-top: 150px;
+    text-align: left;
+  }
+  h1 {
+    margin: 10px ;
+  }
+  input {
+    width: 300px;
+    margin:10px;
+  }
+  button {
+    float:right;
+    margin:10px;
+    width:100px;
+  }
+
 </style>

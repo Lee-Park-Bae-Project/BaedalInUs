@@ -1,6 +1,6 @@
 <template>
   <div id="top_container">
-    <p>©2019 LeeParkBae</p>
+    ©2019 LeeParkBae
   </div>
 </template>
 
@@ -12,10 +12,11 @@
 
 <style scoped>
   #top_container{
-    align-content: center;
-    position: absolute; left: 50%;
-    transform: translateX(-50%);
-    margin:30px;
+    text-align: center;
+    position : fixed;
+    bottom:0;
+    width:100%;
+    margin: 10px;
   }
 
 </style>

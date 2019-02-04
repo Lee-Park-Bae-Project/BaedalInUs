@@ -1,8 +1,9 @@
 <template>
-  <div class="container">
-    <div id="logo">
-      <h2 @click="mainPage">LOGO</h2>
-    </div>
+  <div class="outer">
+    <div class="inner">
+      <div id="logo">
+        <h2 @click="mainPage">Hoodadak</h2>
+      </div>
       <div id="menu">
         <ul><li>내 정보</li>
           <li @click="login">로그인</li>
@@ -11,8 +12,10 @@
           <li @click="chat">채팅</li>
         </ul>
       </div>
-      <hr>
     </div>
+
+  </div>
+
 </template>
 
 <script>
@@ -34,24 +37,24 @@
 </script>
 
 <style scoped>
-.container {
-  margin-top: -50px;
-  width: 100%;
-  height: 20%;
-}
+  html body {
+    width: 100%;
+    height: 100%;
+
+  }
+
 #logo {
   width: 20%;
-  height: 100%;
   float: left;
-  background-color: orange;
   cursor: pointer;
+  font-family: "Cooper Black";
+
 }
 #logo :hover {
   color: #faff31
 }
 #menu {
   width: 80%;
-  height: 100%;
   float: right;
 }
 ul {
@@ -67,7 +70,7 @@ ul {
     display:inline;
    background-color: black;
     color: white;
-    padding: 8px;
+    margin:10px;
     text-decoration: none;
     text-align: center;
     font-weight: bold;
@@ -76,14 +79,22 @@ ul {
 li:hover {
   background-color: white;
   color: black;
-  cursor: pointer}
-
-
-.align-left {
-  float:left;
+  cursor: pointer
 }
-.align-right {
-  float:right;
-}
+
+  .outer {
+    font-family: "Franklin Gothic Demi";
+    width: 100%;
+    height: 100%;
+  }
+
+  .inner {
+    margin: 1%;
+    width: 90%;
+    height: 100%;
+    display: inline-block;
+
+  }
+
 </style>
 

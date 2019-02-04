@@ -10,25 +10,21 @@ const session = require('express-session');
 const indexRouter = require('./routes/index');
 const testRouter = require('./routes/test');
 const apiTestRouter = require('./routes/apiTest');
-const loginRouter = require('./routes/login');
-const signupRouter = require('./routes/signup');
+const authRouter = require('./routes/auth');
 const mailRouter = require('./routes/mail');
 const chatRouter = require('./routes/chat');
-
+var usersRouter = require('./routes/users');
 const connect = require('./mongo');
 // const io = require('socket.io');
 
-var usersRouter = require('./routes/users');
-// var app = express();
+var app = express();
 
-const app = require('express')();
 // const server = require('http').createServer(app);
-
 connect();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 app.use(require('connect-history-api-fallback')()); // vue router 와 연결해줌
 app.use(logger('dev'));
 app.use(express.json());
@@ -49,12 +45,10 @@ app.use(session({
 }));
 
 app.use('/users', usersRouter);
-
 app.use('/', indexRouter);
 app.use('/test', testRouter);
 app.use('/api', apiTestRouter);
-app.use('/login', loginRouter);
-app.use('/signup', signupRouter);
+app.use('/auth', authRouter);
 app.use('/mail', mailRouter);
 app.use('/chat', chatRouter);
 
@@ -67,7 +61,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error =     req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);

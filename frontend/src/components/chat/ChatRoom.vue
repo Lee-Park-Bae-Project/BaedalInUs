@@ -2,32 +2,28 @@
   <div class="outer">
     <div class="inner">
 
-      <b-card id="textArea" >
 
-        <b-nav pills slot="header">
-          <nav-item id="chatHeader">
-            <!--상대방 아이디 표시-->
-              <span v-if="chats !== undefined && this.user.id === chats.user1ID">{{chats.user2ID}}</span>
-              <span v-else>{{chats.user1ID}}</span>
-          </nav-item>
-          <b-dropdown-divider></b-dropdown-divider>
-        </b-nav>
-        <!--메시지들 표시-->
-        <b-card-body id="nav-scroller" ref="content" style="position:relative; height:300px; overflow-y:scroll;">
-          <div v-for="chat in chats.messages">
-            <div v-if="user.id === chat.sender">
-              <p id="myChat">{{chat.message}}</p>
-            </div>
-            <div v-else="this.user.id === chat.sender">
-              <p id="othersChat">{{chat.message}}</p>
-            </div>
+
+      <div id="chatHeader">
+        <span v-if="chats !== undefined && this.user.id === chats.user1ID">{{chats.user2ID}}</span>
+        <span v-else>{{chats.user1ID}}</span>
+      </div>
+      <div id="scrollDiv">
+        <div v-for="chat in chats.messages">
+          <div v-if="user.id === chat.sender">
+            <p id="myChat">{{chat.message}}</p>
           </div>
-        </b-card-body>
-      </b-card>
+          <div v-else="this.user.id === chat.sender">
+            <p id="othersChat">{{chat.message}}</p>
+          </div>
+        </div>
+      </div>
       <div>
         <input id="newMsg" v-model="newMsg" v-on:keyup.enter="sendNewMsg"> <!--엔터로 클릭이벤트-->
         <button id="btnSend" @click="sendNewMsg">전송</button>
       </div>
+
+
 
     </div>
   </div>
@@ -115,6 +111,7 @@
                 this.chats.messages.push(res.data.newMsg);
                 this.chats.updated = res.data.created; // 업데이트된 시각 == 마지막 메시지의 생성 시간
                 console.log(`-----------------new msg added--------------`);
+                this.scrollToLastMessage();
 
               } else if(res.status === 201){
                 console.log(res.data.error);
@@ -131,7 +128,8 @@
       },
       scrollToLastMessage:function(){
         // 마지막 메시지까지 스크롤
-
+        let divdiv = document.getElementById("scrollDiv");
+        divdiv.scrollTop = divdiv.scrollHeight;
       }
     },
     created() {
@@ -147,15 +145,19 @@
       });
 
     },
+    mounted(){
+      console.log('mounted');
+      this.scrollToLastMessage();
+
+    },
     watch:{
       chats:function(data){
         console.log('chats is modified');
-        console.log(data);
+        // console.log(data);
+
       }
     },
-    ready: function(){
-      console.log(`document is ready`);
-    }
+
 
   }
 </script>
@@ -193,13 +195,12 @@
     text-align: left;
   }
 
-  #textArea {
-    width: 100%;
-
-  }
-
   #chatHeader{
-    font-size:20px;
+    font-size:40px;
   }
 
+  #scrollDiv{
+    overflow: scroll;
+    height: 300px;
+  }
 </style>

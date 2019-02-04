@@ -1,15 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
-import LoginPage from '@/components/LoginPage.vue'
-import SignUpPage from '@/components/SignUpPage.vue'
+import LoginPage from '@/components/auth/LoginPage.vue'
+import SignUpPage from '@/components/auth/SignUpPage.vue'
 import MainPage from '@/components/MainPage.vue'
-import ChatPage from '@/components/ChatPage.vue'
-import UserPage from '@/components/UsersVue'
-import ChatRoomList from '@/components/ChatRoomList'
-import ChatRoom from '@/components/ChatRoom'
+import ChatPage from '@/components/chat/ChatPage.vue'
+import UserPage from '@/components/UsersVue.vue'
+import ChatRoomList from '@/components/chat/ChatRoomList.vue'
+import ChatRoom from '@/components/chat/ChatRoom.vue'
 
 export default new Router({
   mode: 'history',
@@ -38,7 +37,7 @@ export default new Router({
       component: LoginPage
     },
     {
-      path:'/SignUpPage',
+      path:'/signUp',
       name:'SignUpPage',
       component:SignUpPage
     },
