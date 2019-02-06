@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     rooms:[
         {
             roomID:{type:String}, // 유저가 참여중인 방 목록
-            uncheckedMsg:{type:Number}
+            uncheckedMsg:{type:Number, default:0}
         }
     ],
     socketID:String

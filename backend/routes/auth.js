@@ -26,14 +26,16 @@ router.get('/logout', (req, res) => {
 //
 router.post('/login', (req, res) => {
     console.log(`in /login post`);
-    console.log(req.body);
     const id = req.body.user.id.toString();
     const pw = req.body.user.pw.toString();
     console.log(`id: ${id}`);
     console.log(`pw: ${pw}`);
 
     // res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
+    // res.setHeader("Access-Control-Allow-Origin", "*");     //허용할 Origin(요청 url) : "*" 의 경우 모두 허용
+    // res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");     //허용할 request http METHOD : POST, GET, DELETE, PUT
+    // res.setHeader("Access-Control-Max-Age", "3600");     //브라우저 캐시 시간(단위: 초) : "3600" 이면 최소 1시간 안에는 서버로 재요청 되지 않음
+    // res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");    //요청 허용 헤더(ajax : X-Requested-With)
 
     user.find({id: id}, (err, result) => {
         if (err) return res.json(err);
@@ -47,7 +49,6 @@ router.post('/login', (req, res) => {
                 req.session.user_uid = id;
                 console.log(`test oid : ${result[0]._id}`);
                 res.status(200).json({complete:true, oid:result[0]._id}); // 성공 status code
-                console.log(res);
                 // res.redirect('/login');
             } else {
                 console.log(`authenticate fail`);

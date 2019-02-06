@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import io from 'socket.io-client';
+  // import io from 'socket.io-client';
 
 
   export default {
@@ -27,7 +27,7 @@
     data() {
       return {
         users: [],
-        socket: io('localhost:3000'),
+        // socket: io('localhost:3000'),
         room:{
           senderOID:'',
           senderID:'',
@@ -39,7 +39,7 @@
     },
     methods: {
       getUsers: function (event) {
-        this.$http.post('/users', {
+        this.$http.post('http://localhost:3000/users', {
           user: this.user
         })
           .then(
@@ -58,7 +58,7 @@
           })
       },
       sendMessage(senderOID, senderID, receiverOID, receiverID, message){
-        this.$http.post('/chat/makeRoom', {
+        this.$http.post('http://localhost:3000/chat/makeRoom', {
           room:{
             senderOID:senderOID,
             senderID:senderID,
@@ -101,12 +101,11 @@
         this.sendMessage(senderOID, senderID, receiverOID, receiverID, message);
       }
     },
-    mounted() {
-      this.socket.on('connect', ()=>{
-        console.log(`connected`);
-
-      });
-    }
+    // mounted() {
+    //   this.socket.on('connect', ()=>{
+    //     console.log(`connected`);
+    //   });
+    // }
   }
 </script>
 

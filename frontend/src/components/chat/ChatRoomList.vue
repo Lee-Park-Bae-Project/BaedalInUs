@@ -53,7 +53,7 @@
     methods: {
       // 채팅방 리스트 가져오기
       getChatRooms: function (event) {
-        this.$http.post('/chat/getChatRooms', {
+        this.$http.post('http://localhost:3000/chat/getChatRooms', {
           user: this.user
         })
           .then(
@@ -92,7 +92,7 @@
 <style scoped>
   .outer {
     font-family: "Franklin Gothic Demi";
-    width:80%;
+    width:100%;
     text-align: center;
   }
 

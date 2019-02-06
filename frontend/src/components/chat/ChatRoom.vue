@@ -31,7 +31,6 @@
 </template>
 
 <script>
-  import io from 'socket.io-client';
 
   export default {
     name: "ChatRoom",
@@ -45,7 +44,7 @@
           oid: localStorage.getItem('userOID'),
         },
         newMsg: '',
-        socket: io('localhost:3000'),
+        // socket: io('localhost:3000'),
         testchats: {
           created: "2019-01-31T14:22:12.472Z",
           messages: [
@@ -78,7 +77,7 @@
       // 채팅방 불러옴
       getChatRoom: function (roomid) {
         this.roomID = this.roomID.substring(1, this.roomID.length);
-        this.$http.post(`/chat/getRoom/${this.roomID}`)
+        this.$http.post(`http://localhost:3000/chat/getRoom/${this.roomID}`,{userID:this.user.id})
           .then(
             (res) => {
               if (res.status === 200) {
@@ -86,6 +85,7 @@
                 console.log(this.chats.user1ID);
                 console.log(this.chats.user2ID);
                 console.log(this.chats);
+                this.scrollToLastMessage();
               } else if (res.status === 202) {
                 alert('error');
               }
@@ -96,11 +96,12 @@
       },
       // 새로운 메시지 보냄
       sendNewMsg: function () {
-        this.$http.post('/chat/sendNewMsg', {
+        this.$http.post('http://localhost:3000/chat/sendNewMsg', {
           sender: this.user.id,
           newMsg: this.newMsg,
           roomID: this.chats.roomID,
-          socketID:this.socket.id
+          // socketID:this.socket.id,
+          receiverID : (this.user.id === this.chats.user1ID)?this.chats.user2ID:this.chats.user1ID
         })
           .then(
             (res) => {
@@ -128,8 +129,8 @@
       },
       scrollToLastMessage:function(){
         // 마지막 메시지까지 스크롤
-        let divdiv = document.getElementById("scrollDiv");
-        divdiv.scrollTop = divdiv.scrollHeight;
+        let objDiv = document.getElementById('scrollDiv');
+        objDiv.scrollTop = objDiv.scrollHeight;
       }
     },
     created() {
@@ -137,18 +138,17 @@
       this.getChatRoom(this.roomID);
 
       // socket.io
-      this.socket.on('connect', ()=>{
-        console.log(`connected : ${this.socket.id}`);
-
-        this.socket.emit('newSocket', this.user.id, this.socket.id);  // 서버에게 아이디, 소켓아이디 전달
-
-      });
+      // this.socket.on('connect', ()=>{
+      //   console.log(`connected : ${this.socket.id}`);
+      //
+      //   this.socket.emit('newSocket', this.user.id, this.socket.id);  // 서버에게 아이디, 소켓아이디 전달
+      //
+      // });
 
     },
     mounted(){
       console.log('mounted');
       this.scrollToLastMessage();
-
     },
     watch:{
       chats:function(data){

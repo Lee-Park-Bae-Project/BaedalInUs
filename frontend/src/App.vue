@@ -10,6 +10,7 @@
   import chatVue from "./components/chat/ChatRoom.vue";
   import HeaderComponent from './components/Header.vue';
   import BottomComponent from './components/BottomVue.vue';
+  import io from 'socket.io-client';
 
   export default {
     name: 'App',
@@ -17,6 +18,17 @@
       HeaderComponent,
       chatVue,
       BottomComponent
+    },
+    data(){
+      return{
+        socket: io('localhost:3000'),
+      }
+    },
+    mounted() {
+      this.socket.on('connect', ()=>{
+        console.log(`connected`);
+
+      });
     }
   }
 </script>

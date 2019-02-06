@@ -60,10 +60,17 @@ router.post('/getChatRooms', (req, res) => {
 
 // 특정 room 반환
 router.post('/getRoom/:roomID', (req, res) => {
+    console.log('get room');
+    console.log(req.params);
+    console.log(req.body);
     let roomID = req.params.roomID;
+    let userID = req.body.userID;
 
+    console.log('--------------------------------------------');
     console.log(`req.params : ${req.params}`);
     console.log(`roomID : ${roomID}`);
+    console.log(`userID : ${userID}`);
+    console.log('--------------------------------------------');
 
     rooms.findOne({'roomID': roomID}, (err, result) => {
         if (err) res.status(202);
@@ -71,6 +78,20 @@ router.post('/getRoom/:roomID', (req, res) => {
         console.log(result);
         res.status(200).json(result);
     });
+
+    // users.findOneAndUpdate({'id':userID, 'rooms.roomID':roomID}, {$set:{'rooms.$.uncheckedMsg':0}})
+    //     .then(
+    //         (result)=>{
+    //             console.log(result);
+    //         }
+    //     )
+    //     .catch(
+    //         (err)=>{
+    //             console.log(err);
+    //         }
+    //     )
+
+
 
 
     // rooms.findOne({'roomID':roomID})
@@ -92,21 +113,21 @@ router.post('/sendNewMsg', (req, res) => {
     let sender = req.body.sender;
     let newMsg = req.body.newMsg;
     let roomID = req.body.roomID;
-    let socketID = req.body.socketID;
+    // let socketID = req.body.socketID;
+    let receiverID = req.body.receiverID;
     let created = Date.now();
 
     console.log(`sender : ${sender}`);
     console.log(`newMsg : ${newMsg}`);
     console.log(`roomID : ${roomID}`);
-    console.log(`socketID : ${socketID}`);
+    console.log(`receiverID : ${receiverID}`);
+    // console.log(`socketID : ${socketID}`);
 
     // 디비에 새로운 메시지 추가
     rooms.findOneAndUpdate({'roomID':roomID}, {$push:{messages:{sender:sender,message:newMsg, created:created}}} )
         .then(
             (result)=>{
                 // console.log(result);
-                let len = result.messages.length;
-                // 여기서 마지막 데이터가 잘못들어감
                 console.log('-----------------------------');
                 console.log('sender : ' + sender);
                 console.log('message : ' + newMsg);
@@ -116,13 +137,27 @@ router.post('/sendNewMsg', (req, res) => {
                 res.status(200).json({complete:true, newMsg:{sender:sender, message:newMsg, created:created}});
             }
         )
+
         .catch(
             (err)=>{
                 res.status(201).json({complete:false, error:err});
             }
+        );
+
+
+
+
+    users.findOneAndUpdate({'id':receiverID, 'rooms.roomID':roomID}, {$inc:{'rooms.$.uncheckedMsg':1}})
+        .then(
+            (result)=>{
+                console.log(result);
+            }
         )
-
-
+        .catch(
+            (err)=>{
+                console.log(err);
+            }
+        )
 });
 
 // 처음 대화일떄 대화방 만들기
@@ -230,7 +265,8 @@ router.post('/makeRoom', (req, res) => {
                                     {
                                         $push: {
                                             rooms: {
-                                                roomID: newRoomID
+                                                roomID: newRoomID,
+                                                uncheckedMsg:1
                                             }
                                         }
                                     }, (err, result) => {

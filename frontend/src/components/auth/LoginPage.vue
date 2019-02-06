@@ -29,7 +29,7 @@
     },
     methods: {
       login: function (event) {
-        this.$http.post('/auth/login', {
+        this.$http.post('http://localhost:3000/auth/login', {
           user: this.user
         })
           .then(

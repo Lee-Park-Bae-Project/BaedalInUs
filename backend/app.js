@@ -14,6 +14,7 @@ const authRouter = require('./routes/auth');
 const mailRouter = require('./routes/mail');
 const chatRouter = require('./routes/chat');
 var usersRouter = require('./routes/users');
+const cors = require('cors');
 const connect = require('./mongo');
 // const io = require('socket.io');
 
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use(cookieParser('1234'));
 app.use(session({

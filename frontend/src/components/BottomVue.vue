@@ -13,10 +13,8 @@
 <style scoped>
   #top_container{
     text-align: center;
-    position : fixed;
-    bottom:0;
     width:100%;
-    margin: 10px;
+    margin-top: 100px;
   }
 
 </style>
