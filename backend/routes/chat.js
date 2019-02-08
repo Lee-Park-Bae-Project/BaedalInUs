@@ -6,7 +6,7 @@ const rooms = require('../models/rooms');
 const users = require('../models/user');
 
 
-function makeRet(user1, user2, sender, msg, updated, roomID) {
+function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
     let ret = {
         user1ID: user1,
         user2ID: user2,
@@ -14,7 +14,8 @@ function makeRet(user1, user2, sender, msg, updated, roomID) {
         message: msg,
         updated: updated,
         roomID: roomID,
-    }
+        uncheckedMsg: uncheckedMsg
+    };
 
     return ret;
 }
@@ -27,20 +28,22 @@ router.post('/getChatRooms', (req, res) => {
     console.log(`userID : ${userID}`);
     console.log(`userOID : ${userOID}`);
 
-    function getRoomInfoPromise(roomID) {
+    // 받은 roomID로 방목록 만듬
+    function getRoomInfoPromise(roomID, uncheckedMsg) {
         return new Promise(function (resolve, reject) {
             rooms.findOne({'roomID': roomID}, (err, result) => {
                 if (err) reject(err);
                 let len = result.messages.length;
-                resolve(makeRet(result.user1ID, result.user2ID, result.messages[len - 1].sender, result.messages[len - 1].message, result.updated, roomID));
+                resolve(makeRet(result.user1ID, result.user2ID, result.messages[len - 1].sender, result.messages[len - 1].message, result.updated, roomID, uncheckedMsg));
             })
         })
     }
 
+    // roomID 하나씪 getRoomInfoPromise에 넘겨줌
     async function getRoomInfo(rooms) {
         let len = rooms.length;
         for (let i = 0; i < len; i++) {
-            let t = await getRoomInfoPromise(rooms[i].roomID);
+            let t = await getRoomInfoPromise(rooms[i].roomID, rooms[i].uncheckedMsg);
             console.log(t);
             ret.push(t);
         }
@@ -48,7 +51,7 @@ router.post('/getChatRooms', (req, res) => {
 
     }
 
-
+    // 유저가 가진 방들 찾음
     users.findOne({'id': userID}, (err, result) => {
         if (err) res.status(204).json(err);
         getRoomInfo(result.rooms);
@@ -79,19 +82,19 @@ router.post('/getRoom/:roomID', (req, res) => {
         res.status(200).json(result);
     });
 
-    // users.findOneAndUpdate({'id':userID, 'rooms.roomID':roomID}, {$set:{'rooms.$.uncheckedMsg':0}})
-    //     .then(
-    //         (result)=>{
-    //             console.log(result);
-    //         }
-    //     )
-    //     .catch(
-    //         (err)=>{
-    //             console.log(err);
-    //         }
-    //     )
+    // 확인 안한 메시지 0 개로 맞춤
+    users.findOneAndUpdate({'id': userID, 'rooms.roomID': roomID}, {$set: {'rooms.$.uncheckedMsg': 0}})
+        .then(
+            (result) => {
+                console.log(result);
 
-
+            }
+        )
+        .catch(
+            (err) => {
+                console.log(err);
+            }
+        )
 
 
     // rooms.findOne({'roomID':roomID})
@@ -108,12 +111,13 @@ router.post('/getRoom/:roomID', (req, res) => {
 
 });
 
+
 // 새로운 메시지 왔을떄
 router.post('/sendNewMsg', (req, res) => {
     let sender = req.body.sender;
     let newMsg = req.body.newMsg;
     let roomID = req.body.roomID;
-    // let socketID = req.body.socketID;
+    let socketID = req.body.socketID;
     let receiverID = req.body.receiverID;
     let created = Date.now();
 
@@ -121,43 +125,44 @@ router.post('/sendNewMsg', (req, res) => {
     console.log(`newMsg : ${newMsg}`);
     console.log(`roomID : ${roomID}`);
     console.log(`receiverID : ${receiverID}`);
-    // console.log(`socketID : ${socketID}`);
+    console.log(`socketID : ${socketID}`);
+
+
+    // receiverID의 socket이 있을때만 쏴줘야
 
     // 디비에 새로운 메시지 추가
-    rooms.findOneAndUpdate({'roomID':roomID}, {$push:{messages:{sender:sender,message:newMsg, created:created}}} )
+    users.findOneAndUpdate({'id': receiverID, 'rooms.roomID': roomID}, {$inc: {'rooms.$.uncheckedMsg': 1}})
+        .then(
+            (result) => {
+                console.log(result);
+            }
+        )
+        .then(
+            () => {
+                rooms.findOneAndUpdate({'roomID': roomID}, {$push: {messages: {sender: sender, message: newMsg, created: created}}})
+            }
+        )
         .then(
             (result)=>{
-                // console.log(result);
+                console.log(result);
                 console.log('-----------------------------');
                 console.log('sender : ' + sender);
                 console.log('message : ' + newMsg);
                 console.log('created : ' + created);
                 console.log('-----------------------------');
 
-                res.status(200).json({complete:true, newMsg:{sender:sender, message:newMsg, created:created}});
-            }
-        )
-
-        .catch(
-            (err)=>{
-                res.status(201).json({complete:false, error:err});
-            }
-        );
-
-
-
-
-    users.findOneAndUpdate({'id':receiverID, 'rooms.roomID':roomID}, {$inc:{'rooms.$.uncheckedMsg':1}})
-        .then(
-            (result)=>{
-                console.log(result);
+                res.status(200).json({complete: true, newMsg: {sender: sender, message: newMsg, created: created}});
             }
         )
         .catch(
             (err)=>{
                 console.log(err);
+                res.status(201).json({complete: false, error: err});
             }
-        )
+        );
+
+
+
 });
 
 // 처음 대화일떄 대화방 만들기
@@ -266,7 +271,7 @@ router.post('/makeRoom', (req, res) => {
                                         $push: {
                                             rooms: {
                                                 roomID: newRoomID,
-                                                uncheckedMsg:1
+                                                uncheckedMsg: 1
                                             }
                                         }
                                     }, (err, result) => {

@@ -7,7 +7,6 @@
         <div id="chatRoomLists">
 
           <!--<img id=imgI src="../assets/profile_img.svg">-->
-
           <p v-if="chatRooms.length===0">참여중인 대화가 없습니다.</p>
           <table v-else="chatRooms.length===0">
             <div v-for="room in chatRooms" @click="selectChatRoom(room)">
@@ -16,6 +15,7 @@
                 <td rowspan="2" class="sender" v-if="room.user1ID===user.id">{{room.user2ID}}</td>
                 <td rowspan="2" class="sender" v-else="room.user1ID===user.id">{{room.user1ID}}</td>
                 <td id="lastMsg">{{room.message}}</td>
+                <td rowspan="2" id="uncheckedMsg"><span class="badge badge-danger">{{room.uncheckedMsg}}</span></td>
               </tr>
               <tr>
                 <td id="lastModified">{{room.updated.substring(0,10)}}</td>
@@ -124,6 +124,10 @@
     /*color:#fff;*/
     border:1px solid #B6F2F0;
     background-color:#B6F2F0;
+  }
+
+  #uncheckedMsg{
+    vertical-align:middle; /*세로 가운데 정렬*/
   }
 
   #lastMsg{

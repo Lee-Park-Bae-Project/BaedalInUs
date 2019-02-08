@@ -3,7 +3,6 @@
     <div class="inner">
 
 
-
       <div id="chatHeader">
         <span v-if="chats !== undefined && this.user.id === chats.user1ID">{{chats.user2ID}}</span>
         <span v-else>{{chats.user1ID}}</span>
@@ -38,11 +37,13 @@
       return {
         roomID: this.$route.params.roomID,
         text: '',
+        receiverID:'',
         chats: {},
         user: {
           id: localStorage.getItem('userID'),
           oid: localStorage.getItem('userOID'),
         },
+        socketID : localStorage.getItem('socketID'),
         newMsg: '',
         // socket: io('localhost:3000'),
         testchats: {
@@ -82,9 +83,10 @@
             (res) => {
               if (res.status === 200) {
                 this.chats = res.data;
-                console.log(this.chats.user1ID);
-                console.log(this.chats.user2ID);
+                console.log('chats.user1ID : ' + this.chats.user1ID);
+                console.log('chats.user2ID : ' + this.chats.user2ID);
                 console.log(this.chats);
+                this.receiverID = this.user.id === this.chats.user1ID?this.chats.user2ID:this.chats.user1ID;
                 this.scrollToLastMessage();
               } else if (res.status === 202) {
                 alert('error');
@@ -100,7 +102,7 @@
           sender: this.user.id,
           newMsg: this.newMsg,
           roomID: this.chats.roomID,
-          // socketID:this.socket.id,
+          socketID:this.socketID,
           receiverID : (this.user.id === this.chats.user1ID)?this.chats.user2ID:this.chats.user1ID
         })
           .then(
@@ -126,6 +128,9 @@
             }
           );
         this.newMsg='';
+
+        this.$emit('newMsg', this.receiverID); // 새로운 메시지가 있다는 알림
+
       },
       scrollToLastMessage:function(){
         // 마지막 메시지까지 스크롤
@@ -134,17 +139,8 @@
       }
     },
     created() {
-
       this.getChatRoom(this.roomID);
-
-      // socket.io
-      // this.socket.on('connect', ()=>{
-      //   console.log(`connected : ${this.socket.id}`);
-      //
-      //   this.socket.emit('newSocket', this.user.id, this.socket.id);  // 서버에게 아이디, 소켓아이디 전달
-      //
-      // });
-
+      this.$emit('joinRoom', this.roomID); // 내가 보고있는 방에 join
     },
     mounted(){
       console.log('mounted');

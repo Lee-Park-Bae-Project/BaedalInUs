@@ -1,9 +1,11 @@
 const SocketIO = require('socket.io');
 const users = require('./models/user');
 
-function setSocketID(socketID, userID){
 
+function setSocketID(socketID, userID){
+    console.log('set socket id');
 }
+
 
 module.exports = (server) => {
     const io = SocketIO(server);
@@ -29,6 +31,15 @@ module.exports = (server) => {
                 .catch(
                     (err)=>console.log(err)
                 )
+        });
+
+        // 새로운 메시지가 왔다는걸 receiver에게 알려야함
+        socket.on('newMsgAlert', (data)=>{
+            console.log('개시발이다 개시발');
+            let receiverID = data.receiverID;
+            console.log(receiverID);
+            socket.broadcast.to(receiverID).emit('newMsg'); // 이 방에 나 제외한 모든 사람들에게 보냄 (recervier한테 새로운 메시지가 왔다는걸 알림)
+
         });
 
         //-----------------------------------------------------------------
@@ -89,4 +100,9 @@ module.exports = (server) => {
         }, 3000);
 
     })
+
+
+
+
+
 };
