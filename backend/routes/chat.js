@@ -25,6 +25,7 @@ router.post('/getChatRooms', (req, res) => {
     let userID = req.body.user.id;
     let userOID = req.body.user.oid;
     let ret = [];
+    let sumOfUncheckedMsg=0;
     console.log(`userID : ${userID}`);
     console.log(`userOID : ${userOID}`);
 
@@ -46,8 +47,9 @@ router.post('/getChatRooms', (req, res) => {
             let t = await getRoomInfoPromise(rooms[i].roomID, rooms[i].uncheckedMsg);
             console.log(t);
             ret.push(t);
+            sumOfUncheckedMsg += rooms[i].uncheckedMsg;
         }
-        res.status(200).json({ret});
+        res.status(200).json({ret, sumOfUncheckedMsg});
 
     }
 

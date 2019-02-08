@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <header-component></header-component><br/>
-    <router-view v-on:newMsg="sendNewMsg" v-on:joinRoom="joinRoom"></router-view><br/>
+    <header-component v-bind:sumOfUncheckedMsg="sumOfUncheckedMsg"></header-component><br/>
+    <router-view v-on:newMsg="sendNewMsg" v-on:joinRoom="joinRoom" v-on:updateSumOfUncheckedMsg="updateSumOfUncheckedMsg"></router-view><br/>
     <bottom-component></bottom-component><br/>
   </div>
 </template>
@@ -18,14 +18,15 @@
     components: {
       HeaderComponent,
       chatVue,
-      BottomComponent
+      BottomComponent,
     },
     data(){
       return{
         socket: io('localhost:3000'),
         user:{
           id:localStorage.getItem('userID')
-        }
+        },
+        sumOfUncheckedMsg:0, // 읽지 않은 메시지 총합
       }
     },
     mounted() {
@@ -42,7 +43,7 @@
         });
 
         this.socket.on('newMsg', ()=>{
-          alert('new message');
+          // alert('new message');
         })
 
       });
@@ -56,6 +57,9 @@
         this.socket.emit('join', roomID, ()=>{
 
         })
+      },
+      updateSumOfUncheckedMsg: function(newVal){
+        this.sumOfUncheckedMsg = newVal; // 안읽은 메시지 총합 업데이
       }
     }
   }

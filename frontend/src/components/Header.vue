@@ -9,7 +9,7 @@
           <li @click="login">로그인</li>
           <li>주문하기</li>
           <li>배달하기</li>
-          <li @click="chat">채팅</li>
+          <li @click="chat">채팅<span class="badge badge-danger">{{this.sumOfUncheckedMsg}}</span></li>
         </ul>
       </div>
     </div>
@@ -21,6 +21,7 @@
 <script>
     export default {
         name: "Header",
+      props:['sumOfUncheckedMsg'],
      methods: {
           login: function () {
             this.$router.push('/login') // Login 페이지로 보내줌

@@ -60,6 +60,8 @@
             (res) => {
               console.log('----------------------response--------------')
               console.log(res);
+              console.log(res.data.sumOfUncheckedMsg); // 읽지 않은 메시지 총합
+              this.emitUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg);
               console.log('----------------------response--------------')
               if (res.status === 200) {
                 this.chatRooms = res.data.ret;
@@ -80,6 +82,10 @@
         this.$router.push(`/chatroom/:${room.roomID}`); // 유저목록 페이지로 보내줌
 
       },
+      emitUpdateSumOfUncheckedMsg:function(newVal){
+        console.log('emit Update Sum Of Unchecked Msg : ' + newVal);
+        this.$emit('updateSumOfUncheckedMsg', newVal);
+      }
 
     },
     created() {
