@@ -42,5 +42,6 @@ userSchema.virtual('password').set(function(password){
     console.log('pw : ' + this.pw);
 }).get(function(){return this.pw;});
 
+
 // users: collection 이름
 module.exports = mongoose.model('User', userSchema, 'users');

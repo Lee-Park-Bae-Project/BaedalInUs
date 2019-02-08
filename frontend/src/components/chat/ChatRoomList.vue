@@ -2,7 +2,6 @@
     <div class="outer">
       <div class="inner">
 
-        <p id="header">chat list</p>
         <!--<p>{{chatRooms.length}}</p>-->
         <div id="chatRoomLists">
 
@@ -15,16 +14,16 @@
                 <td rowspan="2" class="sender" v-if="room.user1ID===user.id">{{room.user2ID}}</td>
                 <td rowspan="2" class="sender" v-else="room.user1ID===user.id">{{room.user1ID}}</td>
                 <td id="lastMsg">{{room.message}}</td>
-                <td rowspan="2" id="uncheckedMsg"><span class="badge badge-danger">{{room.uncheckedMsg}}</span></td>
+                <td rowspan="2" id="uncheckedMsg">
+                  <span v-if="room.uncheckedMsg!==0" class="badge badge-danger">{{room.uncheckedMsg}}</span>
+                </td>
               </tr>
               <tr>
                 <td id="lastModified">{{room.updated.substring(0,10)}}</td>
               </tr>
             </div>
           </table>
-
         </div>
-
       </div>
     </div>
 

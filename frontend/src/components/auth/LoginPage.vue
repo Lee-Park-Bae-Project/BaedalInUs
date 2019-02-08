@@ -35,7 +35,7 @@
           .then(
             (response) => {
               console.log('----------------------response--------------')
-              console.log(response)
+              console.log(response);
               console.log(response.status)
               if (response.status == 200) {
                 console.log(`200`)
@@ -44,6 +44,7 @@
                   // 로컬 스토리지에 아이디 저장하기
                   localStorage.setItem('userID', this.user.id);
                   localStorage.setItem('userOID', response.data.oid);
+                  this.getSumOfUncheckedMsg(this.user.id);
                   this.$router.push('/userList') // 유저목록 페이지로 보내줌
                 } else {
                   alert('wrong password')
@@ -63,6 +64,24 @@
       },
       signUp:function(){
         this.$router.push('/signup'); //  sign up 페이지로 보내줌
+      },
+      getSumOfUncheckedMsg:function(id){
+        this.$http.post('http://localhost:3000/chat/getSumOfUnCheckMsg',{id:id})
+          .then(
+            (res)=>{
+              if(res.status===200){
+                console.log(res.data.sumOfUncheckedMsg);
+
+              } else{
+                alert('err');
+              }
+            }
+          )
+          .catch(
+            (err)=>{
+              alert('error');
+            }
+          )
       }
     }
   }

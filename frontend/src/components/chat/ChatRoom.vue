@@ -18,11 +18,9 @@
         </div>
       </div>
       <div>
-        <input id="newMsg" v-model="newMsg" v-on:keyup.enter="sendNewMsg"> <!--엔터로 클릭이벤트-->
+        <input id="newMsg" v-model="newMsg" v-on:keyup.enter="sendNewMsg2"> <!--엔터로 클릭이벤트-->
         <button id="btnSend" @click="sendNewMsg">전송</button>
       </div>
-
-
 
     </div>
   </div>
@@ -98,6 +96,41 @@
       },
       // 새로운 메시지 보냄
       sendNewMsg: function () {
+        this.$http.post('http://localhost:3000/chat/sendNewMsg', {
+          sender: this.user.id,
+          newMsg: this.newMsg,
+          roomID: this.chats.roomID,
+          socketID:this.socketID,
+          receiverID : (this.user.id === this.chats.user1ID)?this.chats.user2ID:this.chats.user1ID
+        })
+          .then(
+            (res) => {
+              console.log(res);
+              if(res.status === 200){
+                // 메시지 저장 성공 -> result chats.messages에 추가
+                console.log(`----------------새로들어갈 메시지---------------`);
+                this.chats.messages.push(res.data.newMsg);
+                this.chats.updated = res.data.created; // 업데이트된 시각 == 마지막 메시지의 생성 시간
+                console.log(`-----------------new msg added--------------`);
+                this.scrollToLastMessage();
+
+              } else if(res.status === 201){
+                console.log(res.data.error);
+                alert(res.data.error);
+              }
+            }
+          )
+          .catch(
+            (err) => {
+              alert(err);
+            }
+          );
+        this.newMsg='';
+
+        this.$emit('newMsg', this.receiverID); // 새로운 메시지가 있다는 알림
+
+      },
+      sendNewMsg2: function () {
         this.$http.post('http://localhost:3000/chat/sendNewMsg', {
           sender: this.user.id,
           newMsg: this.newMsg,

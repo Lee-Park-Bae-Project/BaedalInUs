@@ -9,11 +9,12 @@
           <li @click="login">로그인</li>
           <li>주문하기</li>
           <li>배달하기</li>
-          <li @click="chat">채팅<span class="badge badge-danger">{{this.sumOfUncheckedMsg}}</span></li>
+          <li @click="chat">채팅
+            <span v-if="this.sumOfUncheckedMsg !==0" class="badge badge-danger">{{this.sumOfUncheckedMsg}}</span>
+          </li>
         </ul>
       </div>
     </div>
-
   </div>
 
 </template>

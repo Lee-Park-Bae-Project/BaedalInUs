@@ -20,6 +20,8 @@ function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
     return ret;
 }
 
+
+
 // 채팅 목록 반환
 router.post('/getChatRooms', (req, res) => {
     let userID = req.body.user.id;
@@ -128,6 +130,7 @@ router.post('/sendNewMsg', (req, res) => {
     console.log(`roomID : ${roomID}`);
     console.log(`receiverID : ${receiverID}`);
     console.log(`socketID : ${socketID}`);
+
 
 
     // receiverID의 socket이 있을때만 쏴줘야
@@ -339,8 +342,30 @@ router.post('/makeRoom', (req, res) => {
     // });
 
 
-})
-;
+});
+
+router.post('/getSumOfUnCheckMsg', (req,res)=>{
+   let id = req.body.id;
+   users.findOne({'id':id})
+       .then(
+           (result)=>{
+               // getSumOfUncheckedMsg(result.rooms);
+               let ret=0;
+               for(let i=0;i<result.rooms.length;i++){
+                    ret += result.rooms[i].uncheckedMsg;
+               }
+
+               res.status(200).json({sumOfUncheckedMsg : ret});
+
+           }
+       )
+       .catch(
+           (err)=>{
+               console.log(err);
+               res.status(201).json({err:err});
+           }
+       )
+});
 
 
 module.exports = router;

@@ -45,7 +45,6 @@
         this.socket.on('newMsg', ()=>{
           // alert('new message');
         })
-
       });
     },
     methods:{
