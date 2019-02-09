@@ -81,12 +81,8 @@
           })
       },
       selectChatRoom:function(room){
-        this.$router.push(`/chatroom/:${room.roomID}`); // 유저목록 페이지로 보내줌
-
-      },
-      emitUpdateSumOfUncheckedMsg:function(newVal){
-        console.log('emit Update Sum Of Unchecked Msg in chat room list vue: ' + newVal);
-        this.$emit('updateSumOfUncheckedMsg', newVal);
+        this.$router.push(`/chatroom/${room.roomID}`); // 유저목록 페이지로 보내줌
+        this.busUpdateSumOfUncheckedMsg(-room.uncheckedMsg);
       },
       busUpdateSumOfUncheckedMsg:function(newVal){
         // app.vue에서 받음

@@ -44,7 +44,11 @@
       },
       // 안읽은 메시지 수 업데이트 하는 함수
       update: function (newVal) {
-        this.sumOfUncheckedMsg = newVal;
+        if(newVal < 0){
+          this.sumOfUncheckedMsg += newVal;
+        } else{
+          this.sumOfUncheckedMsg = newVal;
+        }
       },
 
     },

@@ -75,7 +75,6 @@
     methods: {
       // 채팅방 불러옴
       getChatRoom: function (roomid) {
-        this.roomID = this.roomID.substring(1, this.roomID.length);
         this.$http.post(`http://localhost:3000/chat/getRoom/${this.roomID}`,{userID:this.user.id})
           .then(
             (res) => {
