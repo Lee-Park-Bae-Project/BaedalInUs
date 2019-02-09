@@ -30,6 +30,8 @@
 </template>
 
 <script>
+  import {EventBus} from "../../event-bus";
+
   export default {
     name: "ChatRoomList",
     data() {
@@ -57,11 +59,12 @@
         })
           .then(
             (res) => {
-              console.log('----------------------response--------------')
+              console.log('----------------------response--------------');
               console.log(res);
               console.log(res.data.sumOfUncheckedMsg); // 읽지 않은 메시지 총합
-              this.emitUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg);
-              console.log('----------------------response--------------')
+              // this.emitUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg);
+              this.busUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg);
+              console.log('----------------------response--------------');
               if (res.status === 200) {
                 this.chatRooms = res.data.ret;
                 console.log(this.chatRooms);
@@ -82,9 +85,13 @@
 
       },
       emitUpdateSumOfUncheckedMsg:function(newVal){
-        console.log('emit Update Sum Of Unchecked Msg : ' + newVal);
+        console.log('emit Update Sum Of Unchecked Msg in chat room list vue: ' + newVal);
         this.$emit('updateSumOfUncheckedMsg', newVal);
-      }
+      },
+      busUpdateSumOfUncheckedMsg:function(newVal){
+        // app.vue에서 받음
+        EventBus.$emit('updateSumOfUncheckedMsg', newVal);
+      },
 
     },
     created() {

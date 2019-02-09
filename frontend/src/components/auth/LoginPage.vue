@@ -9,16 +9,16 @@
         <button @click="login">login</button>
         <button @click="signUp">Sign Up</button>
 
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { EventBus} from "../../event-bus";
+
   export default {
     name: 'LoginPage',
-
     data: function () {
       return {
         user: {
@@ -37,19 +37,18 @@
               console.log('----------------------response--------------')
               console.log(response);
               console.log(response.status)
-              if (response.status == 200) {
-                console.log(`200`)
+              if (response.status === 200) {
                 console.log(response)
                 if (response.data.complete) {
                   // 로컬 스토리지에 아이디 저장하기
                   localStorage.setItem('userID', this.user.id);
                   localStorage.setItem('userOID', response.data.oid);
-                  this.getSumOfUncheckedMsg(this.user.id);
+                  this.getSumOfUncheckedMsg(this.user.id);  // 읽지 않은 메시지 가져옴
                   this.$router.push('/userList') // 유저목록 페이지로 보내줌
                 } else {
                   alert('wrong password')
                 }
-              } else if (response.status == 201) {
+              } else if (response.status === 201) {
                 console.log(`201`);
                 alert('no matching id')
               }
@@ -70,8 +69,7 @@
           .then(
             (res)=>{
               if(res.status===200){
-                console.log(res.data.sumOfUncheckedMsg);
-
+                this.busUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg);
               } else{
                 alert('err');
               }
@@ -79,9 +77,14 @@
           )
           .catch(
             (err)=>{
-              alert('error');
+              alert(err);
             }
           )
+      },
+      // 로그인 했을떄 읽지않은 메시지 수 넘겨줌 (header 에 표시함)
+      busUpdateSumOfUncheckedMsg:function(newVal){
+        // header.vue에서 받음
+        EventBus.$emit('updateSumOfUncheckedMsg', newVal);
       }
     }
   }

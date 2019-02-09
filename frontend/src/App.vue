@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <header-component v-bind:sumOfUncheckedMsg="sumOfUncheckedMsg"></header-component><br/>
-    <router-view v-on:newMsg="sendNewMsg" v-on:joinRoom="joinRoom" v-on:updateSumOfUncheckedMsg="updateSumOfUncheckedMsg"></router-view><br/>
+    <header-component></header-component><br/>
+    <router-view v-on:newMsg="sendNewMsg" v-on:joinRoom="joinRoom"></router-view><br/>
     <bottom-component></bottom-component><br/>
   </div>
 </template>
@@ -26,10 +26,10 @@
         user:{
           id:localStorage.getItem('userID')
         },
-        sumOfUncheckedMsg:0, // 읽지 않은 메시지 총합
       }
     },
     mounted() {
+
       this.socket.on('connect', ()=>{
         console.log(`connected`);
 
@@ -57,10 +57,8 @@
 
         })
       },
-      updateSumOfUncheckedMsg: function(newVal){
-        this.sumOfUncheckedMsg = newVal; // 안읽은 메시지 총합 업데이
-      }
-    }
+    },
+
   }
 </script>
 
