@@ -4,24 +4,27 @@
 
 
       <div id="chatHeader">
+        <!--상대 아이디-->
         <span v-if="chats !== undefined && this.user.id === chats.user1ID">{{chats.user2ID}}</span>
         <span v-else>{{chats.user1ID}}</span>
       </div>
       <div id="scrollDiv">
         <div id=chats v-for="chat in chats.messages">
+
           <div id=myChat v-if="user.id === chat.sender">
-            <span id="myTime">{{chat.created}}</span>
+            <span id="myTime">{{((chat.created))}}</span>
             <span>{{chat.message}}</span>
           </div>
           <div id=othersChat v-else="this.user.id === chat.sender">
             <span>{{chat.message}}</span>
-            <span id="otherTime">{{chat.created}}</span>
+            <span id="otherTime">{{(chat.created)}}</span>
           </div>
         </div>
       </div>
+
       <div>
-        <input id="newMsg" v-model="newMsg" v-on:keyup.enter="sendNewMsg(Date.now())"> <!--엔터로 클릭이벤트-->
-        <button id="btnSend" @click="sendNewMsg(Date.now())">전송</button>
+        <input id="newMsg" v-model="newMsg" v-on:keyup.enter="sendNewMsg()"> <!--엔터로 클릭이벤트-->
+        <button id="btnSend" @click="sendNewMsg()">전송</button>
       </div>
     </div>
   </div>
@@ -97,7 +100,8 @@
         })
       },
       // 새로운 메시지 보냄
-      sendNewMsg: function (created) {
+      sendNewMsg: function () {
+        const created = new Date();
         console.log(`in sendNewMsg`);
         console.log(`newMsg : ${this.newMsg}`);
         console.log(`sender : ${this.user.id}`);
@@ -154,6 +158,12 @@
         let objDiv = document.getElementById('scrollDiv');
         objDiv.scrollTop = objDiv.scrollHeight;
       },
+      getDate(time){
+        let t = new Date();
+
+        console.log(t);
+        return time.getFullYear();
+      }
     },
     created() {
       this.getChatRoom(this.roomID);
@@ -183,6 +193,9 @@
 
 
   }
+
+
+
 </script>
 
 <style scoped>

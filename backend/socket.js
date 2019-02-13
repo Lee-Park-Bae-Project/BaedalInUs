@@ -41,7 +41,7 @@ module.exports = (server) => {
 
         });
 
-        // chatRoom 에서 받음
+        // chatRoom 에서 보냄 TODO: 나 포함한 모든인원에게 보내기로 바꾸기
         socket.on('sendNewMsg', (data)=>{
             console.log('data : ' + data);
             console.log('in data : ' + data.newMsg, data.sender, data.created, data.roomID);

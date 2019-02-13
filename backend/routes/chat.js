@@ -35,6 +35,7 @@ router.post('/getChatRooms', (req, res) => {
         return new Promise(function (resolve, reject) {
             rooms.findOne({'roomID': roomID}, (err, result) => {
                 if (err) reject(err);
+
                 let len = result.messages.length;
                 resolve(makeRet(result.user1ID, result.user2ID, result.messages[len - 1].sender, result.messages[len - 1].message, result.updated, roomID, uncheckedMsg));
             })
@@ -89,7 +90,7 @@ router.post('/getRoom/:roomID', (req, res) => {
     users.findOneAndUpdate({'id': userID, 'rooms.roomID': roomID}, {$set: {'rooms.$.uncheckedMsg': 0}})
         .then(
             (result) => {
-                console.log(result);
+                // console.log(result);
             }
         )
         .catch(
@@ -180,6 +181,7 @@ router.post('/makeRoom', (req, res) => {
     const receiverOID = req.body.room.receiverOID;
     const receiverID = req.body.room.receiverID;
     const message = req.body.room.message;
+    const created = req.body.room.created;
 
     console.log('------------req------------');
     console.log(`senderOID : ${senderOID}`);
@@ -187,7 +189,8 @@ router.post('/makeRoom', (req, res) => {
     console.log(`receiverOID : ${receiverOID}`);
     console.log(`receiverID : ${receiverID}`);
     console.log(`message : ${message}`);
-    console.log(`date now : ${Date.now()}`);
+    console.log(`created : ${created}`);
+
     console.log('--------------------------------');
 
     // rooms.findOneAndUpdate({'user2': senderOID}, {
@@ -211,12 +214,13 @@ router.post('/makeRoom', (req, res) => {
     rooms.findOneAndUpdate(
         {
             $or: [{'user1': senderOID, 'user2': receiverOID}, {'user1': receiverOID, 'user2': senderOID}]
-        }, {
+        },
+        {
             $push: {
                 messages: {
                     sender: senderID,
                     message: message,
-                    created: Date.now()
+                    created: created
                 }
             }
         }, (err, result) => {
@@ -245,10 +249,10 @@ router.post('/makeRoom', (req, res) => {
                             {
                                 sender: senderID, // 보낸사람
                                 message: message, // 메시지 내용
-                                created: Date.now() // 보낸 시각
+                                created: created // 보낸 시각
                             }
                         ],
-                        updated: Date.now()
+                        updated: created
                     }
                 );
 
@@ -366,6 +370,5 @@ router.post('/getSumOfUnCheckMsg', (req, res) => {
             }
         )
 });
-
 
 module.exports = router;

@@ -34,6 +34,7 @@
           receiverOID:'',
           receiverID:'',
           message:'',
+          created:''
         },
       }
     },
@@ -64,7 +65,8 @@
             senderID:senderID,
             receiverOID:receiverOID,
             receiverID:receiverID,
-            message:message
+            message:message,
+            created:new Date()
           }
         })
           .then(
@@ -95,7 +97,6 @@
         console.log(`receiverOID : ${receiverOID} receiverID : ${receiverID}`);
 
         let message = prompt('메시지를 입력하세여');  // 처음 보낼 메시지 입력
-        console.log(`newMSG : ${message}`);
 
 
         this.sendMessage(senderOID, senderID, receiverOID, receiverID, message);
