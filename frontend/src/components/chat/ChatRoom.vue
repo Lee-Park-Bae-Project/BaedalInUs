@@ -18,30 +18,31 @@
         </div>
       </div>
       <div>
-        <input id="newMsg" v-model="newMsg" v-on:keyup.enter="sendNewMsg2"> <!--엔터로 클릭이벤트-->
-        <button id="btnSend" @click="sendNewMsg">전송</button>
+        <input id="newMsg" v-model="newMsg" v-on:keyup.enter="sendNewMsg(Date.now())"> <!--엔터로 클릭이벤트-->
+        <button id="btnSend" @click="sendNewMsg(Date.now())">전송</button>
       </div>
-
     </div>
   </div>
 
 </template>
 
 <script>
+  import {EventBus} from "../../event-bus";
 
   export default {
-    name: "ChatRoom",
+  name: "ChatRoom",
+    props:['propsNewMsg'],
     data() {
       return {
         roomID: this.$route.params.roomID,
         text: '',
-        receiverID:'',
+        receiverID: '',
         chats: {},
         user: {
           id: localStorage.getItem('userID'),
           oid: localStorage.getItem('userOID'),
         },
-        socketID : localStorage.getItem('socketID'),
+        socketID: localStorage.getItem('socketID'),
         newMsg: '',
         // socket: io('localhost:3000'),
         testchats: {
@@ -75,7 +76,7 @@
     methods: {
       // 채팅방 불러옴
       getChatRoom: function (roomid) {
-        this.$http.post(`http://localhost:3000/chat/getRoom/${this.roomID}`,{userID:this.user.id})
+        this.$http.post(`http://localhost:3000/chat/getRoom/${this.roomID}`, {userID: this.user.id})
           .then(
             (res) => {
               if (res.status === 200) {
@@ -83,7 +84,7 @@
                 console.log('chats.user1ID : ' + this.chats.user1ID);
                 console.log('chats.user2ID : ' + this.chats.user2ID);
                 console.log(this.chats);
-                this.receiverID = this.user.id === this.chats.user1ID?this.chats.user2ID:this.chats.user1ID;
+                this.receiverID = this.user.id === this.chats.user1ID ? this.chats.user2ID : this.chats.user1ID;
                 this.scrollToLastMessage();
               } else if (res.status === 202) {
                 alert('error');
@@ -94,26 +95,44 @@
         })
       },
       // 새로운 메시지 보냄
-      sendNewMsg: function () {
+      sendNewMsg: function (created) {
+        console.log(`in sendNewMsg`);
+        console.log(`newMsg : ${this.newMsg}`);
+        console.log(`sender : ${this.user.id}`);
+        console.log(`created : ${created}`);
+
+        this.busEmitSendMsg(this.newMsg, this.user.id, created, this.roomID);
+        this.sendNewMsgToServer(this.newMsg, this.user.id, created);
+      },
+      busEmitSendMsg:function(newMsg, sender, created, roomID){
+        // console.log(`in busEmitSendMsg`);
+        // console.log(`newMsg : ${newMsg}`);
+        // console.log(`sender : ${sender }`);
+        // console.log(`created : ${created}`);
+        // console.log(`roomID : ${roomID}`);
+        EventBus.$emit('sendNewMsg', newMsg, sender, created, roomID);
+      },
+      sendNewMsgToServer:function(newMsg, sender, created){
         this.$http.post('http://localhost:3000/chat/sendNewMsg', {
-          sender: this.user.id,
-          newMsg: this.newMsg,
+          sender: sender,
+          newMsg: newMsg,
           roomID: this.chats.roomID,
-          socketID:this.socketID,
-          receiverID : (this.user.id === this.chats.user1ID)?this.chats.user2ID:this.chats.user1ID
+          socketID: this.socketID,
+          receiverID: (this.user.id === this.chats.user1ID) ? this.chats.user2ID : this.chats.user1ID,
+          created:created,
         })
           .then(
             (res) => {
               console.log(res);
-              if(res.status === 200){
+              if (res.status === 200) {
                 // 메시지 저장 성공 -> result chats.messages에 추가
-                console.log(`----------------새로들어갈 메시지---------------`);
-                this.chats.messages.push(res.data.newMsg);
-                this.chats.updated = res.data.created; // 업데이트된 시각 == 마지막 메시지의 생성 시간
-                console.log(`-----------------new msg added--------------`);
+                // console.log(`----------------새로들어갈 메시지---------------`);
+                // this.chats.messages.push(res.data.newMsg);
+                // this.chats.updated = res.data.created; // 업데이트된 시각 == 마지막 메시지의 생성 시간 (고쳐야할듯)
+                // console.log(`-----------------new msg added--------------`);
                 this.scrollToLastMessage();
 
-              } else if(res.status === 201){
+              } else if (res.status === 201) {
                 console.log(res.data.error);
                 alert(res.data.error);
               }
@@ -124,65 +143,49 @@
               alert(err);
             }
           );
-        this.newMsg='';
+        this.newMsg = '';
 
-        this.$emit('newMsg', this.receiverID); // 새로운 메시지가 있다는 알림
-
+        // this.$emit('newMsg', this.receiverID); // 새로운 메시지가 있다는 알림
       },
-      sendNewMsg2: function () {
-        this.$http.post('http://localhost:3000/chat/sendNewMsg', {
-          sender: this.user.id,
-          newMsg: this.newMsg,
-          roomID: this.chats.roomID,
-          socketID:this.socketID,
-          receiverID : (this.user.id === this.chats.user1ID)?this.chats.user2ID:this.chats.user1ID
-        })
-          .then(
-            (res) => {
-              console.log(res);
-              if(res.status === 200){
-                // 메시지 저장 성공 -> result chats.messages에 추가
-                console.log(`----------------새로들어갈 메시지---------------`);
-                this.chats.messages.push(res.data.newMsg);
-                this.chats.updated = res.data.created; // 업데이트된 시각 == 마지막 메시지의 생성 시간
-                console.log(`-----------------new msg added--------------`);
-                this.scrollToLastMessage();
-
-              } else if(res.status === 201){
-                console.log(res.data.error);
-                alert(res.data.error);
-              }
-            }
-          )
-          .catch(
-            (err) => {
-              alert(err);
-            }
-          );
-        this.newMsg='';
-
-        this.$emit('newMsg', this.receiverID); // 새로운 메시지가 있다는 알림
-
-      },
-      scrollToLastMessage:function(){
+      scrollToLastMessage: function () {
         // 마지막 메시지까지 스크롤
         let objDiv = document.getElementById('scrollDiv');
         objDiv.scrollTop = objDiv.scrollHeight;
-      }
+      },
+      receiveNewMsg:(data)=>{
+        console.log(`------------new msg on event bus--------------`);
+        console.log(data);
+        console.log(this.chats);
+        console.log(`------------new msg on event bus--------------`);
+
+        this.chats.messages.push(data); // 새로운 메시지 추가
+
+      },
     },
     created() {
       this.getChatRoom(this.roomID);
-      this.$emit('joinRoom', this.roomID); // 내가 보고있는 방에 join
+      EventBus.$emit('joinRoom', this.roomID);
+
     },
-    mounted(){
+    mounted() {
       console.log('mounted');
       this.scrollToLastMessage();
-    },
-    watch:{
-      chats:function(data){
-        console.log('chats is modified');
-        // console.log(data);
+      // EventBus.$once('newMsg', this.receiveNewMsg); // socket.js 에서 보냄
 
+
+    },
+    destroyed(){
+      console.log('before destroy');
+      EventBus.$emit('leaveRoom', (this.roomID)); // 이방을 떠남 (app.vue에서 받음)
+
+    },
+    watch: {
+      chats: function (data) {
+        console.log('chats is modified');
+      },
+      propsNewMsg:function(){
+        console.log('propsNewMsg is modified');
+        this.chats.messages.push(this.propsNewMsg);
       }
     },
 
@@ -203,7 +206,6 @@
   .inner {
     display: inline-block;
     width: 100%;
-
   }
 
   #myChat {
@@ -223,11 +225,11 @@
     text-align: left;
   }
 
-  #chatHeader{
-    font-size:40px;
+  #chatHeader {
+    font-size: 40px;
   }
 
-  #scrollDiv{
+  #scrollDiv {
     overflow: scroll;
     height: 300px;
   }

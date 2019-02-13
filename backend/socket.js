@@ -35,11 +35,18 @@ module.exports = (server) => {
 
         // 새로운 메시지가 왔다는걸 receiver에게 알려야함
         socket.on('newMsgAlert', (data)=>{
-            console.log('개시발이다 개시발');
             let receiverID = data.receiverID;
             console.log(receiverID);
             socket.broadcast.to(receiverID).emit('newMsg'); // 이 방에 나 제외한 모든 사람들에게 보냄 (recervier한테 새로운 메시지가 왔다는걸 알림)
 
+        });
+
+        // chatRoom 에서 받음
+        socket.on('sendNewMsg', (data)=>{
+            console.log('data : ' + data);
+            console.log('in data : ' + data.newMsg, data.sender, data.created, data.roomID);
+            // console.log('Object.keys(socket.rooms) : ' + Object.keys(socket.rooms));
+            socket.broadcast.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created}) ;
         });
 
         //-----------------------------------------------------------------

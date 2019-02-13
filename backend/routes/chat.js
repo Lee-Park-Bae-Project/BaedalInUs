@@ -21,13 +21,12 @@ function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
 }
 
 
-
 // 채팅 목록 반환
 router.post('/getChatRooms', (req, res) => {
     let userID = req.body.user.id;
     let userOID = req.body.user.oid;
     let ret = [];
-    let sumOfUncheckedMsg=0;
+    let sumOfUncheckedMsg = 0;
     console.log(`userID : ${userID}`);
     console.log(`userOID : ${userOID}`);
 
@@ -91,7 +90,6 @@ router.post('/getRoom/:roomID', (req, res) => {
         .then(
             (result) => {
                 console.log(result);
-
             }
         )
         .catch(
@@ -99,18 +97,6 @@ router.post('/getRoom/:roomID', (req, res) => {
                 console.log(err);
             }
         )
-
-
-    // rooms.findOne({'roomID':roomID})
-    //     .then(
-    //         (result)=>{
-    //             console.log(result);
-    //             res.status(200).json({result});
-    //         }
-    //     )
-    //     .catch((err)=>{
-    //         res.status(202)
-    //     });
 
 
 });
@@ -123,50 +109,65 @@ router.post('/sendNewMsg', (req, res) => {
     let roomID = req.body.roomID;
     let socketID = req.body.socketID;
     let receiverID = req.body.receiverID;
-    let created = Date.now();
+    let created = req.body.created;
 
     console.log(`sender : ${sender}`);
     console.log(`newMsg : ${newMsg}`);
     console.log(`roomID : ${roomID}`);
     console.log(`receiverID : ${receiverID}`);
     console.log(`socketID : ${socketID}`);
-
-
+    console.log(`created : ${created}`);
 
     // receiverID의 socket이 있을때만 쏴줘야
 
-    // 디비에 새로운 메시지 추가
-    users.findOneAndUpdate({'id': receiverID, 'rooms.roomID': roomID}, {$inc: {'rooms.$.uncheckedMsg': 1}})
+    // 확인안한 메시지 1증가
+
+    console.log('새로운 메시지 디비에 추가');
+    rooms.findOneAndUpdate({'roomID': roomID}, {$push: {messages: {sender: sender, message: newMsg, created: created}}})
         .then(
             (result) => {
-                console.log(result);
-            }
-        )
-        .then(
-            () => {
-                rooms.findOneAndUpdate({'roomID': roomID}, {$push: {messages: {sender: sender, message: newMsg, created: created}}})
-            }
-        )
-        .then(
-            (result)=>{
-                console.log(result);
+                // console.log(result);
                 console.log('-----------------------------');
                 console.log('sender : ' + sender);
                 console.log('message : ' + newMsg);
                 console.log('created : ' + created);
                 console.log('-----------------------------');
-
                 res.status(200).json({complete: true, newMsg: {sender: sender, message: newMsg, created: created}});
             }
         )
         .catch(
-            (err)=>{
+            (err) => {
                 console.log(err);
                 res.status(201).json({complete: false, error: err});
             }
         );
 
-
+    // users.findOneAndUpdate({'id': receiverID, 'rooms.roomID': roomID}, {$inc: {'rooms.$.uncheckedMsg': 1}})
+    //     .then(
+    //         (result) => {
+    //             console.log(result);
+    //             console.log('새로운 메시지 디비에 추가');
+    //             return rooms.findOneAndUpdate({'roomID': roomID}, {$push: {messages: {sender: sender, message: newMsg, created: created}}})
+    //         }
+    //     )
+    //     .then(
+    //         (result)=>{
+    //             console.log(result);
+    //             console.log('-----------------------------');
+    //             console.log('sender : ' + sender);
+    //             console.log('message : ' + newMsg);
+    //             console.log('created : ' + created);
+    //             console.log('-----------------------------');
+    //
+    //             res.status(200).json({complete: true, newMsg: {sender: sender, message: newMsg, created: created}});
+    //         }
+    //     )
+    //     .catch(
+    //         (err)=>{
+    //             console.log(err);
+    //             res.status(201).json({complete: false, error: err});
+    //         }
+    //     );
 
 });
 
@@ -250,7 +251,6 @@ router.post('/makeRoom', (req, res) => {
                         updated: Date.now()
                     }
                 );
-
 
                 // 저장
                 newRoom.save()
@@ -344,27 +344,27 @@ router.post('/makeRoom', (req, res) => {
 
 });
 
-router.post('/getSumOfUnCheckMsg', (req,res)=>{
-   let id = req.body.id;
-   users.findOne({'id':id})
-       .then(
-           (result)=>{
-               // getSumOfUncheckedMsg(result.rooms);
-               let ret=0;
-               for(let i=0;i<result.rooms.length;i++){
+router.post('/getSumOfUnCheckMsg', (req, res) => {
+    let id = req.body.id;
+    users.findOne({'id': id})
+        .then(
+            (result) => {
+                // getSumOfUncheckedMsg(result.rooms);
+                let ret = 0;
+                for (let i = 0; i < result.rooms.length; i++) {
                     ret += result.rooms[i].uncheckedMsg;
-               }
+                }
 
-               res.status(200).json({sumOfUncheckedMsg : ret});
+                res.status(200).json({sumOfUncheckedMsg: ret});
 
-           }
-       )
-       .catch(
-           (err)=>{
-               console.log(err);
-               res.status(201).json({err:err});
-           }
-       )
+            }
+        )
+        .catch(
+            (err) => {
+                console.log(err);
+                res.status(201).json({err: err});
+            }
+        )
 });
 
 
