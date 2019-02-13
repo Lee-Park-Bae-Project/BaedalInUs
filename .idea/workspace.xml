@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4f3c7c3e-b2a2-405e-8489-843c4771e97a" name="Default Changelist" comment="중간 커밋2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -28,13 +27,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="js" value="8406" />
-          <entry key="vue" value="9311" />
+          <entry key="vue" value="9755" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JavaScript" value="8406" />
-          <entry key="Vue.js" value="9311" />
+          <entry key="Vue.js" value="9755" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages">
@@ -66,8 +65,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="177" column="70" selection-start-line="177" selection-start-column="70" selection-end-line="177" selection-end-column="70" />
+            <state relative-caret-position="224">
+              <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -178,8 +177,8 @@
       <find>eventbus</find>
       <find>recei</find>
       <find>propsNewMsg</find>
-      <find>receiveNewMsg</find>
       <find>newmsg</find>
+      <find>receiveNewMsg</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -458,7 +457,7 @@
       <workItem from="1549193056961" duration="13095000" />
       <workItem from="1549256747399" duration="19712000" />
       <workItem from="1549609433937" duration="32063000" />
-      <workItem from="1549719355288" duration="17188000" />
+      <workItem from="1549719355288" duration="19072000" />
     </task>
     <task id="LOCAL-00001" summary="add mainPage">
       <created>1547806069275</created>
@@ -485,7 +484,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="271879000" />
+    <option name="totallyTimeSpent" value="273763000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -865,8 +864,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="177" column="70" selection-start-line="177" selection-start-column="70" selection-end-line="177" selection-end-column="70" />
+        <state relative-caret-position="224">
+          <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
         </state>
       </provider>
     </entry>

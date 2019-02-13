@@ -8,12 +8,14 @@
         <span v-else>{{chats.user1ID}}</span>
       </div>
       <div id="scrollDiv">
-        <div v-for="chat in chats.messages">
-          <div v-if="user.id === chat.sender">
-            <p id="myChat">{{chat.message}}</p>
+        <div id=chats v-for="chat in chats.messages">
+          <div id=myChat v-if="user.id === chat.sender">
+            <span id="myTime">{{chat.created}}</span>
+            <span>{{chat.message}}</span>
           </div>
-          <div v-else="this.user.id === chat.sender">
-            <p id="othersChat">{{chat.message}}</p>
+          <div id=othersChat v-else="this.user.id === chat.sender">
+            <span>{{chat.message}}</span>
+            <span id="otherTime">{{chat.created}}</span>
           </div>
         </div>
       </div>
@@ -198,9 +200,7 @@
     width: 100%;
   }
 
-  #myChat {
-    text-align: right;
-  }
+
 
   #newMsg {
     width: 90%;
@@ -211,9 +211,7 @@
     width: 10%;
   }
 
-  #othersChat {
-    text-align: left;
-  }
+
 
   #chatHeader {
     font-size: 40px;
@@ -222,5 +220,23 @@
   #scrollDiv {
     overflow: scroll;
     height: 300px;
+  }
+  #chats{
+    font-size:20px;
+
+  }
+  #myChat {
+    text-align: right;
+  }
+  #othersChat {
+    text-align: left;
+  }
+  #myTime{
+    font-size:10px;
+    text-align:right;
+  }
+  #otherTime{
+    font-size:10px;
+    text-align:left;
   }
 </style>
