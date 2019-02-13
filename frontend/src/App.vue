@@ -57,8 +57,7 @@
           console.log(data);
           console.log('-----------newMsg--------------');
           // 새로운 메시지 보냈다는걸 알림
-          // EventBus.$emit('newMsg', (data)); // ChatRoom 에서 받음
-          this.newMsg = data;
+          this.newMsg = data; // props로 하위 chat room 으로 전달
 
         })
       });

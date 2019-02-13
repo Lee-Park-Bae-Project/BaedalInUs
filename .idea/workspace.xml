@@ -3,14 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4f3c7c3e-b2a2-405e-8489-843c4771e97a" name="Default Changelist" comment="중간 커밋2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/css/app.03c1d7c03c154dc61a5b0057a475230c.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/css/app.03c1d7c03c154dc61a5b0057a475230c.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/js/app.0e6a77413bab31e61377.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/js/app.0e6a77413bab31e61377.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/js/manifest.2ae2e69a05c33dfc65f8.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/backend/public/static/js/manifest.2ae2e69a05c33dfc65f8.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/routes/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/socket.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/socket.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue" afterDir="false" />
     </list>
@@ -36,13 +28,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="js" value="8406" />
-          <entry key="vue" value="9225" />
+          <entry key="vue" value="9311" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JavaScript" value="8406" />
-          <entry key="Vue.js" value="9225" />
+          <entry key="Vue.js" value="9311" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages">
@@ -74,8 +66,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="187" column="15" selection-start-line="187" selection-start-column="15" selection-end-line="187" selection-end-column="15" />
+            <state relative-caret-position="178">
+              <caret line="177" column="70" selection-start-line="177" selection-start-column="70" selection-end-line="177" selection-end-column="70" />
             </state>
           </provider>
         </entry>
@@ -119,8 +111,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/App.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-288">
-              <caret line="57" column="57" lean-forward="true" selection-start-line="57" selection-start-column="57" selection-end-line="57" selection-end-column="57" />
+            <state relative-caret-position="177">
+              <caret line="59" column="38" lean-forward="true" selection-start-line="59" selection-start-column="38" selection-end-line="59" selection-end-column="38" />
               <folding>
                 <element signature="e#242#295#0" expanded="true" />
               </folding>
@@ -158,7 +150,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>bus</find>
       <find>Bus</find>
       <find>sendnewMsg</find>
       <find>join</find>
@@ -187,6 +178,7 @@
       <find>eventbus</find>
       <find>recei</find>
       <find>propsNewMsg</find>
+      <find>receiveNewMsg</find>
       <find>newmsg</find>
     </findStrings>
   </component>
@@ -466,7 +458,7 @@
       <workItem from="1549193056961" duration="13095000" />
       <workItem from="1549256747399" duration="19712000" />
       <workItem from="1549609433937" duration="32063000" />
-      <workItem from="1549719355288" duration="16769000" />
+      <workItem from="1549719355288" duration="17188000" />
     </task>
     <task id="LOCAL-00001" summary="add mainPage">
       <created>1547806069275</created>
@@ -493,7 +485,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="271460000" />
+    <option name="totallyTimeSpent" value="271879000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -508,7 +500,7 @@
     <frame x="0" y="23" width="1440" height="828" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49773756" visible="true" weight="0.18604651" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49773756" visible="true" weight="0.18604651" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5022625" side_tool="true" weight="0.1952079" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -520,7 +512,7 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32880434" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4929694" visible="true" weight="0.4035326" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.4929694" visible="true" weight="0.4035326" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5070306" side_tool="true" weight="0.3569869" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.32880434" />
       <window_info anchor="bottom" id="TypeScript" order="12" sideWeight="0.49964765" weight="0.32880434" />
@@ -863,8 +855,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/App.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-288">
-          <caret line="57" column="57" lean-forward="true" selection-start-line="57" selection-start-column="57" selection-end-line="57" selection-end-column="57" />
+        <state relative-caret-position="177">
+          <caret line="59" column="38" lean-forward="true" selection-start-line="59" selection-start-column="38" selection-end-line="59" selection-end-column="38" />
           <folding>
             <element signature="e#242#295#0" expanded="true" />
           </folding>
@@ -873,8 +865,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="187" column="15" selection-start-line="187" selection-start-column="15" selection-end-line="187" selection-end-column="15" />
+        <state relative-caret-position="178">
+          <caret line="177" column="70" selection-start-line="177" selection-start-column="70" selection-end-line="177" selection-end-column="70" />
         </state>
       </provider>
     </entry>

@@ -152,15 +152,6 @@
         let objDiv = document.getElementById('scrollDiv');
         objDiv.scrollTop = objDiv.scrollHeight;
       },
-      receiveNewMsg:(data)=>{
-        console.log(`------------new msg on event bus--------------`);
-        console.log(data);
-        console.log(this.chats);
-        console.log(`------------new msg on event bus--------------`);
-
-        this.chats.messages.push(data); // 새로운 메시지 추가
-
-      },
     },
     created() {
       this.getChatRoom(this.roomID);
@@ -170,7 +161,6 @@
     mounted() {
       console.log('mounted');
       this.scrollToLastMessage();
-      // EventBus.$once('newMsg', this.receiveNewMsg); // socket.js 에서 보냄
 
 
     },
@@ -185,7 +175,7 @@
       },
       propsNewMsg:function(){
         console.log('propsNewMsg is modified');
-        this.chats.messages.push(this.propsNewMsg);
+        this.chats.messages.push(this.propsNewMsg); // props로 메시지 전달받음
       }
     },
 
