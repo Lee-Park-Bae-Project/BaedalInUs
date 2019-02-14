@@ -66,7 +66,7 @@
             receiverOID:receiverOID,
             receiverID:receiverID,
             message:message,
-            created:new Date()
+            created:Date.now()
           }
         })
           .then(

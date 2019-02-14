@@ -10,14 +10,19 @@
       </div>
       <div id="scrollDiv">
         <div id=chats v-for="chat in chats.messages">
+          <div v-if="isNewDay(chat.created)">
+            <hr>
+            <span id="newDate">{{getYYMMDD(chat.created)}}</span>
+            <hr>
+          </div>
 
           <div id=myChat v-if="user.id === chat.sender">
-            <span id="myTime">{{((chat.created))}}</span>
+            <span id="myTime">{{(getTime(chat.created))}}</span>
             <span>{{chat.message}}</span>
           </div>
           <div id=othersChat v-else="this.user.id === chat.sender">
             <span>{{chat.message}}</span>
-            <span id="otherTime">{{(chat.created)}}</span>
+            <span id="otherTime">{{getTime(chat.created)}}</span>
           </div>
         </div>
       </div>
@@ -34,6 +39,8 @@
 <script>
   import {EventBus} from "../../event-bus";
 
+  let stdDate = '1970-01-01';
+
   export default {
     name: "ChatRoom",
     props: ['propsNewMsg'],
@@ -49,33 +56,6 @@
         },
         socketID: localStorage.getItem('socketID'),
         newMsg: '',
-        // socket: io('localhost:3000'),
-        testchats: {
-          created: "2019-01-31T14:22:12.472Z",
-          messages: [
-            {
-              created: "2019-01-31T14:22:12.466Z",
-              message: "msg1",
-              sender: "test1"
-            },
-            {
-              created: "2019-01-31T14:22:12.466Z",
-              message: "msg2",
-              sender: "test1"
-            },
-            {
-              created: "2019-01-31T14:22:12.466Z",
-              message: "msg3",
-              sender: "test2"
-            }
-          ],
-          roomID: "xk4QEnaGeDEJbOenNrOu",
-          user1: "5c530481f6d2eb28eb03c5c0",
-          user1ID: "test1",
-          user2: "5c530486f6d2eb28eb03c5c1",
-          user2ID: "test2",
-          updated: "2019-01-31T14:22:12.466Z"
-        }
       }
     },
     methods: {
@@ -102,8 +82,7 @@
       sendNewMsg: function () {
         if (this.newMsg.length === 0) {
         } else {
-
-          const created = new Date();
+          const created = Date.now();
           console.log(`in sendNewMsg`);
           console.log(`newMsg : ${this.newMsg}`);
           console.log(`sender : ${this.user.id}`);
@@ -162,13 +141,61 @@
         let objDiv = document.getElementById('scrollDiv');
         objDiv.scrollTop = objDiv.scrollHeight + 30;
       },
-     getDate(time) {
-        // TODO 시간(스트링) 파싱하기 ex)날짜 - 2019년 2월 14일 시간 - 오전 1시 22분 / 오후 9시 20분
-        // 시간은
-        let t = new Date();
+     getYear(time) {
+       let ret = time.substr(0,4);
+        return ret;
+      },
+      getMonth(time){
+        let ret = time.substr(5,2);
+        return ret;
+      },
+      getDay(time){
+        let ret = time.substr(8,2);
+        return ret;
+      },
+      getIso(time){
+        let t1 = new Date().getTimezoneOffset() * 60000;
+        let t2 = new Date(time - t1);
 
-        console.log(t);
-        return time.getFullYear();
+        return t2.toISOString();
+      },
+      isNewDay(time){
+        let chatday = this.getIso(time).substr(0,10);
+        // let today = new Date().toISOString().substr(0,10);
+        // console.log('chatday : ' + chatday);
+        // console.log('today : ' + today);
+
+
+        console.log('chatday : ' +chatday);
+        console.log('stdDate : ' + this.stdDate);
+        console.log(chatday === this.stdDate);
+
+        if(chatday !== this.stdDate){
+          this.stdDate = chatday;
+          console.log('rkwkrwkrwkerkwelrwker');
+          return true;
+        } else{
+          return false;
+        }
+
+      },
+      getYYMMDD(time){
+        let iso = this.getIso(time);
+        let ret = this.getYear(iso) + '년 ' + this.getMonth(iso) + '월 ' + this.getDay(iso) + '일';
+        return ret;
+      },
+      getTime(time){
+        // let timezoneOffset = new Date().getTimezoneOffset() * 60000;
+        // let timezoneDate = new Date(Date.now() - timezoneOffset);
+        // console.log('그냥 ISOString = '+new Date().toISOString());
+        // console.log('timezone 반영 ISOString = '+timezoneDate.toISOString());
+
+        let iso = this.getIso(time);
+        let hh = iso.substr(11,2);
+        let mm = iso.substr(14,2);
+        let ret = hh + ':' + mm;
+
+        return ret;
       }
     },
     created() {
@@ -191,15 +218,19 @@
     watch: {
       chats: function (data) {
         console.log('chats is modified');
-
+        this.stdDate='1970-01-01';
       },
       propsNewMsg: function () {
         console.log('propsNewMsg is modified');
         this.chats.messages.push(this.propsNewMsg); // props로 메시지 전달받음
+        this.stdDate='1970-01-01';
+
+      },
+      newMsg:function(){
+        this.stdDate='1970-01-01';
 
       }
     },
-
 
   }
 
@@ -238,7 +269,7 @@
 
   #scrollDiv {
     overflow: scroll;
-    height: 400px;
+    height: 600px;
     padding:10px;
   }
 
@@ -263,5 +294,9 @@
   #otherTime {
     font-size: 10px;
     text-align: left;
+  }
+  #newDate{
+    font-size:15px;
+    display: inline-block;
   }
 </style>
