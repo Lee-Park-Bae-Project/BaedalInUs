@@ -2,14 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f3c7c3e-b2a2-405e-8489-843c4771e97a" name="Default Changelist" comment="중간 커밋2">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/models/rooms.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/rooms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/css/app.c2bc710c08e912e0bb4e09f409dc60b6.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/css/app.c2bc710c08e912e0bb4e09f409dc60b6.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/js/app.0cb9c43de53fd7eb120d.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/js/app.0cb9c43de53fd7eb120d.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/static/js/manifest.2ae2e69a05c33dfc65f8.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/backend/public/static/js/manifest.2ae2e69a05c33dfc65f8.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -34,13 +26,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="js" value="8819" />
-          <entry key="vue" value="14568" />
+          <entry key="vue" value="14841" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JavaScript" value="8819" />
-          <entry key="Vue.js" value="14568" />
+          <entry key="Vue.js" value="14841" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages">
@@ -72,8 +64,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="161" column="39" selection-start-line="161" selection-start-column="39" selection-end-line="161" selection-end-column="39" />
+            <state relative-caret-position="275">
+              <caret line="197" column="22" selection-start-line="197" selection-start-column="22" selection-end-line="197" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -460,7 +452,7 @@
       <workItem from="1549193056961" duration="13095000" />
       <workItem from="1549256747399" duration="19712000" />
       <workItem from="1549609433937" duration="32063000" />
-      <workItem from="1549719355288" duration="41265000" />
+      <workItem from="1549719355288" duration="41668000" />
     </task>
     <task id="LOCAL-00001" summary="add mainPage">
       <created>1547806069275</created>
@@ -487,7 +479,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="295956000" />
+    <option name="totallyTimeSpent" value="296359000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -507,14 +499,14 @@
       <window_info id="Favorites" order="2" sideWeight="0.5022625" side_tool="true" weight="0.1952079" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49920508" weight="0.32744566" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.5897436" visible="true" weight="0.36277175" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.5897436" weight="0.36277175" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.38994566" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.25543478" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4929694" weight="0.30706522" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.4929694" visible="true" weight="0.30706522" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5070306" side_tool="true" weight="0.3569869" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.32880434" />
       <window_info anchor="bottom" id="TypeScript" order="12" sideWeight="0.49964765" weight="0.32880434" />
@@ -871,8 +863,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="161" column="39" selection-start-line="161" selection-start-column="39" selection-end-line="161" selection-end-column="39" />
+        <state relative-caret-position="275">
+          <caret line="197" column="22" selection-start-line="197" selection-start-column="22" selection-end-line="197" selection-end-column="22" />
         </state>
       </provider>
     </entry>

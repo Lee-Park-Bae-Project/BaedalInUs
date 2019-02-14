@@ -185,14 +185,21 @@
       getTime(time){
         // let timezoneOffset = new Date().getTimezoneOffset() * 60000;
         // let timezoneDate = new Date(Date.now() - timezoneOffset);
-        // console.log(Date.now());
         // console.log('그냥 ISOString = '+new Date().toISOString());
         // console.log('timezone 반영 ISOString = '+timezoneDate.toISOString());
 
         let iso = this.getIso(time);
         let hh = iso.substr(11,2);
         let mm = iso.substr(14,2);
-        let ret = hh + ':' + mm;
+        let ret = '';
+        if(hh > 12){
+          hh = Number(hh); // number로 캐스팅
+          hh-=12;
+          hh = String(hh); // string 으로 캐스
+          ret = '오후 ' + hh+':'+mm;
+        } else{
+          ret = '오전 ' + hh+':'+mm;
+        }
 
         return ret;
       }
