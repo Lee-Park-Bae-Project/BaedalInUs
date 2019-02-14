@@ -59,6 +59,11 @@
           // 새로운 메시지 보냈다는걸 알림
           this.newMsg = data; // props로 하위 chat room 으로 전달
 
+        });
+        this.socket.on('test', (data)=>{
+          console.log('00000000000000000 in socket 00000000000000000');
+          console.log(data);
+          console.log('11111111111111111 in socket 11111111111111111');
         })
       });
     },

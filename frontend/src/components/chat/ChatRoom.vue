@@ -159,6 +159,8 @@
         objDiv.scrollTop = objDiv.scrollHeight;
       },
       getDate(time){
+        // TODO 시간(스트링) 파싱하기 ex)날짜 - 2019년 2월 14일 시간 - 오전 1시 22분 / 오후 9시 20분
+        // 시간은
         let t = new Date();
 
         console.log(t);

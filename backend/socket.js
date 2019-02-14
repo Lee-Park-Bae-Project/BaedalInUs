@@ -41,12 +41,12 @@ module.exports = (server) => {
 
         });
 
-        // chatRoom 에서 보냄 TODO: 나 포함한 모든인원에게 보내기로 바꾸기
+        // chatRoom 에서 보냄 TODO: 나 포함한 모든인원에게 보내기로 바꾸
         socket.on('sendNewMsg', (data)=>{
             console.log('data : ' + data);
             console.log('in data : ' + data.newMsg, data.sender, data.created, data.roomID);
-            // console.log('Object.keys(socket.rooms) : ' + Object.keys(socket.rooms));
-            socket.broadcast.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created}) ;
+            // socket.broadcast.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created});
+            io.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created});
         });
 
         //-----------------------------------------------------------------
