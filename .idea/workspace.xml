@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f3c7c3e-b2a2-405e-8489-843c4771e97a" name="Default Changelist" comment="중간 커밋2">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/models/rooms.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/rooms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/UsersVue.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/UsersVue.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/public/static/css/app.c2bc710c08e912e0bb4e09f409dc60b6.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/public/static/css/app.c2bc710c08e912e0bb4e09f409dc60b6.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/public/static/js/app.0cb9c43de53fd7eb120d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/public/static/js/app.0cb9c43de53fd7eb120d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/public/static/js/manifest.2ae2e69a05c33dfc65f8.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/backend/public/static/js/manifest.2ae2e69a05c33dfc65f8.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -27,14 +33,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="8796" />
-          <entry key="vue" value="14309" />
+          <entry key="js" value="8819" />
+          <entry key="vue" value="14568" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="8796" />
-          <entry key="Vue.js" value="14309" />
+          <entry key="JavaScript" value="8819" />
+          <entry key="Vue.js" value="14568" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages">
@@ -66,8 +72,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="271" column="13" selection-start-line="271" selection-start-column="13" selection-end-line="271" selection-end-column="13" />
+            <state relative-caret-position="182">
+              <caret line="161" column="39" selection-start-line="161" selection-start-column="39" selection-end-line="161" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -76,7 +82,7 @@
         <entry file="file://$PROJECT_DIR$/frontend/src/main.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="238">
-              <caret line="17" column="9" lean-forward="true" selection-start-line="17" selection-start-column="9" selection-end-line="17" selection-end-column="9" />
+              <caret line="17" column="9" selection-start-line="17" selection-start-column="9" selection-end-line="17" selection-end-column="9" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#140#161#0" expanded="true" />
@@ -90,7 +96,7 @@
         <entry file="file://$PROJECT_DIR$/backend/routes/chat.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="293">
-              <caret line="222" column="36" lean-forward="true" selection-start-line="222" selection-start-column="36" selection-end-line="222" selection-end-column="36" />
+              <caret line="222" column="36" selection-start-line="222" selection-start-column="36" selection-end-line="222" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -99,7 +105,7 @@
         <entry file="file://$PROJECT_DIR$/backend/models/order.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="168">
-              <caret line="12" column="3" lean-forward="true" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
+              <caret line="12" column="3" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -107,8 +113,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/backend/models/rooms.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="518">
-              <caret line="37" column="45" lean-forward="true" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
+            <state relative-caret-position="238">
+              <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -117,7 +123,7 @@
         <entry file="file://$PROJECT_DIR$/frontend/src/App.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="269">
-              <caret line="65" column="54" lean-forward="true" selection-start-line="65" selection-start-column="54" selection-end-line="65" selection-end-column="54" />
+              <caret line="65" column="54" selection-start-line="65" selection-start-column="54" selection-end-line="65" selection-end-column="54" />
               <folding>
                 <element signature="e#242#295#0" expanded="true" />
               </folding>
@@ -138,7 +144,7 @@
         <entry file="file://$PROJECT_DIR$/backend/socket.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="322">
-              <caret line="53" column="41" lean-forward="true" selection-start-line="53" selection-start-column="41" selection-end-line="53" selection-end-column="41" />
+              <caret line="53" column="41" selection-start-line="53" selection-start-column="41" selection-end-line="53" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -147,7 +153,7 @@
         <entry file="file://$PROJECT_DIR$/backend/routes/users.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="252">
-              <caret line="18" column="24" lean-forward="true" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+              <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -156,7 +162,7 @@
         <entry file="file://$PROJECT_DIR$/frontend/src/components/UsersVue.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="201">
-              <caret line="72" column="20" lean-forward="true" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+              <caret line="72" column="20" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -269,8 +275,8 @@
         <option value="$PROJECT_DIR$/backend/routes/chat.js" />
         <option value="$PROJECT_DIR$/frontend/src/App.vue" />
         <option value="$PROJECT_DIR$/backend/socket.js" />
-        <option value="$PROJECT_DIR$/backend/models/rooms.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/UsersVue.vue" />
+        <option value="$PROJECT_DIR$/backend/models/rooms.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue" />
       </list>
     </option>
@@ -454,7 +460,7 @@
       <workItem from="1549193056961" duration="13095000" />
       <workItem from="1549256747399" duration="19712000" />
       <workItem from="1549609433937" duration="32063000" />
-      <workItem from="1549719355288" duration="38782000" />
+      <workItem from="1549719355288" duration="41265000" />
     </task>
     <task id="LOCAL-00001" summary="add mainPage">
       <created>1547806069275</created>
@@ -481,7 +487,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="293473000" />
+    <option name="totallyTimeSpent" value="295956000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -785,14 +791,14 @@
     <entry file="file://$PROJECT_DIR$/backend/models/order.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
-          <caret line="12" column="3" lean-forward="true" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
+          <caret line="12" column="3" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
-          <caret line="17" column="9" lean-forward="true" selection-start-line="17" selection-start-column="9" selection-end-line="17" selection-end-column="9" />
+          <caret line="17" column="9" selection-start-line="17" selection-start-column="9" selection-end-line="17" selection-end-column="9" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#140#161#0" expanded="true" />
@@ -821,14 +827,14 @@
     <entry file="file://$PROJECT_DIR$/backend/routes/users.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
-          <caret line="18" column="24" lean-forward="true" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+          <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/App.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="269">
-          <caret line="65" column="54" lean-forward="true" selection-start-line="65" selection-start-column="54" selection-end-line="65" selection-end-column="54" />
+          <caret line="65" column="54" selection-start-line="65" selection-start-column="54" selection-end-line="65" selection-end-column="54" />
           <folding>
             <element signature="e#242#295#0" expanded="true" />
           </folding>
@@ -838,35 +844,35 @@
     <entry file="file://$PROJECT_DIR$/backend/socket.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="322">
-          <caret line="53" column="41" lean-forward="true" selection-start-line="53" selection-start-column="41" selection-end-line="53" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/models/rooms.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="37" column="45" lean-forward="true" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
+          <caret line="53" column="41" selection-start-line="53" selection-start-column="41" selection-end-line="53" selection-end-column="41" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/routes/chat.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="293">
-          <caret line="222" column="36" lean-forward="true" selection-start-line="222" selection-start-column="36" selection-end-line="222" selection-end-column="36" />
+          <caret line="222" column="36" selection-start-line="222" selection-start-column="36" selection-end-line="222" selection-end-column="36" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/UsersVue.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="201">
-          <caret line="72" column="20" lean-forward="true" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+          <caret line="72" column="20" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/models/rooms.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/chat/ChatRoom.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="271" column="13" selection-start-line="271" selection-start-column="13" selection-end-line="271" selection-end-column="13" />
+        <state relative-caret-position="182">
+          <caret line="161" column="39" selection-start-line="161" selection-start-column="39" selection-end-line="161" selection-end-column="39" />
         </state>
       </provider>
     </entry>

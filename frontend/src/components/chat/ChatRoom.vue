@@ -156,23 +156,21 @@
       getIso(time){
         let t1 = new Date().getTimezoneOffset() * 60000;
         let t2 = new Date(time - t1);
-
         return t2.toISOString();
       },
       isNewDay(time){
         let chatday = this.getIso(time).substr(0,10);
+
         // let today = new Date().toISOString().substr(0,10);
         // console.log('chatday : ' + chatday);
         // console.log('today : ' + today);
 
-
-        console.log('chatday : ' +chatday);
-        console.log('stdDate : ' + this.stdDate);
-        console.log(chatday === this.stdDate);
+        // console.log('chatday : ' +chatday);
+        // console.log('stdDate : ' + this.stdDate);
+        // console.log(chatday === this.stdDate);
 
         if(chatday !== this.stdDate){
           this.stdDate = chatday;
-          console.log('rkwkrwkrwkerkwelrwker');
           return true;
         } else{
           return false;
@@ -187,6 +185,7 @@
       getTime(time){
         // let timezoneOffset = new Date().getTimezoneOffset() * 60000;
         // let timezoneDate = new Date(Date.now() - timezoneOffset);
+        // console.log(Date.now());
         // console.log('그냥 ISOString = '+new Date().toISOString());
         // console.log('timezone 반영 ISOString = '+timezoneDate.toISOString());
 

@@ -11,11 +11,11 @@ const roomsSchema = mongoose.Schema({
         {
             sender: {type: String, required: true}, // 보낸사람
             message: {type: String, required: true}, // 내용
-            created: {type: Date, required: true} // 보낸 시각
+            created: {type: String, required: true} // 보낸 시각
         }
     ],
-    created: {type:Date}, // 방이 생성된 날짜
-    updated: {type: Date, required: true} // 마지막으로 메시지 날린 시각
+    created: {type:String}, // 방이 생성된 날짜
+    updated: {type: String, required: true} // 마지막으로 메시지 날린 시각
 });
 
 // 메시지 처음 보냈을떄 내아이디랑 상대 아이디 조합해서 roomID 생성 socket.io로 통신할떄 이 아이디가 방 아이디가 됨
