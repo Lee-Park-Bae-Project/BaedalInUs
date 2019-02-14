@@ -90,7 +90,6 @@
                 console.log('chats.user2ID : ' + this.chats.user2ID);
                 console.log(this.chats);
                 this.receiverID = this.user.id === this.chats.user1ID ? this.chats.user2ID : this.chats.user1ID;
-                this.scrollToLastMessage();
               } else if (res.status === 202) {
                 alert('error');
               }
@@ -142,7 +141,6 @@
                 // this.chats.messages.push(res.data.newMsg);
                 // this.chats.updated = res.data.created; // 업데이트된 시각 == 마지막 메시지의 생성 시간 (고쳐야할듯)
                 // console.log(`-----------------new msg added--------------`);
-                this.scrollToLastMessage();
 
               } else if (res.status === 201) {
                 console.log(res.data.error);
@@ -162,7 +160,7 @@
       scrollToLastMessage: function () {
         // 마지막 메시지까지 스크롤
         let objDiv = document.getElementById('scrollDiv');
-        objDiv.scrollTop = objDiv.scrollHeight;
+        objDiv.scrollTop = objDiv.scrollHeight + 30;
       },
      getDate(time) {
         // TODO 시간(스트링) 파싱하기 ex)날짜 - 2019년 2월 14일 시간 - 오전 1시 22분 / 오후 9시 20분
@@ -180,8 +178,6 @@
     },
     mounted() {
       console.log('mounted');
-      this.scrollToLastMessage();
-
 
     },
     destroyed() {
@@ -189,13 +185,18 @@
       EventBus.$emit('leaveRoom', (this.roomID)); // 이방을 떠남 (app.vue에서 받음)
 
     },
+    updated(){
+      this.scrollToLastMessage();
+    },
     watch: {
       chats: function (data) {
         console.log('chats is modified');
+
       },
       propsNewMsg: function () {
         console.log('propsNewMsg is modified');
         this.chats.messages.push(this.propsNewMsg); // props로 메시지 전달받음
+
       }
     },
 
@@ -237,7 +238,8 @@
 
   #scrollDiv {
     overflow: scroll;
-    height: 300px;
+    height: 400px;
+    padding:10px;
   }
 
   #chats {
