@@ -35,8 +35,8 @@
   import {EventBus} from "../../event-bus";
 
   export default {
-  name: "ChatRoom",
-    props:['propsNewMsg'],
+    name: "ChatRoom",
+    props: ['propsNewMsg'],
     data() {
       return {
         roomID: this.$route.params.roomID,
@@ -101,16 +101,22 @@
       },
       // 새로운 메시지 보냄
       sendNewMsg: function () {
-        const created = new Date();
-        console.log(`in sendNewMsg`);
-        console.log(`newMsg : ${this.newMsg}`);
-        console.log(`sender : ${this.user.id}`);
-        console.log(`created : ${created}`);
+        if (this.newMsg.length === 0) {
+        } else {
 
-        this.busEmitSendMsg(this.newMsg, this.user.id, created, this.roomID);
-        this.sendNewMsgToServer(this.newMsg, this.user.id, created);
+          const created = new Date();
+          console.log(`in sendNewMsg`);
+          console.log(`newMsg : ${this.newMsg}`);
+          console.log(`sender : ${this.user.id}`);
+          console.log(`created : ${created}`);
+
+          this.busEmitSendMsg(this.newMsg, this.user.id, created, this.roomID);
+          this.sendNewMsgToServer(this.newMsg, this.user.id, created);
+
+        }
+
       },
-      busEmitSendMsg:function(newMsg, sender, created, roomID){
+      busEmitSendMsg: function (newMsg, sender, created, roomID) {
         // console.log(`in busEmitSendMsg`);
         // console.log(`newMsg : ${newMsg}`);
         // console.log(`sender : ${sender }`);
@@ -118,14 +124,14 @@
         // console.log(`roomID : ${roomID}`);
         EventBus.$emit('sendNewMsg', newMsg, sender, created, roomID);
       },
-      sendNewMsgToServer:function(newMsg, sender, created){
+      sendNewMsgToServer: function (newMsg, sender, created) {
         this.$http.post('http://localhost:3000/chat/sendNewMsg', {
           sender: sender,
           newMsg: newMsg,
           roomID: this.chats.roomID,
           socketID: this.socketID,
           receiverID: (this.user.id === this.chats.user1ID) ? this.chats.user2ID : this.chats.user1ID,
-          created:created,
+          created: created,
         })
           .then(
             (res) => {
@@ -158,7 +164,7 @@
         let objDiv = document.getElementById('scrollDiv');
         objDiv.scrollTop = objDiv.scrollHeight;
       },
-      getDate(time){
+     getDate(time) {
         // TODO 시간(스트링) 파싱하기 ex)날짜 - 2019년 2월 14일 시간 - 오전 1시 22분 / 오후 9시 20분
         // 시간은
         let t = new Date();
@@ -178,7 +184,7 @@
 
 
     },
-    destroyed(){
+    destroyed() {
       console.log('before destroy');
       EventBus.$emit('leaveRoom', (this.roomID)); // 이방을 떠남 (app.vue에서 받음)
 
@@ -187,7 +193,7 @@
       chats: function (data) {
         console.log('chats is modified');
       },
-      propsNewMsg:function(){
+      propsNewMsg: function () {
         console.log('propsNewMsg is modified');
         this.chats.messages.push(this.propsNewMsg); // props로 메시지 전달받음
       }
@@ -195,7 +201,6 @@
 
 
   }
-
 
 
 </script>
@@ -213,9 +218,9 @@
   .inner {
     display: inline-block;
     width: 100%;
+    max-width:800px;
+    min-width:480px;
   }
-
-
 
   #newMsg {
     width: 90%;
@@ -226,8 +231,6 @@
     width: 10%;
   }
 
-
-
   #chatHeader {
     font-size: 40px;
   }
@@ -236,22 +239,27 @@
     overflow: scroll;
     height: 300px;
   }
-  #chats{
-    font-size:20px;
+
+  #chats {
+    font-size: 20px;
 
   }
+
   #myChat {
     text-align: right;
   }
+
   #othersChat {
     text-align: left;
   }
-  #myTime{
-    font-size:10px;
-    text-align:right;
+
+  #myTime {
+    font-size: 10px;
+    text-align: right;
   }
-  #otherTime{
-    font-size:10px;
-    text-align:left;
+
+  #otherTime {
+    font-size: 10px;
+    text-align: left;
   }
 </style>
