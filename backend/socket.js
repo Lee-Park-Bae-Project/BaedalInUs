@@ -17,6 +17,11 @@ module.exports = (server) => {
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         console.log(`새로운 클라이언트 접속! ${ip}, ${socket.id}, ${req.ip}`);
         console.log('connection : ' + socket.id +  ' ' + socket.handshake.query);
+        console.log('----------------------------------------- connection 후 -----------------------------------------');
+        IDSocket.forEach(function (item, index, array) {
+            console.log(item, index);
+        });
+
         // console.log(socket.handshake);
 
         // 유저에게 새로운 소켓 할당 from ChatRoom.vue
@@ -43,12 +48,25 @@ module.exports = (server) => {
         // });
 
         // chatRoom 에서 보냄
+        // TODO:디비에 새 메시지 저장하고 보내야 할듯
         socket.on('sendNewMsg', (data)=>{
+            let receiverSocketID='';
             console.log('data : ' + data);
             console.log('in data : ' + data.newMsg, data.sender, data.created, data.roomID, data.receiver);
+            const idx = IDSocket.findIndex(function(item) {return item.userID === data.receiver}); // 인덱스 찾기
+            console.log('----------------------------------------- msg alert -----------------------------------------');
+            for(let i=0;i<IDSocket.length;i++){
+                console.log(IDSocket[i]);
+            }
+            console.log('idx : ' + idx);
+            if(idx > -1){
+                receiverSocketID = IDSocket[idx].userSocket;
+            }
+
+            console.log('receiverSocketID : ' + receiverSocketID);
             // socket.broadcast.to(data.roomID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
             io.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created}); // roomID 전체에게 보냄
-            io.to(data.receiver).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
+            io.to(receiverSocketID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
             //
             // socket.broadcast.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created});
             // socket.broadcast.to(data.receiver).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
@@ -58,10 +76,14 @@ module.exports = (server) => {
         // client 에서 로그인 성공 후 id 랑 socket보내서 서버에서 기억해줌
         socket.on('joinToMyID', (userID)=>{
             console.log('joinToMyID : ' + userID + ' : ' + socket.id);
+
+            const idx = IDSocket.findIndex(function(item) {return item.userID === userID}); // 인덱스 찾기
+            if(idx > -1) IDSocket.splice(idx, 1); // 제거
+
             IDSocket.push({userID: userID, userSocket: socket.id});
             console.log(IDSocket.length);
             // 로그아웃 할때 빼줘야함
-            console.log('----------------------------------------- 한명 들어온 후 -----------------------------------------');
+            console.log('----------------------------------------- joinToMyID 후 -----------------------------------------');
             IDSocket.forEach(function (item, index, array) {
                 console.log(item, index);
             })
@@ -119,7 +141,7 @@ module.exports = (server) => {
             const idx = IDSocket.findIndex(function(item) {return item.userSocket === socket.id}); // 인덱스 찾기
             if(idx > -1) IDSocket.splice(idx, 1);
 
-            console.log('----------------------------------------- 한명 나간 후 -----------------------------------------');
+            console.log('----------------------------------------- disconnecting 후 -----------------------------------------');
             IDSocket.forEach(function(item, index, array){
                 console.log(item, index);
             })
@@ -128,6 +150,12 @@ module.exports = (server) => {
         socket.on('disconnect', (data)=>{
             console.log(`socket on disconnect`);
             console.log(`disconnect ${socket.id}, ${Object.keys(socket.rooms)}`);
+            const idx = IDSocket.findIndex(function(item) {return item.userSocket === socket.id}); // 인덱스 찾기
+            if(idx > -1) IDSocket.splice(idx, 1); // 제거
+            console.log('----------------------------------------- disconnect 후 -----------------------------------------');
+            IDSocket.forEach(function(item, index, array){
+                console.log(item, index);
+            })
         });
 
         // socket.interval = setInterval(()=>{

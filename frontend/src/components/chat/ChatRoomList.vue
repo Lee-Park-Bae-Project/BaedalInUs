@@ -93,12 +93,24 @@
         // app.vue에서 받음
         EventBus.$emit('updateSumOfUncheckedMsg', newVal);
       },
-
+      updateChatRoomList:function(){
+        // TODO : 채팅방 메시지 새로 받아와야함
+        console.log('in updateChatRoomList');
+        this.getChatRooms();
+      }
     },
     created() {
       console.log(`created`);
       this.getChatRooms();  // 채팅방 목록 불러오기
     },
+    mounted(){
+      EventBus.$on('updateChatRoomList', this.updateChatRoomList);
+    },
+    watch:{
+      chatRooms:function(){
+        console.log('chatrooms 바뀜');
+      }
+    }
   }
 </script>
 

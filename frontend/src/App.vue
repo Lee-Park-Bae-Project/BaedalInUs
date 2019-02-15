@@ -45,9 +45,12 @@
     },
     mounted() {
       socket.on('connect', () => {
-        console.log(`connected`);
         console.log(`connected : ${socket.id}`);
+        // 새로운 소켓 할당받을때마다 내 아이디랑 소켓아이디 보내
         localStorage.setItem('socketID', socket.id);
+        if(localStorage.getItem('userID') !== undefined){
+          this.joinToMyID(localStorage.getItem('userID'));
+        }
         // this.socket.emit('newSocket', this.user.id, this.socket.id);  // 서버에게 아이디, 소켓아이디 전달
 
         // this.socket.emit('join', this.user.id, () => {
@@ -65,10 +68,13 @@
         });
         socket.on('newMsgAlert', (data)=>{
           console.log('newMsgAlert');
-          EventBus.$emit('updateSumOfUncheckedMsg', (1));
+          console.log(data);
+
+          // EventBus.$emit('updateSumOfUncheckedMsg', (1));
+          EventBus.$emit('updateChatRoomList'); // 채팅방 리스트를 다시 받아오라는 이벤트 (chatRoomList에서 받음)
         });
         socket.on('message', (data)=>{
-          console.log('message : ' + data.msg);
+          // console.log('message : ' + data.msg);
         })
       });
 
