@@ -67,13 +67,12 @@ module.exports = (server) => {
             })
         });
 
+        // 아직 안씀 TODO: 로그아웃 할때 해줘야함
         socket.on('leaveFromMyID', (userID)=>{
             console.log('leaveFromMyID : ' + userID + ' : ' + socket.id);
             const idx = IDSocket.findIndex(function(item) {return item.userSocket === socket.id}); // 인덱스 찾기
             if(idx > -1) IDSocket.splice(idx, 1); // 제거
-
         });
-
 
         //-----------------------------------------------------------------
         // 사람 들어왔을떄

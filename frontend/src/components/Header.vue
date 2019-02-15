@@ -1,22 +1,28 @@
 <template>
-  <div class="outer">
-    <div class="inner">
+  <div>
+    <b-navbar toggleable="lg">
+      <!--<b-navbar-brand @click="mainPage">Hoodadak</b-navbar-brand>-->
       <div id="logo">
         <h2 @click="mainPage">Hoodadak</h2>
       </div>
-      <div id="menu">
-        <ul>
-          <li>내 정보</li>
-          <li @click="login">로그인</li>
-          <li>주문하기</li>
-          <li>배달하기</li>
-          <li @click="chat">채팅
-            <!--<span v-if="this.sumOfUncheckedMsg !==0" class="badge badge-danger">{{this.sumOfUncheckedMsg}}</span>-->
+      <b-navbar-toggle target="nav_collapse" />
+
+      <b-collapse is-nav id="nav_collapse">
+
+
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item>내정보</b-nav-item>
+          <b-nav-item @click="login">로그인</b-nav-item>
+          <b-nav-item href="#">주문하기</b-nav-item>
+          <b-nav-item href="#">배달하기</b-nav-item>
+          <b-nav-item @click="chat">채팅
             <span v-if="sumOfUncheckedMsg!==0" class="badge badge-danger">{{this.sumOfUncheckedMsg}}</span>
-          </li>
-        </ul>
-      </div>
-    </div>
+          </b-nav-item>
+
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
   </div>
 
 </template>
@@ -69,62 +75,66 @@
 
   }
 
-  #logo {
-    width: 20%;
-    float: left;
-    cursor: pointer;
-    font-family: "Cooper Black";
-
+  .menu{
+    float:right;
   }
+
+  /*#logo {*/
+    /*width: 20%;*/
+    /*float: left;*/
+    /*cursor: pointer;*/
+    /*font-family: "Cooper Black";*/
+  /*}*/
 
   #logo :hover {
     color: #faff31
   }
 
-  #menu {
-    width: 80%;
-    float: right;
-  }
+  /*#menu {*/
+    /*float: right;*/
+    /*background: black;*/
+    /*color:white;*/
+  /*}*/
 
-  ul {
-    list-style: none;
-    background-color: #000000;
-    list-style-type: none;
-    margin-left: 60%;
-    padding: 0;
-    overflow: hidden;
+  /*ul {*/
+    /*list-style: none;*/
+    /*!*background-color: #000000;*!*/
+    /*list-style-type: none;*/
+    /*margin-left: 60%;*/
+    /*padding: 0;*/
+    /*overflow: hidden;*/
 
-  }
+  /*}*/
 
-  li {
-    display: inline;
-    background-color: black;
-    color: white;
-    margin: 10px;
-    text-decoration: none;
-    text-align: center;
-    font-weight: bold;
-  }
+  /*li {*/
+    /*display: inline;*/
+    /*!*background-color: black;*!*/
+    /*color: white;*/
+    /*margin: 10px;*/
+    /*text-decoration: none;*/
+    /*text-align: center;*/
+    /*font-weight: bold;*/
+  /*}*/
 
-  li:hover {
-    background-color: white;
-    color: black;
-    cursor: pointer
-  }
+  /*li:hover {*/
+    /*background-color: white;*/
+    /*color: black;*/
+    /*cursor: pointer*/
+  /*}*/
 
-  .outer {
-    font-family: "Franklin Gothic Demi";
-    width: 100%;
-    height: 100%;
-  }
+  /*.outer {*/
+    /*font-family: "Franklin Gothic Demi";*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+  /*}*/
 
-  .inner {
-    margin: 1%;
-    width: 90%;
-    height: 100%;
-    display: inline-block;
+  /*.inner {*/
+    /*margin: 1%;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*display: inline-block;*/
 
-  }
+  /*}*/
 
 </style>
 
