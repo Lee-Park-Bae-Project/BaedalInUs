@@ -30,6 +30,9 @@ router.post('/getChatRooms', (req, res) => {
     console.log(`userID : ${userID}`);
     console.log(`userOID : ${userOID}`);
 
+
+
+
     // 받은 roomID로 방목록 만듬
     function getRoomInfoPromise(roomID, uncheckedMsg) {
         return new Promise(function (resolve, reject) {
@@ -45,15 +48,34 @@ router.post('/getChatRooms', (req, res) => {
     // roomID 하나씪 getRoomInfoPromise에 넘겨줌
     async function getRoomInfo(rooms) {
         let len = rooms.length;
-        for (let i = 0; i < len; i++) {
-            let t = await getRoomInfoPromise(rooms[i].roomID, rooms[i].uncheckedMsg);
-            // console.log(t);
-            ret.push(t);
-            sumOfUncheckedMsg += rooms[i].uncheckedMsg;
+        try {
+
+            for (let i = 0; i < len; i++) {
+                let t = await getRoomInfoPromise(rooms[i].roomID, rooms[i].uncheckedMsg);
+                // console.log(t);
+                ret.push(t);
+
+                sumOfUncheckedMsg += rooms[i].uncheckedMsg;
+            }
+        } catch (error) {
+            res.status(202).json({err:error});
         }
+
+        // console.log('정렬 전');
+        // console.log(ret);
+        // updated 내림차순 정렬
+        ret.sort(function(a,b){
+            return a.updated > b.updated ? -1 : a.updated < b.updated ? 1 : 0;
+        });
+        // console.log('정렬 후');
+        // console.log(ret);
+
         res.status(200).json({ret, sumOfUncheckedMsg});
 
+
     }
+
+
 
     // 유저가 가진 방들 찾음
     users.findOne({'id': userID}, (err, result) => {
@@ -119,14 +141,11 @@ router.post('/sendNewMsg', (req, res) => {
     console.log(`socketID : ${socketID}`);
     console.log(`created : ${created}`);
 
-    // receiverID의 socket이 있을때만 쏴줘야
-
-    // 확인안한 메시지 1증가
-
-    console.log('새로운 메시지 디비에 추가');
+    // updated 바꿔줌
     rooms.findOneAndUpdate({'roomID':roomID}, {$set:{updated:created}})
         .then(
             (result)=>{
+                // 새로움 메시지 추가
                 return rooms.findOneAndUpdate({'roomID': roomID}, {$push: {messages: {sender: sender, message: newMsg, created: created}}})
             }
         )

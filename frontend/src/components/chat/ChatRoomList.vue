@@ -69,7 +69,12 @@
                 this.chatRooms = res.data.ret;
                 console.log(this.chatRooms);
               } else if (res.status === 204) {
+                // 방없음
                 console.log(`no chat rooms`);
+              } else if (res.status === 202) {
+                // 에러
+                console.log(res.data.err);
+                alert(res.data.err);
               }
             },
             (error) => {
