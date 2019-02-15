@@ -3,12 +3,13 @@ const users = require('./models/user');
 const cluster = require('cluster');
 const redisAdapter = require('socket.io-redis');
 
+// userID:'', userSocket:''
+let IDSocket = [];
 
 
 
 module.exports = (server) => {
     const io = SocketIO(server);
-
 
     io.on('connection', (socket) => {
         socket.emit(`message`, {msg:`welcome ${socket.id}`});
@@ -54,6 +55,26 @@ module.exports = (server) => {
             // socket.broadcast.to(data.roomID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created}); // 메시지가 왓다는 알림
         });
 
+        // client 에서 로그인 성공 후 id 랑 socket보내서 서버에서 기억해줌
+        socket.on('joinToMyID', (userID)=>{
+            console.log('joinToMyID : ' + userID + ' : ' + socket.id);
+            IDSocket.push({userID: userID, userSocket: socket.id});
+            console.log(IDSocket.length);
+            // 로그아웃 할때 빼줘야함
+            console.log('----------------------------------------- 한명 들어온 후 -----------------------------------------');
+            IDSocket.forEach(function (item, index, array) {
+                console.log(item, index);
+            })
+        });
+
+        socket.on('leaveFromMyID', (userID)=>{
+            console.log('leaveFromMyID : ' + userID + ' : ' + socket.id);
+            const idx = IDSocket.findIndex(function(item) {return item.userSocket === socket.id}); // 인덱스 찾기
+            if(idx > -1) IDSocket.splice(idx, 1); // 제거
+
+        });
+
+
         //-----------------------------------------------------------------
         // 사람 들어왔을떄
         socket.on('join', (roomID, fn)=>{
@@ -95,6 +116,14 @@ module.exports = (server) => {
         socket.on('disconnecting', (data)=>{
             console.log(`socket on disconnecting`);
             console.log(`disconnecting ${socket.id}`);
+            // IDSocket 배열에서 userID - userSocket pair 제
+            const idx = IDSocket.findIndex(function(item) {return item.userSocket === socket.id}); // 인덱스 찾기
+            if(idx > -1) IDSocket.splice(idx, 1);
+
+            console.log('----------------------------------------- 한명 나간 후 -----------------------------------------');
+            IDSocket.forEach(function(item, index, array){
+                console.log(item, index);
+            })
         });
 
         socket.on('disconnect', (data)=>{
@@ -107,11 +136,6 @@ module.exports = (server) => {
         // }, 3000);
 
     })
-
-
-    // 로그인 된 애들
-
-
 
 
 

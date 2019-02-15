@@ -96,7 +96,7 @@
       joinToMyID: function(userID){
         console.log('---------------------------------');
         console.log(userID);
-        socket.emit('join', userID);
+        socket.emit('joinToMyID', userID);
       },
     },
 
