@@ -1,64 +1,64 @@
 const SocketIO = require('socket.io');
 const users = require('./models/user');
+const cluster = require('cluster');
+const redisAdapter = require('socket.io-redis');
 
 
-function setSocketID(socketID, userID){
-    console.log('set socket id');
-}
 
 
 module.exports = (server) => {
     const io = SocketIO(server);
+
 
     io.on('connection', (socket) => {
         socket.emit(`message`, {msg:`welcome ${socket.id}`});
         const req = socket.request;
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         console.log(`새로운 클라이언트 접속! ${ip}, ${socket.id}, ${req.ip}`);
-        console.log(`connection : ${socket.id}, ${socket.handshake.query}`);
-
+        console.log('connection : ' + socket.id +  ' ' + socket.handshake.query);
+        // console.log(socket.handshake);
 
         // 유저에게 새로운 소켓 할당 from ChatRoom.vue
-        socket.on('newSocket', (userID, socketID)=>{
-            console.log('newSocket : ' + userID + " " + socketID);
-            // 디비에 소켓아이디 저장
-            users.findOneAndUpdate({'id':userID}, {$set:{'socketID':socketID}})
-                .then(
-                    (result)=>{
-                        console.log(result);
-                    }
-                )
-                .catch(
-                    (err)=>console.log(err)
-                )
-        });
+        // socket.on('newSocket', (userID, socketID)=>{
+        //     console.log('newSocket : ' + userID + " " + socketID);
+        //     // 디비에 소켓아이디 저장
+        //     users.findOneAndUpdate({'id':userID}, {$set:{'socketID':socketID}})
+        //         .then(
+        //             (result)=>{
+        //                 console.log(result);
+        //             }
+        //         )
+        //         .catch(
+        //             (err)=>console.log(err)
+        //         )
+        // });
 
         // 새로운 메시지가 왔다는걸 receiver에게 알려야함
-        socket.on('newMsgAlert', (data)=>{
-            let receiverID = data.receiverID;
-            console.log(receiverID);
-            socket.broadcast.to(receiverID).emit('newMsg'); // 이 방에 나 제외한 모든 사람들에게 보냄 (recervier한테 새로운 메시지가 왔다는걸 알림)
+        // socket.on('newMsgAlert', (data)=>{
+        //     let receiverID = data.receiverID;
+        //     console.log(receiverID);
+        //     // socket.broadcast.to(receiverID).emit('newMsg'); // 이 방에 나 제외한 모든 사람들에게 보냄 (recervier한테 새로운 메시지가 왔다는걸 알림)
+        //
+        // });
 
-        });
-
-        // chatRoom 에서 보냄 TODO: 나 포함한 모든인원에게 보내기로 바꾸
+        // chatRoom 에서 보냄
         socket.on('sendNewMsg', (data)=>{
             console.log('data : ' + data);
-            console.log('in data : ' + data.newMsg, data.sender, data.created, data.roomID);
+            console.log('in data : ' + data.newMsg, data.sender, data.created, data.roomID, data.receiver);
+            // socket.broadcast.to(data.roomID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
+            io.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created}); // roomID 전체에게 보냄
+            io.to(data.receiver).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
+            //
             // socket.broadcast.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created});
-            io.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created});
+            // socket.broadcast.to(data.receiver).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
+            // socket.broadcast.to(data.roomID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created}); // 메시지가 왓다는 알림
         });
 
         //-----------------------------------------------------------------
         // 사람 들어왔을떄
         socket.on('join', (roomID, fn)=>{
             console.log(`socket on join`);
-            socket.join(roomID, ()=>{
-                console.log("Join", roomID, Object.keys(socket.rooms));
-                if(fn){
-                    fn();
-                }
-            });
+            socket.join(roomID);
         });
 
         // 사람 나갈때
@@ -102,11 +102,14 @@ module.exports = (server) => {
             console.log(`disconnect ${socket.id}, ${Object.keys(socket.rooms)}`);
         });
 
-        socket.interval = setInterval(()=>{
-            socket.emit('news', 'hello socket.IO');
-        }, 3000);
+        // socket.interval = setInterval(()=>{
+        //     socket.emit('news', 'hello socket.IO');
+        // }, 3000);
 
     })
+
+
+    // 로그인 된 애들
 
 
 

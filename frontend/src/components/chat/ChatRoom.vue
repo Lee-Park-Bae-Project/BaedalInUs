@@ -82,25 +82,26 @@
       sendNewMsg: function () {
         if (this.newMsg.length === 0) {
         } else {
-          const created = Date.now();
-          console.log(`in sendNewMsg`);
-          console.log(`newMsg : ${this.newMsg}`);
-          console.log(`sender : ${this.user.id}`);
-          console.log(`created : ${created}`);
+          const created = Date.now(); // 바꾸면 안댐
+          // console.log(`in sendNewMsg`);
+          // console.log(`newMsg : ${this.newMsg}`);
+          // console.log(`sender : ${this.user.id}`);
+          // console.log(`receiver : ${this.receiverID}`);
+          // console.log(`created : ${created}`);
 
-          this.busEmitSendMsg(this.newMsg, this.user.id, created, this.roomID);
-          this.sendNewMsgToServer(this.newMsg, this.user.id, created);
+          this.busEmitSendMsg(this.newMsg, this.user.id, created, this.roomID, this.receiverID); // 소켓으로 보내는 요청
+          this.sendNewMsgToServer(this.newMsg, this.user.id, created); // 서버에 저장하라고 보내는 요청
 
         }
 
       },
-      busEmitSendMsg: function (newMsg, sender, created, roomID) {
+      busEmitSendMsg: function (newMsg, sender, created, roomID, receiver) {
         // console.log(`in busEmitSendMsg`);
         // console.log(`newMsg : ${newMsg}`);
         // console.log(`sender : ${sender }`);
         // console.log(`created : ${created}`);
         // console.log(`roomID : ${roomID}`);
-        EventBus.$emit('sendNewMsg', newMsg, sender, created, roomID);
+        EventBus.$emit('sendNewMsg', newMsg, sender, created, roomID, receiver);
       },
       sendNewMsgToServer: function (newMsg, sender, created) {
         this.$http.post('http://localhost:3000/chat/sendNewMsg', {

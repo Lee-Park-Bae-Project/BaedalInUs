@@ -20,8 +20,8 @@ function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
     return ret;
 }
 
-
 // 채팅 목록 반환
+// TODO : 각 rooms에 updated 제대로 체크하고 불러올떄 updated 순으로 가져옴, 새로운 메시지가 왔을때 chatRooms에서 목록에서 빼서 맨앞으로 넣기 (), 페이지 네이션 추가
 router.post('/getChatRooms', (req, res) => {
     let userID = req.body.user.id;
     let userOID = req.body.user.oid;
@@ -47,7 +47,7 @@ router.post('/getChatRooms', (req, res) => {
         let len = rooms.length;
         for (let i = 0; i < len; i++) {
             let t = await getRoomInfoPromise(rooms[i].roomID, rooms[i].uncheckedMsg);
-            console.log(t);
+            // console.log(t);
             ret.push(t);
             sumOfUncheckedMsg += rooms[i].uncheckedMsg;
         }
@@ -82,7 +82,7 @@ router.post('/getRoom/:roomID', (req, res) => {
     rooms.findOne({'roomID': roomID}, (err, result) => {
         if (err) res.status(202);
 
-        console.log(result);
+        // console.log(result);
         res.status(200).json(result);
     });
 
@@ -124,9 +124,14 @@ router.post('/sendNewMsg', (req, res) => {
     // 확인안한 메시지 1증가
 
     console.log('새로운 메시지 디비에 추가');
-    rooms.findOneAndUpdate({'roomID': roomID}, {$push: {messages: {sender: sender, message: newMsg, created: created}}})
+    rooms.findOneAndUpdate({'roomID':roomID}, {$set:{updated:created}})
         .then(
-            (result) => {
+            (result)=>{
+                return rooms.findOneAndUpdate({'roomID': roomID}, {$push: {messages: {sender: sender, message: newMsg, created: created}}})
+            }
+        )
+        .then(
+            (result)=>{
                 // console.log(result);
                 console.log('-----------------------------');
                 console.log('sender : ' + sender);
@@ -231,7 +236,7 @@ router.post('/makeRoom', (req, res) => {
             if (result) {
                 // 있으니까 데이터 추가만 하면댐
                 console.log(`방있음`);
-                console.log(result);
+                // console.log(result);
                 // 저장 완료
                 res.status(201).json({});
             }
@@ -272,7 +277,7 @@ router.post('/makeRoom', (req, res) => {
                             }, (err, result) => {
                                 if (err) res.json(err);
                                 console.log(`유저 콜렉션에 roomid 저장`);
-                                console.log(result);
+                                // console.log(result);
 
                                 users.findOneAndUpdate(
                                     {'id': receiverID},
@@ -286,7 +291,7 @@ router.post('/makeRoom', (req, res) => {
                                     }, (err, result) => {
                                         if (err) res.json(err);
                                         console.log(`유저 콜렉션에 roomid 저장`);
-                                        console.log(result);
+                                        // console.log(result);
                                         res.status(201).json({});
 
                                     }
