@@ -15,9 +15,10 @@ function makeRet(user1, user2, sender, msg, updated, roomID) {
         updated: updated,
         roomID: roomID,
     }
-
     return ret;
 }
+
+
 
 // 채팅 목록 반환
 router.post('/getChatRooms', (req, res) => {

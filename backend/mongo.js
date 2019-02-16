@@ -25,7 +25,9 @@ module.exports = () => {
         connect();
     });
     require('./models/user');
-    require('./models/order');
+    require('./models/board');
     require('./models/rooms');
+
+
 
 };

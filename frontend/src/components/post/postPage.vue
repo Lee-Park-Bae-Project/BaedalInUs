@@ -1,14 +1,16 @@
 <template>
   <div class="outer">
-    <div class="inner">
+    <div calss = "inner">
       <div class="form_box">
-        <h1>LOG INs </h1>
 
-        <input v-model="user.id" placeholder="your ID"><br/>
-        <input v-model="user.pw" type="password" placeholder="your password"><br/>
-        <button @click="login">login</button>
-        <button @click="signUp">Sign Up</button>
+        <h1> Post your order</h1>
 
+        <input v-model="board.title" placeholder="Title"><br/>
+        <input v-model="board.content" placeholder="Content"><br/>
+        <input v-model="board.fee" placeholder="Fee"><br/>
+        <input v-model="board.addr" placeholder="Address"><br/>
+
+        <button @click="post">Submit</button>
 
       </div>
     </div>
@@ -17,20 +19,23 @@
 
 <script>
   export default {
-    name: 'LoginPage',
+    name: 'postPage',
+      data: function () {
 
-    data: function () {
       return {
-        user: {
-          id: '',
-          pw: ''
+        board: {
+          title:'',
+          content:'',
+          fee:'',
+          addr:'',
+          dueDate:''
         }
       }
     },
     methods: {
-      login: function (event) {
-        this.$http.post('/auth/login', {
-          user: this.user
+      post: function (event) {
+        this.$http.post('http://localhost:3001/post/postOrder', {
+          board: this.board
         })
           .then(
             (response) => {
@@ -38,15 +43,11 @@
               console.log(response)
               console.log(response.status)
               if (response.status == 200) {
-                console.log(`200`)
+                console.log('200')
                 console.log(response)
-                if (response.data.complete) {
-                  // 로컬 스토리지에 아이디 저장하기
-                  localStorage.setItem('userID', this.user.id);
-                  localStorage.setItem('userOID', response.data.oid);
-                  this.$router.push('/userList') // 유저목록 페이지로 보내줌
-                } else {
-                  alert('wrong password')
+                if (!response.data.complete) {
+                  //alert 띄우기
+                  alert('wrong');
                 }
               } else if (response.status == 201) {
                 console.log(`201`);
@@ -60,14 +61,10 @@
           .catch(error => {
             alert(error)
           })
-      },
-      signUp:function(){
-        this.$router.push('/signup'); //  sign up 페이지로 보내줌
       }
     }
   }
 </script>
-
 <style scoped>
   .outer {
     font-family: "Franklin Gothic Demi";
@@ -93,5 +90,5 @@
     margin:10px;
     width:100px;
   }
-
 </style>
+

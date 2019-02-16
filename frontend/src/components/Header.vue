@@ -7,8 +7,9 @@
       <div id="menu">
         <ul><li>내 정보</li>
           <li @click="login">로그인</li>
-          <li>주문하기</li>
+          <li @click="post">주문하기</li>
           <li>배달하기</li>
+          <li @click="orderList">주문목록</li>
           <li @click="chat">채팅</li>
         </ul>
       </div>
@@ -24,17 +25,23 @@
      methods: {
           login: function () {
             this.$router.push('/login') // Login 페이지로 보내줌
-
           },
+          post: function(){
+            this.$router.push('/post')
+          },
+       orderList: function () {
+         this.$router.push('/showOrder') // Login 페이지로 보내줌
+       },
           mainPage: function () {
             this.$router.push('/')
           },
        chat:function(){
-            this.$router.push('/chatroomlist');
+            this.$router.push('/chatroomlist')
        }
      }
     }
 </script>
+
 
 <style scoped>
   html body {

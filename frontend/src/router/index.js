@@ -9,6 +9,8 @@ import ChatPage from '@/components/chat/ChatPage.vue'
 import UserPage from '@/components/UsersVue.vue'
 import ChatRoomList from '@/components/chat/ChatRoomList.vue'
 import ChatRoom from '@/components/chat/ChatRoom.vue'
+import postPage from '@/components/post/postPage.vue'
+import ShowPostPage from '@/components/post/ShowPostPage.vue'
 
 export default new Router({
   mode: 'history',
@@ -40,6 +42,16 @@ export default new Router({
       path:'/signUp',
       name:'SignUpPage',
       component:SignUpPage
+    },
+    {
+      path:'/post',
+      name:'postPage',
+      component: postPage
+    },
+    {
+      path:'/showOrder',
+      name:'ShowPostPage',
+      component: ShowPostPage
     },
     {
       path:'/',
