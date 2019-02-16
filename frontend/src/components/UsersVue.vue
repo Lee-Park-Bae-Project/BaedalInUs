@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import io from 'socket.io-client';
+  // import io from 'socket.io-client';
 
 
   export default {
@@ -27,19 +27,20 @@
     data() {
       return {
         users: [],
-        socket: io('localhost:3000'),
+        // socket: io('localhost:3000'),
         room:{
           senderOID:'',
           senderID:'',
           receiverOID:'',
           receiverID:'',
           message:'',
+          created:''
         },
       }
     },
     methods: {
       getUsers: function (event) {
-        this.$http.post('/users', {
+        this.$http.post('http://localhost:3000/users', {
           user: this.user
         })
           .then(
@@ -58,13 +59,14 @@
           })
       },
       sendMessage(senderOID, senderID, receiverOID, receiverID, message){
-        this.$http.post('/chat/makeRoom', {
+        this.$http.post('http://localhost:3000/chat/makeRoom', {
           room:{
             senderOID:senderOID,
             senderID:senderID,
             receiverOID:receiverOID,
             receiverID:receiverID,
-            message:message
+            message:message,
+            created:Date.now()
           }
         })
           .then(
@@ -95,18 +97,16 @@
         console.log(`receiverOID : ${receiverOID} receiverID : ${receiverID}`);
 
         let message = prompt('메시지를 입력하세여');  // 처음 보낼 메시지 입력
-        console.log(`newMSG : ${message}`);
 
 
         this.sendMessage(senderOID, senderID, receiverOID, receiverID, message);
       }
     },
-    mounted() {
-      this.socket.on('connect', ()=>{
-        console.log(`connected`);
-
-      });
-    }
+    // mounted() {
+    //   this.socket.on('connect', ()=>{
+    //     console.log(`connected`);
+    //   });
+    // }
   }
 </script>
 

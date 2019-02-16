@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const cors = require('cors');
+
 const mongoose = require('mongoose');
 const session = require('express-session');
 
@@ -13,11 +13,8 @@ const apiTestRouter = require('./routes/apiTest');
 const authRouter = require('./routes/auth');
 const mailRouter = require('./routes/mail');
 const chatRouter = require('./routes/chat');
-const postRouter = require('./routes/post');
-const showPostRouter = require('./routes/showPost');
-
 var usersRouter = require('./routes/users');
-
+const cors = require('cors');
 const connect = require('./mongo');
 // const io = require('socket.io');
 
@@ -36,6 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
+
 app.use(cookieParser('1234'));
 app.use(session({
     secret: '1234', // 쿠키에 저장할 connect.sid값을 암호화할 키값 입력
@@ -55,8 +53,6 @@ app.use('/api', apiTestRouter);
 app.use('/auth', authRouter);
 app.use('/mail', mailRouter);
 app.use('/chat', chatRouter);
-app.use('/post',postRouter);
-app.use('/showPost',showPostRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -74,8 +70,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-const server = app.listen(3001, function(){
-  console.log('Example app listening on port 3001d!');
+const server = app.listen(3000, function(){
+  console.log('Example app listening on port 3000!');
 });
 const webSocket = require('./socket');
 

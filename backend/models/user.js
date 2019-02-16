@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     rooms:[
         {
             roomID:{type:String}, // 유저가 참여중인 방 목록
-            uncheckedMsg:{type:Number}
+            uncheckedMsg:{type:Number, default:0}
         }
     ],
     socketID:String
@@ -41,6 +41,7 @@ userSchema.virtual('password').set(function(password){
     console.log('salt : ' + this.salt);
     console.log('pw : ' + this.pw);
 }).get(function(){return this.pw;});
+
 
 // users: collection 이름
 module.exports = mongoose.model('User', userSchema, 'users');

@@ -38,7 +38,7 @@ export default {
   methods: {
     signUp: function (event) {
       console.log(`button clicked`);
-      this.$http.post('/auth/signUp', { // axios 사용
+      this.$http.post('http://localhost:3000/auth/signUp', { // axios 사용
         user: this.user
       })
         .then((response) => {

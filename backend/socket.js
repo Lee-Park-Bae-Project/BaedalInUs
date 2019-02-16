@@ -1,9 +1,12 @@
 const SocketIO = require('socket.io');
 const users = require('./models/user');
+const cluster = require('cluster');
+const redisAdapter = require('socket.io-redis');
 
-function setSocketID(socketID, userID){
+// userID:'', userSocket:''
+let IDSocket = [];
 
-}
+
 
 module.exports = (server) => {
     const io = SocketIO(server);
@@ -13,34 +16,93 @@ module.exports = (server) => {
         const req = socket.request;
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         console.log(`새로운 클라이언트 접속! ${ip}, ${socket.id}, ${req.ip}`);
-        console.log(`connection : ${socket.id}, ${socket.handshake.query}`);
+        console.log('connection : ' + socket.id +  ' ' + socket.handshake.query);
+        console.log('----------------------------------------- connection 후 -----------------------------------------');
+        IDSocket.forEach(function (item, index, array) {
+            console.log(item, index);
+        });
 
+        // console.log(socket.handshake);
 
         // 유저에게 새로운 소켓 할당 from ChatRoom.vue
-        socket.on('newSocket', (userID, socketID)=>{
-            console.log('newSocket : ' + userID + " " + socketID);
-            // 디비에 소켓아이디 저장
-            users.findOneAndUpdate({'id':userID}, {$set:{'socketID':socketID}})
-                .then(
-                    (result)=>{
-                        console.log(result);
-                    }
-                )
-                .catch(
-                    (err)=>console.log(err)
-                )
+        // socket.on('newSocket', (userID, socketID)=>{
+        //     console.log('newSocket : ' + userID + " " + socketID);
+        //     // 디비에 소켓아이디 저장
+        //     users.findOneAndUpdate({'id':userID}, {$set:{'socketID':socketID}})
+        //         .then(
+        //             (result)=>{
+        //                 console.log(result);
+        //             }
+        //         )
+        //         .catch(
+        //             (err)=>console.log(err)
+        //         )
+        // });
+
+        // 새로운 메시지가 왔다는걸 receiver에게 알려야함
+        // socket.on('newMsgAlert', (data)=>{
+        //     let receiverID = data.receiverID;
+        //     console.log(receiverID);
+        //     // socket.broadcast.to(receiverID).emit('newMsg'); // 이 방에 나 제외한 모든 사람들에게 보냄 (recervier한테 새로운 메시지가 왔다는걸 알림)
+        //
+        // });
+
+        // chatRoom 에서 보냄
+        // TODO:디비에 새 메시지 저장하고 보내야 할
+        socket.on('sendNewMsg', (data)=>{
+            let receiverSocketID='go';
+            console.log('data : ' + data);
+            console.log('in data : ' + data.newMsg, data.sender, data.created, data.roomID, data.receiver);
+
+            const idx = IDSocket.findIndex(function(item) {return item.userID === data.receiver}); // 인덱스 찾기
+            console.log('----------------------------------------- msg alert -----------------------------------------');
+            for(let i=0;i<IDSocket.length;i++){
+                console.log(IDSocket[i]);
+            }
+            console.log('idx : ' + idx);
+            if(idx > -1){
+                receiverSocketID = IDSocket[idx].userSocket;
+            }
+
+            console.log('receiverSocketID : ' + receiverSocketID);
+            // socket.broadcast.to(data.roomID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
+            io.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created}); // roomID 전체에게 보냄
+
+            io.to(receiverSocketID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
+            //
+            // socket.broadcast.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created});
+            // socket.broadcast.to(data.receiver).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
+            // socket.broadcast.to(data.roomID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created}); // 메시지가 왓다는 알림
+        });
+
+        // client 에서 로그인 성공 후 id 랑 socket보내서 서버에서 기억해줌
+        socket.on('joinToMyID', (userID)=>{
+            console.log('joinToMyID : ' + userID + ' : ' + socket.id);
+
+            const idx = IDSocket.findIndex(function(item) {return item.userID === userID}); // 인덱스 찾기
+            if(idx > -1) IDSocket.splice(idx, 1); // 제거
+
+            IDSocket.push({userID: userID, userSocket: socket.id});
+            console.log(IDSocket.length);
+            // 로그아웃 할때 빼줘야함
+            console.log('----------------------------------------- joinToMyID 후 -----------------------------------------');
+            IDSocket.forEach(function (item, index, array) {
+                console.log(item, index);
+            })
+        });
+
+        // 아직 안씀 TODO: 로그아웃 할때 해줘야함
+        socket.on('leaveFromMyID', (userID)=>{
+            console.log('leaveFromMyID : ' + userID + ' : ' + socket.id);
+            const idx = IDSocket.findIndex(function(item) {return item.userSocket === socket.id}); // 인덱스 찾기
+            if(idx > -1) IDSocket.splice(idx, 1); // 제거
         });
 
         //-----------------------------------------------------------------
         // 사람 들어왔을떄
         socket.on('join', (roomID, fn)=>{
             console.log(`socket on join`);
-            socket.join(roomID, ()=>{
-                console.log("Join", roomID, Object.keys(socket.rooms));
-                if(fn){
-                    fn();
-                }
-            });
+            socket.join(roomID);
         });
 
         // 사람 나갈때
@@ -77,16 +139,33 @@ module.exports = (server) => {
         socket.on('disconnecting', (data)=>{
             console.log(`socket on disconnecting`);
             console.log(`disconnecting ${socket.id}`);
+            // IDSocket 배열에서 userID - userSocket pair 제
+            const idx = IDSocket.findIndex(function(item) {return item.userSocket === socket.id}); // 인덱스 찾기
+            if(idx > -1) IDSocket.splice(idx, 1);
+
+            console.log('----------------------------------------- disconnecting 후 -----------------------------------------');
+            IDSocket.forEach(function(item, index, array){
+                console.log(item, index);
+            })
         });
 
         socket.on('disconnect', (data)=>{
             console.log(`socket on disconnect`);
             console.log(`disconnect ${socket.id}, ${Object.keys(socket.rooms)}`);
+            const idx = IDSocket.findIndex(function(item) {return item.userSocket === socket.id}); // 인덱스 찾기
+            if(idx > -1) IDSocket.splice(idx, 1); // 제거
+            console.log('----------------------------------------- disconnect 후 -----------------------------------------');
+            IDSocket.forEach(function(item, index, array){
+                console.log(item, index);
+            })
         });
 
-        socket.interval = setInterval(()=>{
-            socket.emit('news', 'hello socket.IO');
-        }, 3000);
+        // socket.interval = setInterval(()=>{
+        //     socket.emit('news', 'hello socket.IO');
+        // }, 3000);
 
     })
+
+
+
 };

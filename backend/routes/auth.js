@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const session = require('express-session');
 
-const user = require('../models/user');
+const users = require('../models/user');
 router.get('/login', (req, res) => {
  //   let session = req.session;
 //    res.render('login', {session: session});
@@ -26,44 +26,76 @@ router.get('/logout', (req, res) => {
 //
 router.post('/login', (req, res) => {
     console.log(`in /login post`);
-    console.log(req.body);
     const id = req.body.user.id.toString();
     const pw = req.body.user.pw.toString();
     console.log(`id: ${id}`);
     console.log(`pw: ${pw}`);
 
     // res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Content-Type', 'text/html');
+    // res.setHeader("Access-Control-Allow-Origin", "*");     //허용할 Origin(요청 url) : "*" 의 경우 모두 허용
+    // res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");     //허용할 request http METHOD : POST, GET, DELETE, PUT
+    // res.setHeader("Access-Control-Max-Age", "3600");     //브라우저 캐시 시간(단위: 초) : "3600" 이면 최소 1시간 안에는 서버로 재요청 되지 않음
+    // res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");    //요청 허용 헤더(ajax : X-Requested-With)
 
-    user.find({id: id}, (err, result) => {
-        if (err) return res.json(err);
-        console.log(`-------------------result-----------------`);
-        console.log(result);
-
-        if (result.length != 0) {
-            // 아이디 있는 경우
-            if (user.authenticate(pw, result[0].password, result[0].salt)) {
-                console.log(`authenticate complete`);
-                req.session.user_uid = id;
-                console.log(`test oid : ${result[0]._id}`);
-                res.status(200).json({complete:true, oid:result[0]._id}); // 성공 status code
-                console.log(res);
-                // res.redirect('/login');
-            } else {
-                console.log(`authenticate fail`);
-                res.status(200).json({complete:false}); // 실패 status code
+    users.find({id:id})
+        .then(
+            (result)=>{
+                console.log(result);
+                if (result.length != 0) {
+                    // 아이디 있는 경우
+                    if (users.authenticate(pw, result[0].password, result[0].salt)) {
+                        console.log(`authenticate complete`);
+                        req.session.user_uid = id;
+                        console.log(`test oid : ${result[0]._id}`);
+                        res.status(200).json({complete:true, oid:result[0]._id}); // 성공 status code
+                        // res.redirect('/login');
+                    } else {
+                        console.log(`authenticate fail`);
+                        res.status(200).json({complete:false}); // 실패 status code
+                    }
+                } else {
+                    // 아이디 없는 경우
+                    res.status(201).json({complete:false});
+                    // res.end('id is not registered');
+                }
             }
-        } else {
-            // 아이디 없는 경우
-            res.status(201).json({complete:false});
-            // res.end('id is not registered');
-        }
-    });
+        )
+        .catch(
+            (err)=>{
+                // 아이디 없는 경우
+                res.status(201).json({complete:false});
+            }
+        )
+    // users.find({id: id}, (err, result) => {
+    //     if (err) return res.json(err);
+    //     console.log(`-------------------result-----------------`);
+    //     console.log(result);
+    //
+    //     if (result.length != 0) {
+    //         // 아이디 있는 경우
+    //         if (users.authenticate(pw, result[0].password, result[0].salt)) {
+    //             console.log(`authenticate complete`);
+    //             req.session.user_uid = id;
+    //             console.log(`test oid : ${result[0]._id}`);
+    //             console.log('---------------------------test-------------- : ' + users.sumOfUncheckedMsg(id));
+    //             res.status(200).json({complete:true, oid:result[0]._id, unCheckedMsg:users.sumOfUncheckedMsg(id)}); // 성공 status code
+    //             // res.redirect('/login');
+    //         } else {
+    //             console.log(`authenticate fail`);
+    //             res.status(200).json({complete:false}); // 실패 status code
+    //         }
+    //     } else {
+    //         // 아이디 없는 경우
+    //         res.status(201).json({complete:false});
+    //         // res.end('id is not registered');
+    //     }
+    // });
 });
 
 
 router.post('/signUp', (req, res) => {
-    user.find({}, (err, data) => {
+    users.find({}, (err, data) => {
         if (err) return res.json(err);
     });
 
@@ -78,7 +110,7 @@ router.post('/signUp', (req, res) => {
     console.log(`id : ${id}`);
     console.log(`pw : ${pw}`);
     //id 중복검사
-    user.find({id:id}, (err, result)=>{
+    users.find({id:id}, (err, result)=>{
         if(err) return res.json(err);
         console.log(result);
         if(result.length!=0){
@@ -88,7 +120,7 @@ router.post('/signUp', (req, res) => {
             // res.redirect('/signup');
         } else{
             console.log(`else`);
-            var newData = new user({id:id, pw:pw});
+            var newData = new users({id:id, pw:pw});
             newData.password = pw;
             newData.save();
             // req.session.destroy();  // 세션 삭제
@@ -107,11 +139,11 @@ router.post('/delete', (req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
 
-    user.find({id:id}, (err, result)=>{
+    users.find({id:id}, (err, result)=>{
         if(err) return res.json(err);
 
         if (result.length != 0) {
-            user.deleteOne({id: id}, (err, result) => {
+            users.deleteOne({id: id}, (err, result) => {
                 if (err) return res.json(err);
                 res.end(id + " is deleted");
             });
