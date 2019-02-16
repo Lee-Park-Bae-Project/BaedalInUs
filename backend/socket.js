@@ -48,11 +48,12 @@ module.exports = (server) => {
         // });
 
         // chatRoom 에서 보냄
-        // TODO:디비에 새 메시지 저장하고 보내야 할듯
+        // TODO:디비에 새 메시지 저장하고 보내야 할
         socket.on('sendNewMsg', (data)=>{
-            let receiverSocketID='';
+            let receiverSocketID='go';
             console.log('data : ' + data);
             console.log('in data : ' + data.newMsg, data.sender, data.created, data.roomID, data.receiver);
+
             const idx = IDSocket.findIndex(function(item) {return item.userID === data.receiver}); // 인덱스 찾기
             console.log('----------------------------------------- msg alert -----------------------------------------');
             for(let i=0;i<IDSocket.length;i++){
@@ -66,6 +67,7 @@ module.exports = (server) => {
             console.log('receiverSocketID : ' + receiverSocketID);
             // socket.broadcast.to(data.roomID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
             io.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created}); // roomID 전체에게 보냄
+
             io.to(receiverSocketID).emit('newMsgAlert', {message:data.newMsg, sender : data.sender, created : data.created});
             //
             // socket.broadcast.to(data.roomID).emit('newMsg', {message:data.newMsg, sender : data.sender, created : data.created});

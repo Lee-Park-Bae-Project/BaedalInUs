@@ -24,14 +24,11 @@ function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
 // TODO : 각 rooms에 updated 제대로 체크하고 불러올떄 updated 순으로 가져옴, 새로운 메시지가 왔을때 chatRooms에서 목록에서 빼서 맨앞으로 넣기 (), 페이지 네이션 추가
 router.post('/getChatRooms', (req, res) => {
     let userID = req.body.user.id;
-    let userOID = req.body.user.oid;
+    // let userOID = req.body.user.oid;
     let ret = [];
     let sumOfUncheckedMsg = 0;
     console.log(`userID : ${userID}`);
-    console.log(`userOID : ${userOID}`);
-
-
-
+    // console.log(`userOID : ${userOID}`);
 
     // 받은 roomID로 방목록 만듬
     function getRoomInfoPromise(roomID, uncheckedMsg) {
