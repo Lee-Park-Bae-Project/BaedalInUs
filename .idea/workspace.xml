@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f3c7c3e-b2a2-405e-8489-843c4771e97a" name="Default Changelist" comment="중간 커밋2">
-      <change beforePath="$PROJECT_DIR$/backend/routes/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/socket.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/socket.js" afterDir="false" />
-    </list>
+    <list default="true" id="4f3c7c3e-b2a2-405e-8489-843c4771e97a" name="Default Changelist" comment="중간 커밋2" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -26,13 +23,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="12504" />
+          <entry key="js" value="12506" />
           <entry key="vue" value="17866" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="12504" />
+          <entry key="JavaScript" value="12506" />
           <entry key="Vue.js" value="17866" />
         </counts>
       </usages-collector>
@@ -127,7 +124,7 @@
         <entry file="file://$PROJECT_DIR$/backend/socket.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="157">
-              <caret line="52" column="34" selection-start-line="52" selection-start-column="34" selection-end-line="52" selection-end-column="34" />
+              <caret line="52" column="36" selection-start-line="52" selection-start-column="36" selection-end-line="52" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -464,7 +461,7 @@
       <workItem from="1549193056961" duration="13095000" />
       <workItem from="1549256747399" duration="19712000" />
       <workItem from="1549609433937" duration="32063000" />
-      <workItem from="1549719355288" duration="77161000" />
+      <workItem from="1549719355288" duration="77405000" />
     </task>
     <task id="LOCAL-00001" summary="add mainPage">
       <created>1547806069275</created>
@@ -491,7 +488,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="331852000" />
+    <option name="totallyTimeSpent" value="332096000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -504,7 +501,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="828" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49773756" visible="true" weight="0.2184637" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -876,7 +872,7 @@
     <entry file="file://$PROJECT_DIR$/backend/socket.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="157">
-          <caret line="52" column="34" selection-start-line="52" selection-start-column="34" selection-end-line="52" selection-end-column="34" />
+          <caret line="52" column="36" selection-start-line="52" selection-start-column="36" selection-end-line="52" selection-end-column="36" />
         </state>
       </provider>
     </entry>
