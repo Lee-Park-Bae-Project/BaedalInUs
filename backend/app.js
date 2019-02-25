@@ -13,6 +13,10 @@ const apiTestRouter = require('./routes/apiTest');
 const authRouter = require('./routes/auth');
 const mailRouter = require('./routes/mail');
 const chatRouter = require('./routes/chat');
+const postRouter= require('./routes/post');
+const showPostRouter = require('./routes/showPost');
+
+
 var usersRouter = require('./routes/users');
 const cors = require('cors');
 const connect = require('./mongo');
@@ -53,10 +57,13 @@ app.use('/api', apiTestRouter);
 app.use('/auth', authRouter);
 app.use('/mail', mailRouter);
 app.use('/chat', chatRouter);
+app.use('/post',postRouter);
+app.use('/showPost',showPostRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+  console.log('fuck');
 });
 
 // error handler

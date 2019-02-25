@@ -34,7 +34,7 @@
     },
     methods: {
       post: function (event) {
-        this.$http.post('http://localhost:3001/post/postOrder', {
+        this.$http.post('http://localhost:3000/post/postOrder', {
           board: this.board
         })
           .then(
@@ -61,7 +61,7 @@
           .catch(error => {
             alert(error)
           })
-      }
+      },
     }
   }
 </script>

@@ -10,7 +10,7 @@ import UserPage from '@/components/UsersVue.vue'
 import ChatRoomList from '@/components/chat/ChatRoomList.vue'
 import ChatRoom from '@/components/chat/ChatRoom.vue'
 import postPage from '@/components/post/postPage.vue'
-import ShowPostPage from '@/components/post/ShowPostPage.vue'
+import PaginateList from '@/components/post/PaginateList.vue'
 
 export default new Router({
   mode: 'history',
@@ -48,9 +48,9 @@ export default new Router({
       component: postPage
     },
     {
-      path:'/showOrder',
-      name:'ShowPostPage',
-      component: ShowPostPage
+      path:'/pagination',
+      name:'PaginateList',
+      component: PaginateList
     },
     {
       path:'/',

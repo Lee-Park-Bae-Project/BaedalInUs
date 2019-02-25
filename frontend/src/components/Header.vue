@@ -14,8 +14,8 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item>내정보</b-nav-item>
           <b-nav-item @click="login">로그인</b-nav-item>
-          <b-nav-item href="#">주문하기</b-nav-item>
-          <b-nav-item href="#">배달하기</b-nav-item>
+          <b-nav-item @click="post">주문하기</b-nav-item>
+          <b-nav-item @click="pagination">배달하기</b-nav-item>
           <b-nav-item @click="chat">채팅
             <span v-if="sumOfUncheckedMsg!==0" class="badge badge-danger">{{this.sumOfUncheckedMsg}}</span>
           </b-nav-item>
@@ -44,6 +44,12 @@
       },
       mainPage: function () {
         this.$router.push('/')
+      },
+      post: function(){
+        this.$router.push('/post')
+      },
+      pagination: function(){
+        this.$router.push('/pagination');
       },
       chat: function () {
         this.$router.push('/chatroomlist');
