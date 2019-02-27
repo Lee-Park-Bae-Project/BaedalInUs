@@ -2,7 +2,7 @@
   <div class="container">
     <div id="search">
     <label for="distance">거리</label>
-    <select id="distance" v-model="selected">
+    <select id="distance" v-model="data.selected">
       <option>1km 내</option>
       <option>3km 내</option>
       <option>5km 내</option>
@@ -11,7 +11,7 @@
     </select>
 
     <label for="fee">수수료</label>
-    <select id="fee" v-model="selected">
+    <select id="fee" v-model="data.selected">
       <option>50,000원 이상</option>
       <option>30,000원 이상</option>
       <option>10,000원 이상</option>
@@ -19,7 +19,7 @@
       <option>상관없음</option>
     </select>
 
-    <input v-model="stuffName" placeholder=" 상품명">
+    <input v-model="data.stuffName" placeholder=" 상품명">
     <button>검색</button>
     </div>
   </div>
@@ -29,10 +29,15 @@
 <script>
   export default {
     name: "Dropdown",
-    data: {
-      selected: '',
-      stuffName: ''
+    data:function(){
+      return {
+        data: {
+          selected: '',
+          stuffName: ''
+        }
+      }
     }
+
   }
 </script>
 

@@ -48,7 +48,6 @@ module.exports = (server) => {
         // });
 
         // chatRoom 에서 보냄
-        // TODO:디비에 새 메시지 저장하고 보내야 할
         socket.on('sendNewMsg', (data)=>{
             let receiverSocketID='go';
             console.log('data : ' + data);

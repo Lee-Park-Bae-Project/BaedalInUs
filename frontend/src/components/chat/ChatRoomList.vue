@@ -53,18 +53,14 @@
     },
     methods: {
       // 채팅방 리스트 가져오기
+      // jwt 인증 실패 하면 403 리턴받을거임
       getChatRooms: function (event) {
-        this.$http.post('http://localhost:3000/chat/getChatRooms', {
+        this.$http.post('http://localhost:3000/api/chat/getChatRooms', {
           user: this.user
         })
           .then(
             (res) => {
-              console.log('----------------------response--------------');
-              console.log(res);
-              console.log(res.data.sumOfUncheckedMsg); // 읽지 않은 메시지 총합
-              // this.emitUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg);
-              this.busUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg);
-              console.log('----------------------response--------------');
+              // this.busUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg); 일단 보류 (2/25)
               if (res.status === 200) {
                 this.chatRooms = res.data.ret;
                 console.log(this.chatRooms);
@@ -95,7 +91,6 @@
       },
       updateChatRoomList:function(){
         // TODO : 채팅방 메시지 새로 받아와야함
-        console.log('in updateChatRoomList');
         this.getChatRooms();
       }
     },

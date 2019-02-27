@@ -61,7 +61,7 @@
     methods: {
       // 채팅방 불러옴
       getChatRoom: function (roomid) {
-        this.$http.post(`http://localhost:3000/chat/getRoom/${this.roomID}`, {userID: this.user.id})
+        this.$http.post(`http://localhost:3000/api/chat/getRoom/${this.roomID}`, {userID: this.user.id})
           .then(
             (res) => {
               if (res.status === 200) {
@@ -69,7 +69,7 @@
                 console.log('chats.user1ID : ' + this.chats.user1ID);
                 console.log('chats.user2ID : ' + this.chats.user2ID);
                 console.log(this.chats);
-                this.receiverID = this.user.id === this.chats.user1ID ? this.chats.user2ID : this.chats.user1ID;
+                this.receiverID =  this.user.id === this.chats.user1ID ? this.chats.user2ID : this.chats.user1ID;
               } else if (res.status === 202) {
                 alert('error');
               }
@@ -104,7 +104,7 @@
         EventBus.$emit('sendNewMsg', newMsg, sender, created, roomID, receiver);
       },
       sendNewMsgToServer: function (newMsg, sender, created) {
-        this.$http.post('http://localhost:3000/chat/sendNewMsg', {
+        this.$http.post('http://localhost:3000/api/chat/sendNewMsg', {
           sender: sender,
           newMsg: newMsg,
           roomID: this.chats.roomID,
@@ -157,6 +157,12 @@
       getIso(time){
         let t1 = new Date().getTimezoneOffset() * 60000;
         let t2 = new Date(time - t1);
+        console.log('------------------------------------------------');
+        console.log(time);
+        console.log(t1);
+        console.log(t2);
+        console.log('------------------------------------------------');
+
         return t2.toISOString();
       },
       isNewDay(time){

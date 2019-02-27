@@ -115,10 +115,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
+    background-color: #E2904B;
+
   }
 
-  body {
+  html{
     background-color: #E2904B;
+  }
+  body {
+    /*background-color: #E2904B;*/
     overflow: auto;
   }
 

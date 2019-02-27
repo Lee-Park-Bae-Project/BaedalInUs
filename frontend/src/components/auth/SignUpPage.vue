@@ -5,16 +5,15 @@
         <div class="form_box">
 
           <h1>Create new account</h1><br/>
-          <strong>Your name</strong><br/>
-          <input v-model="user.name" placeholder="Full name"><br/>
-          <strong>Your E-mail</strong><br/>
-          <input v-model="user.email" placeholder="your-email@example.com"><br/>
           <strong>Your ID</strong><br/>
           <input v-model="user.id" placeholder="ID"> <br/>
           <strong>Your password</strong><br/>
           <input v-model="user.pw" type="password" placeholder="Password"><br/>
+          <strong>Your name</strong><br/>
+          <input v-model="user.name" placeholder="Full name"><br/>
+          <strong>Your E-mail</strong><br/>
+          <input v-model="user.email" placeholder="your-email@example.com"><br/>
           <button class="submit" v-on:click="signUp">SignUp</button>
-
         </div>
       </div>
     </div>
@@ -30,7 +29,7 @@ export default {
         id: '',
         pw: '',
         name: '',
-        email:''
+        email: ''
       },
 
     }
@@ -42,16 +41,15 @@ export default {
         user: this.user
       })
         .then((response) => {
-          console.log(`----------------response---------------------`);
-          console.log(response);
-          console.log(response.status);
-
           if (response.status === 204) {
-            alert('Error, please, try again')
+            if(response.data.complete === false){
+              alert('아이디가 중복됩니다.');
+            }
           }
           if (response.status === 201) {
-            alert('Success');
-            this.$router.push('/login') // Login 페이지로 보내줌
+            if(response.data.complete === true){
+              this.$router.push('/login') // Login 페이지로 보내줌
+            }
           }
         })
         .catch(function (error) {

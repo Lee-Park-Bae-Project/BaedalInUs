@@ -8,16 +8,23 @@ import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import store from './vuex/store';
+import VueCookie from 'vue-cookie'
 
 Vue.use(BootstrapVue);
-
+Vue.use(VueCookie);
+Vue.prototype.$cookie = VueCookie;
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false;
+
+Kakao.init(store.getters.getJAVASCRIPTKEY);
+
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   components: { App},
-  template: '<App/>'
+  template: '<App/>',
+  store,
 });

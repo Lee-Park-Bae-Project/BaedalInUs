@@ -11,6 +11,9 @@
 </script>
 
 <style scoped>
+  div{
+    background-color: #E2904B;
+  }
   #top_container{
     text-align: center;
     width:100%;
