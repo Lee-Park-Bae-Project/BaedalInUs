@@ -90,7 +90,6 @@
         EventBus.$emit('updateSumOfUncheckedMsg', newVal);
       },
       updateChatRoomList:function(){
-        // TODO : 채팅방 메시지 새로 받아와야함
         this.getChatRooms();
       }
     },

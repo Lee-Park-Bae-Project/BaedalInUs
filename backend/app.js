@@ -18,6 +18,7 @@ const mailRouter = require('./routes/mail');
 const chatRouter = require('./routes/chat');
 const postRouter= require('./routes/post');
 const showPostRouter = require('./routes/showPost');
+const searchRouter = require('./routes/search');
 
 const apiRouter = require('./routes/api/api'); // 인증 받아야하는 라우터
 
@@ -27,7 +28,6 @@ var app = express();
 app.use(cookieParser());
 
 app.use('/test', test);
-
 
 var cors = require('cors');
 var connect = require('./mongo');
@@ -84,6 +84,7 @@ app.use('/mail', mailRouter);
 app.use('/chat', chatRouter)
 app.use('/post',postRouter);
 app.use('/showPost',showPostRouter);
+app.use('/search', searchRouter);
 
 app.use('/api', apiRouter); // 인증 받아야하는 곳
 

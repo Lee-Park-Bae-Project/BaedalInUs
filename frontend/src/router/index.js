@@ -14,6 +14,7 @@ import ChatRoom from '@/components/chat/ChatRoom.vue'
 import postPage from '@/components/post/postPage.vue'
 import MyPage from '@/components/myPage.vue'
 import PaginateList from '@/components/post/PaginateList.vue'
+import SearchResult from'@/components/SearchResult.vue'
 
 import logintest from '@/components/auth/logintest.vue'
 import auth from '@/components/auth/auth.vue'
@@ -27,6 +28,10 @@ const requireAuth = ()=>(from, to, next)=>{
 export default new Router({
   mode: 'history',
   routes: [
+    {
+      path:'/searchResult',
+      component:SearchResult
+    },
     {
       path:'/myPage',
       component:MyPage,

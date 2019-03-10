@@ -98,8 +98,7 @@ export default{
     axios.post(url, body)
       .then(result=>{console.log(result)})
       .catch(err=>{console.log(err)})
-  }
-
+  },
 
 
 
