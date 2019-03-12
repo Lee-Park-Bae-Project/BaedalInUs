@@ -17,5 +17,14 @@ export default {
   IsLogined:(state, payload)=>{
     state.isLogined = payload.isLogined;
   },
+  setLatitude:(state, payload)=>{
+    state.myPos.latitude = payload.latitude;
+  },
+  setLongitude:(state, payload)=>{
+    state.myPos.longitude = payload.longitude;
+  },
+  setAddr:(state, payload)=>{
+    state.myPos.addr = payload.addr;
+  }
 
 }

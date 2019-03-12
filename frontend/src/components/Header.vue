@@ -10,7 +10,6 @@
 
       <b-collapse is-nav id="nav_collapse">
 
-
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
 
@@ -23,8 +22,6 @@
           <b-nav-item @click="chat">채팅
             <span v-if="sumOfUncheckedMsg!==0" class="badge badge-danger">{{this.sumOfUncheckedMsg}}</span>
           </b-nav-item>
-
-
 
         </b-navbar-nav>
       </b-collapse>
@@ -136,7 +133,6 @@
     width: 100%;
     height: 100%;
     background-color: #E2904B;
-
   }
 
   .menu{

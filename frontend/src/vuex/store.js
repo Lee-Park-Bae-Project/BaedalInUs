@@ -41,6 +41,12 @@ const state = {
       has_gender:'', // boolean
     }
   },
+
+  myPos:{
+    latitude:'', // 위도
+    longitude:'', // 경도
+    addr:'', // 실제 주소 ( 서울 서대문구 ~ )
+  },
 };
 
 export default new Vuex.Store({

@@ -41,6 +41,15 @@ export default{
   getUserNickName:(state)=>{
     return state.userInfo.properties.nickname;
   },
+  getLatitude:(state)=>{
+    return state.myPos.latitude;
+  },
+  getLongitude:(state)=>{
+    return state.myPos.longitude;
+  },
+  getAddr:(state)=>{
+    return state.myPos.addr;
+  }
 
 
 }

@@ -43,16 +43,14 @@ export default{
 
             ()=>{router.push('/');}
           )
-
       },
       fail:function(err){
         alert(JSON.stringify(err));
       },
+
       throughTalk:false, // 간편 로그인 사용 여부
       // persistAccessToken:true // 세션이 종료된 뒤에도 Access Token을 사용할 수 있도록 로컬 스토리지에 저장합니다.
     })
-
-
 
   },
   // 로그아웃

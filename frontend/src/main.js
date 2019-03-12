@@ -19,7 +19,6 @@ Vue.config.productionTip = false;
 
 Kakao.init(store.getters.getJAVASCRIPTKEY);
 
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
