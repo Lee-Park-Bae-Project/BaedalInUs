@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>프사</p>
-    <img src=""/>
+    <img v-bind="profile_image"/>
   </div>
 </template>
 
@@ -14,7 +14,8 @@
       }
     },
     mounted(){
-      // this.profile_image = this.$store.getters.userInfo.properties.profile_image;
+      //this.profile_image = this.$store.getters.userInfo.properties.profile_image;
+     // console.log('프사 링크'+this.profile_image);
     }
 
   }
