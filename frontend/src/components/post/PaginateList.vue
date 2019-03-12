@@ -1,6 +1,6 @@
 <template>
   <div class="outer">
-    <div calss = "inner">
+    <div class = "inner">
       <p id="header">Order List</p>
      <div v-for="board in pageArray" :key="board.no">
         <b-card title="hello">
@@ -12,12 +12,9 @@
         </b-card-text>
         </b-card>
       </div>
-      <div class = "overflow-auto">
-        <div>
+        <div class="pageList">
           <b-pagination size = "md" :total-rows="100" v-model = "currentPage" @click="" :per-page="10"/>
-          {{currentPage}}
         </div>
-      </div>
       </div>
     </div>
 </template>
@@ -95,6 +92,10 @@ import axios from 'axios'
     float:right;
     margin:10px;
     width:100px;
+  }
+  .pageList {
+   width: 300px;
+    margin: 10px auto;
   }
 </style>
 

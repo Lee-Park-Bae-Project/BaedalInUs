@@ -14,7 +14,7 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
 
-          <b-nav-item v-if="isLogined === true">안녕하세여 {{getUserNickName}} 님</b-nav-item>
+          <b-nav-item v-if="isLogined === true">안녕하세여 <strong>{{getUserNickName}}</strong> 님</b-nav-item>
           <b-nav-item v-if="isLogined===true" @click="myPage">내정보</b-nav-item>
           <b-nav-item v-if="isLogined === true" @click="logout">로그아웃</b-nav-item>
           <b-nav-item @click="login" v-else>로그인</b-nav-item>

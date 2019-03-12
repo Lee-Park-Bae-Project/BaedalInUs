@@ -72,12 +72,16 @@ export default new Router({
     {
       path:'/post',
       name:'postPage',
-      component: postPage
+      component: postPage,
+      beforeEnter:requireAuth()
+
     },
     {
       path:'/pagination',
       name:'PaginateList',
-      component: PaginateList
+      component: PaginateList,
+      beforeEnter:requireAuth()
+
     },
     {
       path:'/',
