@@ -3,9 +3,7 @@ var router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
 const Board = require('../models/board');
-const moment = require('moment');
 const upload = multer({dest: 'uploads/', limits:{fileSize: 5 * 1024 *1024}});
-var faker = require('faker');
 
 router.post('/imageLoad',upload.single('img'),(req,res)=>{
         console.log(req.file);
