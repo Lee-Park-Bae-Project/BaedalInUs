@@ -19,15 +19,20 @@ router.post('/postOrder', (req, res) => {
     const addr = req.body.board.addr.toString();
     const due_date = req.body.board.dueDate.toString();
     const order_date = req.body.board.order_date;
+
+    const lat = req.body.board.lat;
+    const lng = req.body.board.lng;
+
     //const dueDate = req.body.board.dueDate;
 //    const pirUrl = req.body.board.pirUrl.toString();
     //const orderState = req.body.board.orderState;
 
-    console.log(title);
-    console.log(content);
-    console.log(fee);
-    console.log(addr);
-    console.log();
+    console.log('title: ' + title);
+    console.log('content: ' + content);
+    console.log('fee: ' + fee);
+    console.log('addr: ' + addr);
+    console.log('lat: ' + lat);
+    console.log('lng: ' + lng);
 
     /*if(title.length==0)
     {
@@ -40,9 +45,25 @@ router.post('/postOrder', (req, res) => {
         fee: fee,
         addr: addr,
         dueDate: due_date,
-        order_date: order_date
+        order_date: order_date,
+        location:{
+            coordinates:[lng, lat]
+        }
     });
-    boardInfo.save();
+    boardInfo.save()
+        .then(
+            ()=>{
+                res.status(200).json({complete:true});
+            }
+        )
+        .catch(
+            (err)=>{
+                res.status(202).json({coplete:false});
+            }
+        );
+
+
+    res.status(200).json({complete:true});
     //console.log('asdfadf');
     /* for( let i=0;i<10;i++) {
          var boardInf = new Board({

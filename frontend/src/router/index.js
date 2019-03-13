@@ -21,7 +21,7 @@ import auth from '@/components/auth/auth.vue'
 
 const requireAuth = ()=>(from, to, next)=>{
   if(store.getters.IsLogined) return next();
-  alert('login first');
+  alert('로그인이 필요한 서비스입니다');
   next('/login');
 };
 

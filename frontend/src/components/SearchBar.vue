@@ -18,7 +18,7 @@
         <option value='{"fromdist":"5", "todist":"10"}'>5km 초과 ~ 10km 이하</option>
         <option value='{"fromdist":"3", "todist":"5"}'>3km 초과 ~ 5km 이하</option>
         <option value='{"fromdist":"1", "todist":"3"}'>1km 초과 ~ 3km 이하</option>
-        <option value='{"fromdist":"-1", "todist":"50000"}' selected="selected">상관없음</option>
+        <option value='{"fromdist":"0", "todist":"50000"}' selected="selected">상관없음</option>
       </select>
 
       <label for="fee">수수료</label>
@@ -27,7 +27,7 @@
         <option value='{"fromfee":"30000", "tofee":"40000"}'>30,000 원 초과 ~ 40,000 원 이하</option>
         <option value='{"fromfee":"10000", "tofee":"30000"}'>10,000 원 초과 ~ 30,000 원 이하</option>
         <option value='{"fromfee":"5000", "tofee":"10000"}'>5,000 원 초과 ~ 10,000 원 이하</option>
-        <option value='{"fromfee":"-1", "tofee":"50000"}' selected="selected">상관없음</option>
+        <option value='{"fromfee":0", "tofee":"50000"}' selected="selected">상관없음</option>
       </select>
 
       <input v-model="data.stuffName" placeholder=" 상품명">
