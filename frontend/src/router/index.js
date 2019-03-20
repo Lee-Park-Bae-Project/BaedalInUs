@@ -5,20 +5,21 @@ Vue.use(Router)
 
 
 import LoginPage from '@/components/auth/LoginPage.vue'
-import SignUpPage from '@/components/auth/SignUpPage.vue'
+import SignUpPage from '@/components/auth/SignUpPage.vue' // 회원가입
 import MainPage from '@/components/MainPage.vue'
 import ChatPage from '@/components/chat/ChatPage.vue'
 import UserPage from '@/components/UsersVue.vue'
-import ChatRoomList from '@/components/chat/ChatRoomList.vue'
-import ChatRoom from '@/components/chat/ChatRoom.vue'
-import postPage from '@/components/post/postPage.vue'
+import ChatRoomList from '@/components/chat/ChatRoomList.vue' // 채팅방목록
+import ChatRoom from '@/components/chat/ChatRoom.vue' // 채팅방
+import postPage from '@/components/post/postPage.vue' // 주문하기
 import MyPage from '@/components/myPage.vue'
 import PaginateList from '@/components/post/PaginateList.vue'
-import SearchResult from'@/components/SearchResult.vue'
+import SearchResult from'@/components/SearchResult.vue' // 검색 결과
 
 import logintest from '@/components/auth/logintest.vue'
 import auth from '@/components/auth/auth.vue'
 
+// 로그인 확인하기
 const requireAuth = ()=>(from, to, next)=>{
   if(store.getters.IsLogined) return next();
   alert('로그인이 필요한 서비스입니다');

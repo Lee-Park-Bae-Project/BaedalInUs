@@ -77,9 +77,7 @@ router.post('/getChatRooms', (req, res) => {
     users.findOne({'id': userID}, (err, result) => {
         if (err) res.status(204).json(err);
         getRoomInfo(result.rooms);
-
     });
-
 
 });
 

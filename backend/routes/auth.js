@@ -14,8 +14,8 @@ router.use('/kakaoinfo', kakaoinfoRouter);
 // router.use(authMiddleware);
 
 router.get('/login', (req, res) => {
- //   let session = req.session;
-//    res.render('login', {session: session});
+    //   let session = req.session;
+    //    res.render('login', {session: session});
 });
 
 //
@@ -39,11 +39,11 @@ router.post('/login', (req, res) => {
      * @param result
      * 아이디가 있는지 없는지 검사
      */
-    const checkResult = (result)=>{
-      if(result.length !== 0){
-          return result;
-      }
-      throw new Error('id is not correct');
+    const checkResult = (result) => {
+        if (result.length !== 0) {
+            return result;
+        }
+        throw new Error('id is not correct');
     };
 
     /**
@@ -59,8 +59,8 @@ router.post('/login', (req, res) => {
             let tokenGeneratePromise = new Promise(((resolve, reject) => {
                 jwt.sign(
                     {
-                        _id:result._id,
-                        userID:result.id,
+                        _id: result._id,
+                        userID: result.id,
                     },
                     secret,
                     {
@@ -68,9 +68,8 @@ router.post('/login', (req, res) => {
                         issuer: 'hoodadak',
                         subject: 'userInfo'
                     },
-                    (err, token)=>
-                    {
-                        if(err) reject (err);
+                    (err, token) => {
+                        if (err) reject(err);
                         resolve(token);
                     }
                 )
@@ -86,8 +85,8 @@ router.post('/login', (req, res) => {
      * @param token
      * 마지막으로 응답해주는 함수
      */
-    const respond = (token)=>{
-        res.cookie('access_token', token, {maxAge:1000*60*60, httpOnly:false});
+    const respond = (token) => {
+        res.cookie('access_token', token, { maxAge: 1000 * 60 * 60, httpOnly: false });
         res.status(200).json(token);
     };
 
@@ -98,10 +97,10 @@ router.post('/login', (req, res) => {
      */
     const onError = (error) => {
         console.log(error);
-        res.status(201).json({message: error.message});
+        res.status(201).json({ message: error.message });
     };
 
-    users.find({id:id})
+    users.find({ id: id })
         .then(checkResult)
         .then(authenticate)
         .then(respond)
@@ -109,7 +108,7 @@ router.post('/login', (req, res) => {
 
 });
 
-router.post('/setKakaoProperties', (req, res)=>{
+router.post('/setKakaoProperties', (req, res) => {
     const userToken = req.body.userToken;
     const userInfo = req.body.userInfo;
     const kakaoid = req.body.userInfo.id;
@@ -117,8 +116,8 @@ router.post('/setKakaoProperties', (req, res)=>{
 
     console.log(userInfo);
 
-    const respond = (token)=>{
-        res.cookie('access_token', token, {maxAge:1000*60*60, httpOnly:true});
+    const respond = (token) => {
+        res.cookie('access_token', token, { maxAge: 1000 * 60 * 60, httpOnly: true });
         res.status(200).json(token);
     };
 
@@ -129,89 +128,101 @@ router.post('/setKakaoProperties', (req, res)=>{
      */
     const onError = (error) => {
         console.log(error);
-        res.status(201).json({message: error.message});
+        res.status(201).json({ message: error.message });
     };
 
-    const findkakaoid = ()=>{
-        console.log('findkakaoid');
-        users.find({id:kakaoid}, (err, result)=>{
-            if(err) {
-                console.log('시발 에러다');
-                throw new Error(err);
-            }
-            return result.length;
-        });
-    };
+    // const findkakaoid = () => {
+    //     console.log('findkakaoid');
+    //     users.find({ id: kakaoid }, (err, result) => {
+    //         if (err) {
+    //             console.log('시발 에러다');
+    //             throw new Error(err);
+    //         }
+    //         return result.length;
+    //     });
+    // };
 
-    const t1 = (result)=>{
-        if(result.length === 0){
+    const t1 = (result) => {
+        if (result.length === 0) {
             console.log('hihi');
-            var newUser = new users({id:kakaoid});
-            newUser.save(function(err){throw new Error(err);});
-            return true;
-        } else{
+
+            let makeNewUserPromise = new Promise(((resolve, reject) => {
+                var newUser = new users({ id: kakaoid, nickname: userInfo.properties.nickname });
+
+                newUser.save()
+                    .then((result) => { resolve(true); })
+                    .catch((err) => { reject(err); });
+            }
+            ));
+
+            return makeNewUserPromise;
+
+        } else {
             return true;
         }
     };
-    const t2 = (tf)=>{
+    const t2 = (tf) => {
         console.log('t2');
-      if(tf){
-          users.findOneAndUpdate({id:kakaoid},
-              {$set:
-                      {
-                          userToken:{
-                              access_token:userToken.access_token,
-                              expires_in:userToken.expires_in,
-                              refresh_token:userToken.refresh_token,
-                              refresh_token_expires_in:userToken.refresh_token_expires_in,
-                              scope:userToken.scope,
-                              token_type:userToken.token_type
-                          },
-                          userInfo:{
-                              id:userInfo.id,
-                              properties:{
-                                  nickname:userInfo.properties.nickname,
-                                  profile_image:userInfo.properties.profile_image,
-                                  thumbnail_image:userInfo.properties.thumbnail_image
-                              },
-                              kakao_account:{
-                                  has_email:userInfo.kakao_account.has_email,
-                                  is_email_vaild:userInfo.kakao_account.is_email_vaild,
-                                  is_email_verified:userInfo.kakao_account.is_email_verified,
-                                  email:userInfo.kakao_account.email,
-                                  has_age_range:userInfo.kakao_account.has_age_range,
-                                  has_birthday:userInfo.kakao_account.has_birthday,
-                                  has_gender:userInfo.kakao_account.has_gender
-                              }
-                          }
-                      }
-              })
-              .then( result=>{
-                  let tokenGeneratePromise = new Promise(((resolve, reject) => {
-                      jwt.sign(
-                          {
-                              userID:kakaoid
-                          },
-                          secret,
-                          {
-                              expiresIn: '7d',
-                              issuer: 'hoodadak',
-                              subject: 'userInfo'
-                          },
-                          (err, token)=>
-                          {
-                              if(err) reject (err);
-                              resolve(token);
-                          }
-                      )
-                  }));
-                  // 토큰을 생성하는 promise를 리턴
-                  return tokenGeneratePromise;
-              })
-              .catch( err=>{throw new Error(err)})
-      }
+        if (tf) {
+            users.findOneAndUpdate({ id: kakaoid },
+                {
+                    $set:
+                    {
+                        userToken: {
+                            access_token: userToken.access_token,
+                            expires_in: userToken.expires_in,
+                            refresh_token: userToken.refresh_token,
+                            refresh_token_expires_in: userToken.refresh_token_expires_in,
+                            scope: userToken.scope,
+                            token_type: userToken.token_type
+                        },
+                        userInfo: {
+                            id: userInfo.id,
+                            properties: {
+                                nickname: userInfo.properties.nickname,
+                                profile_image: userInfo.properties.profile_image,
+                                thumbnail_image: userInfo.properties.thumbnail_image
+                            },
+                            kakao_account: {
+                                has_email: userInfo.kakao_account.has_email,
+                                is_email_vaild: userInfo.kakao_account.is_email_vaild,
+                                is_email_verified: userInfo.kakao_account.is_email_verified,
+                                email: userInfo.kakao_account.email,
+                                has_age_range: userInfo.kakao_account.has_age_range,
+                                has_birthday: userInfo.kakao_account.has_birthday,
+                                has_gender: userInfo.kakao_account.has_gender
+                            }
+                        }
+
+                    }
+                })
+                .then(result => {
+                    let tokenGeneratePromise = new Promise(((resolve, reject) => {
+                        jwt.sign(
+                            {
+                                userID: kakaoid
+                            },
+                            secret,
+                            {
+                                expiresIn: '7d',
+                                issuer: 'hoodadak',
+                                subject: 'userInfo'
+                            },
+                            (err, token) => {
+                                if (err) reject(err);
+                                resolve(token);
+                            }
+                        )
+                    }));
+                    // 토큰을 생성하는 promise를 리턴
+                    return tokenGeneratePromise;
+                })
+                .catch(err => { throw new Error(err) })
+        }
     };
-    users.find({id:kakaoid})
+
+
+    users.find({ id: kakaoid })
         .then(t1)
         .then(t2)
         .then(respond)
@@ -227,21 +238,21 @@ router.post('/signUp', (req, res) => {
 
     let id = req.body.user.id.toString();
     let pw = req.body.user.pw.toString();
-    let email =req.body.user.email.toString();
-    let name=req.body.user.name.toString();
+    let email = req.body.user.email.toString();
+    let name = req.body.user.name.toString();
     //id 중복검사
-    users.find({id:id}, (err, result)=>{
-        if(err) return res.json(err);
+    users.find({ id: id }, (err, result) => {
+        if (err) return res.json(err);
         console.log(result);
-        if(result.length!=0){
-            res.status(204).json({complete:false}); // 204 - 자원 생성 실패, 아이디 중복임
+        if (result.length != 0) {
+            res.status(204).json({ complete: false }); // 204 - 자원 생성 실패, 아이디 중복임
             // res.redirect('/signup');
-        } else{
+        } else {
             console.log(`else`);
-            let newData = new users({id:id, pw:pw, name:name,email:email});
+            let newData = new users({ id: id, pw: pw, name: name, email: email });
             newData.password = pw;
             newData.save();
-            res.status(201).json({complete:true});// 자원 생성 완료
+            res.status(201).json({ complete: true });// 자원 생성 완료
         }
     });
 
@@ -251,11 +262,11 @@ router.post('/signUp', (req, res) => {
 /////////////////////////////////////////////////////
 // 테스트용임
 
-router.post('/check', (req, res)=>{
+router.post('/check', (req, res) => {
     const token = req.headers['x-access-token'] || req.query.token
 
     // token does not exist
-    if(!token) {
+    if (!token) {
         return res.status(403).json({
             success: false,
             message: 'not logged in'
@@ -266,7 +277,7 @@ router.post('/check', (req, res)=>{
     const p = new Promise(
         (resolve, reject) => {
             jwt.verify(token, req.app.get('jwt-secret'), (err, decoded) => {
-                if(err) reject(err)
+                if (err) reject(err)
                 resolve(decoded)
             })
         }

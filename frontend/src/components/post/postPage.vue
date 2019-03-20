@@ -12,9 +12,7 @@
        <!-- <input id="addrValue" v-model="board.addr" placeholder="주소"><br/>-->
 
         <input id="detailedAddr" v-model="board.detailedAddr" placeholder="상세 주소"><br/>
-
         <button @click="post">Submit</button>
-
       </div>
     </div>
   </div>
@@ -27,6 +25,11 @@
       ckeditor.setAttribute('src', "http://dmaps.daum.net/map_js_init/postcode.v2.js?autoload=false");
       document.head.appendChild(ckeditor);
 
+
+    },
+    mounted(){
+      console.log('hello');
+      this.board.userID = this.$store.getters.getUserID;      
     },
     name: 'postPage',
     data: function () {
@@ -40,7 +43,8 @@
           detailedAddr:'',
           dueDate: '',
           lat:'',
-          lng:''
+          lng:'',
+          userID:'',
         },
       }
     },
@@ -59,12 +63,15 @@
             (response) => {
               if (response.status === 200) {
                 console.log(response);
-                if (!response.data.complete) {
+                if(response.data.complete){
+                  this.$router.push('/pagination');
+                } else {
                   //alert 띄우기
                   alert('잠시 후 다시 시도해주세요');
                 }
-              } else if (response.status === 202) {
-                alert('데이터베이스 오류 \n 잠시 후 다시 시도해주세요');
+              } else if (response.status === 201) {
+                console.log(response.data.message);
+                alert(response);
               }
             },
             (error) => {

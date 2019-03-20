@@ -1,8 +1,6 @@
 <template>
   <div class="outer">
     <div class="inner">
-
-
       <div id="chatHeader">
         <!--상대 아이디-->
         <span v-if="chats !== undefined && this.user.id === chats.user1ID">{{chats.user2ID}}</span>

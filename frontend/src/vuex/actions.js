@@ -80,8 +80,12 @@ export default{
     Kakao.Auth.getStatus(
       function (statusObj) {
         // alert(JSON.stringify(statusObj));
+
+
+
         if(statusObj.status === 'connected'){
           context.commit('IsLogined', {isLogined:true}); // 로그인 되어 있다고 표시
+          context.commit('setUserID',{userID:statusObj.user.id});
         } else{
           context.commit('IsLogined', {isLogined:false}); // 로그인 안되어 있다고 표시
         }

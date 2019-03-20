@@ -3,8 +3,8 @@ const user = require('./user');
 
 const boardSchema = mongoose.Schema({
         //no:{type:Number},
-        //id : {type:String},
-        id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},// 글 쓴 id
+        userOID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},// 글 쓴 id
+        userID: {type:String},
         title: {type: String},
         content: {type: String},
         fee: {type: Number},
@@ -14,7 +14,6 @@ const boardSchema = mongoose.Schema({
         dueDate: {type: String},
         //pirUrl:{type:String},
         //orderState:{type:Boolean, default:false}
-
         location: {
             type: {
                 type: String,
@@ -22,7 +21,6 @@ const boardSchema = mongoose.Schema({
             },
             coordinates: [Number]
         }
-
     },
 );
 

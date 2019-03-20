@@ -14,12 +14,18 @@ router.post('/orderPage/:page',(req,res)=>{
     let len=0;
     console.log('fdfd');
     console.log(req.params.page);
-    board.find({}).skip((perPage * req.params.page)-perPage).limit(perPage).exec(function(err, boards) {
+    board
+        .find({})
+        .populate('userOID')
+        .skip((perPage * req.params.page)-perPage)
+        .limit(perPage)
+        .exec(function(err, boards) {
         if (err) {
             res.status(205).json(err);
         }
         //len = board.count();
-        console.log(boards.title);
+
+
         res.status(200).json(boards);
     });
 

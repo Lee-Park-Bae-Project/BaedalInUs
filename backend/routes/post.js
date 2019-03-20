@@ -3,6 +3,7 @@ var router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
 const Board = require('../models/board');
+const users = require('../models/user');
 const upload = multer({dest: 'uploads/', limits: {fileSize: 5 * 1024 * 1024}});
 
 router.post('/imageLoad', upload.single('img'), (req, res) => {
@@ -19,51 +20,109 @@ router.post('/postOrder', (req, res) => {
     const addr = req.body.board.addr.toString();
     const due_date = req.body.board.dueDate.toString();
     const order_date = req.body.board.order_date;
-
+    const userID = req.body.board.userID;
     const lat = req.body.board.lat;
     const lng = req.body.board.lng;
 
     //const dueDate = req.body.board.dueDate;
-//    const pirUrl = req.body.board.pirUrl.toString();
+    //const pirUrl = req.body.board.pirUrl.toString();
     //const orderState = req.body.board.orderState;
 
-    console.log('title: ' + title);
-    console.log('content: ' + content);
-    console.log('fee: ' + fee);
-    console.log('addr: ' + addr);
-    console.log('lat: ' + lat);
-    console.log('lng: ' + lng);
+    console.log(req.body);
+
 
     /*if(title.length==0)
     {
         console.log('write your title');
         res.status(200).json({complete:false}); // 실패 status code
     }*/
-    var boardInfo = new Board({
-        title: title,
-        content: content,
-        fee: fee,
-        addr: addr,
-        dueDate: due_date,
-        order_date: order_date,
-        location:{
-            coordinates:[lng, lat]
+
+    /**
+     * 
+     * @param {*} user : userID로 검색한 결과 object
+     * oid 값, userID 값을 board collection에 넣어줌
+     */
+    const setBoard = (user)=>{
+        console.log(user.length);
+        if(user.length === 0){
+            throw new Error('잘못된 접근입니다.'); // user collection에 해당하는 아이디가 없다는 것
         }
-    });
-    boardInfo.save()
-        .then(
-            ()=>{
-                res.status(200).json({complete:true});
-            }
-        )
-        .catch(
-            (err)=>{
-                res.status(202).json({coplete:false});
-            }
-        );
+        
+        let userOID = user[0]._id;
+
+        var boardInfo = new Board({
+            title: title,
+            content: content,
+            fee: fee,
+            addr: addr,
+            dueDate: due_date,
+            order_date: order_date,
+            location:{
+                coordinates:[lng, lat]
+            },
+            userOID: userOID,
+            userID: userID
+        });
+
+        boardInfo.save()
+            .then(
+                ()=>{
+                    return 1;
+                }
+            )
+            .catch(
+                (err)=>{
+                    throw new Error('잠시 후 다시 시도해 주십시오.')
+                }
+            );
+    };
 
 
-    res.status(200).json({complete:true});
+    const respond = ()=>{
+        res.status(200).json({complete:true});
+    };
+
+    /**
+     * 
+     * @param {*} error 
+     */
+    const onError = (error)=>{
+        console.log(error);
+        res.status(201).json({message: error.message});
+    }
+
+    users.find({id:userID})
+    .then(setBoard)
+    .then(respond)
+    .catch(onError);
+
+
+    // var boardInfo = new Board({
+    //     title: title,
+    //     content: content,
+    //     fee: fee,
+    //     addr: addr,
+    //     dueDate: due_date,
+    //     order_date: order_date,
+    //     location:{
+    //         coordinates:[lng, lat]
+    //     }
+    // });
+    // boardInfo.save()
+    //     .then(
+    //         ()=>{
+    //             res.status(200).json({complete:true});
+    //         }
+    //     )
+    //     .catch(
+    //         (err)=>{
+    //             res.status(202).json({coplete:false});
+    //         }
+    //     );
+
+
+    // res.status(200).json({complete:true});
+
     //console.log('asdfadf');
     /* for( let i=0;i<10;i++) {
          var boardInf = new Board({

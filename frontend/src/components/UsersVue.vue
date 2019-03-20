@@ -4,7 +4,7 @@
       <button v-on:click='getUsers'></button>
 
       <ul>
-        <li v-for="user in users">
+        <li v-for="user in users" v-bind:key="user.id">
           <span>{{user.id}}</span>
           <div>
             <b-dropdown id="ddown1" text="메뉴" class="m-md-2">
