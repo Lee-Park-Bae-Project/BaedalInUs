@@ -5,15 +5,15 @@
 
       {{this.$store.getters.getAddr}}
 
-      <span v-if="this.$store.getters.getAddr.length!==0" @click="searchAddress">
+      <span v-if="this.$store.getters.getAddr.length!==0" @click="searchAddress" class="getlocation">
         <span id="isItCorrect" class="label label-primary">이 주소가 맞나요?</span>
         <i class="fas fa-map-marker-alt"></i>
       </span>
 
     </div>
-    <div id="search">
+    <div id="search" style="background: #fd7e14">
       <label for="distance">거리</label>
-      <select id="distance" v-model="data.dist">
+      <select id="distance" v-model="data.dist" style="background: #ffffff; width:150px; padding-left:10px">
         <option value='{"fromdist":"10", "todist":"50000"}'>10km 이상</option>
         <option value='{"fromdist":"5", "todist":"10"}'>5km 초과 ~ 10km 이하</option>
         <option value='{"fromdist":"3", "todist":"5"}'>3km 초과 ~ 5km 이하</option>
@@ -22,7 +22,7 @@
       </select>
 
       <label for="fee">수수료</label>
-      <select id="fee" v-model="data.fee">
+      <select id="fee" v-model="data.fee" style="background: #ffffff; width:220px; padding-left:10px">
         <option value='{"fromfee":"40000", "tofee":"50000"}'>40,000 원 초과 ~ 50,000 원 이하</option>
         <option value='{"fromfee":"30000", "tofee":"40000"}'>30,000 원 초과 ~ 40,000 원 이하</option>
         <option value='{"fromfee":"10000", "tofee":"30000"}'>10,000 원 초과 ~ 30,000 원 이하</option>
@@ -30,8 +30,8 @@
         <option value='{"fromfee":0", "tofee":"50000"}' selected="selected">상관없음</option>
       </select>
 
-      <input v-model="data.stuffName" placeholder=" 상품명">
-      <button @click="search()">검색</button>
+      <input v-model="data.stuffName" placeholder=" 상품명" style="background: #ffffff; padding-left:10px">
+      <button @click="search()" class="btn btn-dark">검색</button>
 
     </div>
   </div>
@@ -132,5 +132,14 @@
 
   #isItCorrect {
     font-size: 5px;
+  }
+
+  .getlocation:hover{
+    cursor:pointer;
+  }
+
+  label{
+    color :#ffffff;
+    font-weight: bold;
   }
 </style>

@@ -149,12 +149,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    background-color: #E2904B;
+    background-color: #F8F8F9;
 
   }
 
   html{
-    background-color: #E2904B;
+    background-color: #F8F8F9;
   }
   body {
     /*background-color: #E2904B;*/

@@ -1,92 +1,107 @@
 <template>
+  <body>
+  <div class="container">
 
-    <div class="outer">
-      <div class="inner">
-        <div class="form_box">
+    <form class="form-signin">
+      <h2 class="form-signin-heading">Create your account</h2>
+      <input v-model="user.id" placeholder="ID" type="text" class="form-control" required autofocus>
+      <input v-model="user.pw" placeholder="Password" type="password"
+             class="form-control" required>
+      <input v-model="user.name" placeholder="Full name" type="text" class="form-control"
+             style="border-radius: 0; margin-top: -1px" required>
+      <input v-model="user.email" placeholder="your-email@example.com" type="email"
+             class="form-control" required>
+      <button v-on:click="signUp" class="submit btn btn-lg btn-success btn-block">Sign up</button>
+    </form>
 
-          <h1>Create new account</h1><br/>
-          <strong>Your ID</strong><br/>
-          <input v-model="user.id" placeholder="ID"> <br/>
-          <strong>Your password</strong><br/>
-          <input v-model="user.pw" type="password" placeholder="Password"><br/>
-          <strong>Your name</strong><br/>
-          <input v-model="user.name" placeholder="Full name"><br/>
-          <strong>Your E-mail</strong><br/>
-          <input v-model="user.email" placeholder="your-email@example.com"><br/>
-          <button class="submit" v-on:click="signUp">SignUp</button>
-        </div>
-      </div>
-    </div>
+  </div> <!-- /container -->
+  </body>
 </template>
 
 <script>
-export default {
-  name: 'SignUpPage',
+  export default {
+    name: 'SignUpPage',
 
-  data: function () {
-    return {
-      user: {
-        id: '',
-        pw: '',
-        name: '',
-        email: ''
-      },
+    data: function () {
+      return {
+        user: {
+          id: '',
+          pw: '',
+          name: '',
+          email: ''
+        },
 
-    }
-  },
-  methods: {
-    signUp: function (event) {
-      console.log(`button clicked`);
-      this.$http.post('http://localhost:3000/auth/signUp', { // axios 사용
-        user: this.user
-      })
-        .then((response) => {
-          if (response.status === 204) {
-            if(response.data.complete === false){
-              alert('아이디가 중복됩니다.');
-            }
-          }
-          if (response.status === 201) {
-            if(response.data.complete === true){
-              alert('회원가입이 완료되었습니다.');
-              this.$router.push('/login') // Login 페이지로 보내줌
-            }
-          }
+      }
+    },
+    methods: {
+      signUp: function (event) {
+        console.log(`button clicked`);
+        this.$http.post('http://localhost:3000/auth/signUp', { // axios 사용
+          user: this.user
         })
-        .catch(function (error) {
-          alert('error')
-        })
+          .then((response) => {
+            if (response.status === 204) {
+              if (response.data.complete === false) {
+                alert('아이디가 중복됩니다.');
+              }
+            }
+            if (response.status === 201) {
+              if (response.data.complete === true) {
+                alert('회원가입이 완료되었습니다.');
+                this.$router.push('/login') // Login 페이지로 보내줌
+              }
+            }
+          })
+          .catch(function (error) {
+            alert('error')
+          })
+      }
     }
   }
-}
 </script>
 <style scoped>
-  .outer {
-    font-family: "Franklin Gothic Demi";
-    width: 100%;
-    text-align: center;
-  }
-  .inner {
-    display: inline-block;
-  }
-  input {
-    width: 300px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    height: 25px;
-  }
-  .form_box {
-    margin-top: 80px;
-    text-align: left;
-  }
-  .check_button {
-    margin-left: 10px;
-  }
-  .submit {
-    float: right;
-    margin-top: 10px;
-    margin-right: 5px;
-    width: 100px;
+  body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #F8F8F9;
   }
 
+  .form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+  }
+
+  .form-signin .form-signin-heading {
+    margin-bottom: 10px;
+  }
+
+
+  .form-signin .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .form-signin .form-control:focus {
+    z-index: 2;
+  }
+
+  .form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .form-signin input[type="email"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .form-signin input[type="password"] {
+    border-radius: 0;
+  }
 </style>

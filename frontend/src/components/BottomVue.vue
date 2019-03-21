@@ -1,6 +1,6 @@
 <template>
   <div id="top_container">
-    ©2019 LeeParkBae
+    ©2019 LeeParkBaeShin
   </div>
 </template>
 
@@ -12,8 +12,9 @@
 
 <style scoped>
   div{
-    background-color: #E2904B;
+    background-color: #F8F8F9;
   }
+
   #top_container{
     text-align: center;
     width:100%;

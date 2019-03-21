@@ -1,24 +1,27 @@
 <template>
-  <div class="outer">
-    <div class="inner">
-      <div class="form_box">
-        <h1>LOG IN</h1>
+  <body>
 
-        <input v-model="user.id" placeholder="your ID" v-on:keyup.enter="login()"><br/>
-        <input v-model="user.pw" type="password" placeholder="your password" v-on:keyup.enter="login()"><br/>
-        <button @click="login">login</button>
-        <button @click="signUp">Sign Up</button>
-        <!--<a id="kakao-login-btn"></a>-->
+  <div class="container">
+
+    <form class="form-signin">
+      <h2 class="form-signin-heading">Please sign in</h2>
+      <input v-model="user.id" placeholder="your ID" v-on:keyup.enter="login()" type="email" class="form-control"
+             required autofocus>
+      <input v-model="user.pw" placeholder="your password" v-on:keyup.enter="login()" type="password"
+             class="form-control" required>
+      <div style="margin:10px">
+        <label>Baedalinus가 처음이신가요?</label>
+        <a href="#" @click="signUp">회원가입</a>
       </div>
+      <button @click="login" class="btn btn-lg btn-primary btn-block border-0"
+              style="background: #fd7e14; font-weight: bold"
+              type="submit">Sign in
+      </button>
+      <button id="kakaoLogin" @click="kakaoLogin" class="btn btn-lg btn-block"></button>
+    </form>
 
-      <!--<a href="https://kauth.kakao.com/oauth/authorize?client_id=6e5e709121be509e1ecc65d8e64a492f&redirect_uri=http://localhost:8080/auth&response_type=code">-->
-        <!--<button id="kakaoLogin"/>-->
-      <!--</a>-->
-
-      <button id="kakaoLogin" @click="kakaoLogin"></button>
-
-    </div>
-  </div>
+  </div> <!-- /container -->
+  </body>
 </template>
 
 <script>
@@ -144,35 +147,56 @@
 </script>
 
 <style scoped>
-  .outer {
-    font-family: "Franklin Gothic Demi";
-    width: 100%;
-    text-align: center;
-  }
-  .inner {
-    display: inline-block;
-  }
-  .form_box {
-    margin-top: 150px;
-    text-align: left;
-  }
-  h1 {
-    margin: 10px ;
-  }
-  input {
-    width: 300px;
-    margin:10px;
-  }
-  button {
-    float:right;
-    margin:10px;
-    width:100px;
+  body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #F8F8F9;
   }
 
-  #kakaoLogin{
+  .form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+  }
+
+  .form-signin .form-signin-heading {
+    margin-bottom: 10px;
+  }
+
+
+  .form-signin .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .form-signin .form-control:focus {
+    z-index: 2;
+  }
+
+  .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  #kakaoLogin {
     background: url("../../assets/kakao_account_login_btn_medium_wide.png");
-    width:300px;
-    height:49px;
+    height: 49px;
+    border: 0;
   }
 
+  #kakaoLogin:hover {
+    background: url("../../assets/kakao_account_login_btn_medium_wide_ov.png");
+    height: 49px;
+    border: 0;
+  }
 </style>
