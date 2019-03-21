@@ -20,9 +20,11 @@ router.post('/postOrder', (req, res) => {
     const content = req.body.board.content.toString();
     const fee = req.body.board.fee.toString();
     const addr = req.body.board.addr.toString();
+    const detailedAddr = req.body.board.detailedAddr.toString();
     const due_date = req.body.board.dueDate.toString();
     const order_date = req.body.board.order_date;
     const userID = req.body.board.userID;
+
     const lat = req.body.board.lat;
     const lng = req.body.board.lng;
 
@@ -37,14 +39,38 @@ router.post('/postOrder', (req, res) => {
     console.log();
     console.log(req.body);
 
-
     /*if(title.length==0)
     {
         console.log('write your title');
         res.status(200).json({complete:false}); // 실패 status code
     }*/
-    var boardInfo = new Board({title:title, content:content, fee:fee ,addr:addr,dueDate:due_date,order_date:order_date});
-    boardInfo.save();
+
+    var boardInfo = new Board({
+        title: title,
+        content: content,
+        fee: fee,
+        addr: addr,
+        dueDate: due_date,
+        order_date: order_date,
+        detailedAddr:detailedAddr,
+        location:{
+            coordinates:[lng, lat]
+        }
+    });
+    boardInfo.save()
+        .then(
+            ()=>{
+                res.status(200).json({complete:true});
+            }
+        )
+        .catch(
+            (err)=>{
+                res.status(202).json({coplete:false});
+            }
+        );
+
+
+    res.status(200).json({complete:true});
     //console.log('asdfadf');
    /* for( let i=0;i<10;i++) {
         var boardInf = new Board({

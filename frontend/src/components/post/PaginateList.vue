@@ -11,7 +11,7 @@
               </div>
             </v-card-title>
             <v-card-text>
-              address: {{board.addr}}
+              address: {{board.addr}} {{board.detailedAddr}}
               order: {{board.content}}
               dueDate: {{board.dueDate}}
               fee: {{board.fee}}
@@ -34,6 +34,7 @@
             @click=""
             circle
           ></v-pagination>
+
         </div>
     </div>
           </div>

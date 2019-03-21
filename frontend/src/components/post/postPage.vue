@@ -7,9 +7,10 @@
         <input v-model="board.content" placeholder="주문 내용"><br/>
         <input v-model="board.fee" placeholder="수수료"><br/>
         <input id="addrValue" @click="searchAddress" v-model="board.addr" placeholder="주소" readonly><br/>
-       <!-- <input id="addrValue" v-model="board.addr" placeholder="주소"><br/>-->
+        <!-- <input id="addrValue" v-model="board.addr" placeholder="주소"><br/>-->
 
         <input id="detailedAddr" v-model="board.detailedAddr" placeholder="상세 주소"><br/>
+
         <button @click="post">Submit</button>
       </div>
 
@@ -42,6 +43,7 @@
           lat:'',
           lng:'',
           userID:'',
+
         },
       }
     },
@@ -52,6 +54,7 @@
         if(this.board.detailedAddr.length === 0){
           alert('상세 주소를 입력해주세요.');
         }
+
         this.$http.post('http://localhost:3000/post/postOrder', {
           board: this.board
         })
@@ -60,6 +63,8 @@
               if (response.status === 200) {
                 console.log(response);
                 if(response.data.complete){
+
+                  alert('주문이 완료되었습니다.');
                   this.$router.push('/pagination');
                 } else {
                   //alert 띄우기
@@ -68,6 +73,7 @@
               } else if (response.status === 201) {
                 console.log(response.data.message);
                 alert(response);
+
               }
             },
             (error) => {
@@ -95,10 +101,13 @@
               }
               that.board.addr = address;
               that.setLatLng(address);
+
               // 우편번호와 주소 정보를 해당 필드에 넣는다.
               document.getElementById("addrValue").value = address;
               // 커서를 상세주소 필드로 이동한다.
               document.getElementById("detailedAddr").focus();
+
+
             }
           }).open();
         });
@@ -106,6 +115,7 @@
       setLatLng:function(addr){
         let that = this;
         var geocoder = new daum.maps.services.Geocoder();
+
         var callback = function(result, status) {
           if (status === daum.maps.services.Status.OK) {
             console.log(result);
@@ -113,6 +123,7 @@
             that.board.lng = result[0].x;
           }
         };
+
         geocoder.addressSearch(addr, callback);
       }
     }
@@ -150,4 +161,3 @@
     width: 100px;
   }
 </style>
-
