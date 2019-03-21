@@ -393,6 +393,99 @@ router.post('/getSumOfUnCheckMsg', (req, res) => {
 });
 
 
+router.post('/sendMsg', (req, res)=>{
+    let msg = req.body.msg;
+    let sender = req.body.sender;
+    let receiver = req.body.receiver;
+    let created = req.body.created;
+    let roomID='';
+
+    console.log('--------------------------------');
+    console.log(msg);
+    console.log(sender);
+    console.log(receiver);
+    console.log(created);
+    console.log('--------------------------------');
+
+    sender = String(sender);
+    receiver = String(receiver);
+
+    console.log(typeof(sender));
+    console.log(typeof(receiver));
+    if(sender > receiver){
+        console.log(`sender 큼`);
+        roomID = sender.concat(receiver);
+    } else{
+        console.log(`receiver 큼`);
+        roomID = receiver.concat('', sender);
+    }
+
+    console.log('roomID : ' + roomID);
+
+    /**
+     * sender, receiver 로 특정 roomID 를 찾음
+     * 방이 있냐 없냐를 리턴
+     */
+    const findRoom = ()=>{
+        rooms.findOne({'roomID' : roomID})
+            .then(res=>{
+                if(res){
+                    return true;
+                } else{
+                    return false;
+                }
+            })
+            .catch(err=>{
+                throw new Error('db error');
+            })
+    };
+
+    /**
+     * 새로운 메시지를 roomID에 저장
+     */
+    const storeNewMsg = (isRoomExist)=>{
+        if(isRoomExist){
+            return true;
+        }
+    };
+
+    /**
+     * 방이 없는 경우 방을 새로 만듬
+     */
+    const makeRoom = (isRoomExist)=>{
+
+        // 방을 생성하는 프로미스
+        let makeRoomPromise = new Promise(((resolve, reject)=>{
+
+        }));
+
+        return makeRoomPromise;
+
+    };
+
+
+    const onError = (error) => {
+        res.status(403).json({
+            success: false,
+            message: error.message
+        })
+    }
+
+    const respond = () => {
+        res.json({
+            success: true
+        })
+    }
+
+    findRoom()
+        .then(storeNewMsg)
+        .then(makeRoom)
+        .then(respond)
+        .catch(onError);
+
+
+});
+
 
 
 module.exports = router;

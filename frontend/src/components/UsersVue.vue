@@ -4,7 +4,7 @@
       <button v-on:click='getUsers'></button>
 
       <ul>
-        <li v-for="user in users">
+        <li v-for="user in users" v-bind:key="user.id">
           <span>{{user.id}}</span>
           <div>
             <b-dropdown id="ddown1" text="메뉴" class="m-md-2">
@@ -97,7 +97,6 @@
         console.log(`receiverOID : ${receiverOID} receiverID : ${receiverID}`);
 
         let message = prompt('메시지를 입력하세여');  // 처음 보낼 메시지 입력
-
 
         this.sendMessage(senderOID, senderID, receiverOID, receiverID, message);
       }

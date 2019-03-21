@@ -11,18 +11,19 @@
               </div>
             </v-card-title>
             <v-card-text>
-              title:{{board.title}}
-              address:{{board.addr}}
-              order:{{board.content}}
-              dueDate:{{board.dueDate}}
-              fee:{{board.fee}}
+              address: {{board.addr}}
+              order: {{board.content}}
+              dueDate: {{board.dueDate}}
+              fee: {{board.fee}}
+              <span @click="sendMsgPpt(board)">
+              <i class="fas fa-sms" ></i>
+            </span>
             </v-card-text>
             <v-card-actions>
             <v-btn flat color="green"
                    @click="singleBoard(board.id)">View</v-btn>
             </v-card-actions>
           </div>
-
 
         <div>
           <v-pagination
@@ -34,119 +35,99 @@
             circle
           ></v-pagination>
         </div>
-
-
-
     </div>
           </div>
+
 </template>
-<!-- <div class="outer">
-    <div calss = "inner">
-      <p id="header">Order List</p>
-      <b-card-group deck>
-     <div v-for="board in pageArray" :key="board.no" >
-       <b-card-body v-on:click="showInfo">
-        <b-card-text>
-          title:{{board.title}}
-          address: {{board.addr}}
-          order: {{board.content}}
-          dueDate: {{board.dueDate}}
-          fee: {{board.fee}}
-        </b-card-text>
-        </b-card>
-       </b-card-body>
-      </div>
-      </b-card-group>
-      <div class = "overflow-auto">
-        <div>
-          <b-pagination size = "md" :total-rows="100" v-model = "currentPage" @click="" :per-page="10"/>
-          {{currentPage}}
-        </div>
-      </div>
-      </div>
-    </div>-->
+
 <script>
-import axios from 'axios'
+  import axios from "axios";
   export default {
-    name: 'PaginateList',
-    data: function(){
+    name: "PaginateList",
+    data() {
       return {
-        currentPage : 1,
+        currentPage: 1,
         perPage: 10,
-        pageArray:[]
-      }
+        pageArray: []
+      };
+    },
+    methods: {
+      getData: function(event) {
+        console.log("______________________---------------");
+        axios
+          .post(
+            "http://localhost:3000/showPost/orderPage/" + this.currentPage,
+            {}
+          )
+          .then(response => {
+            console.log("----------response----------");
+            console.log(response);
+            console.log(response.status);
+            if (response.status == 200) {
+              console.log("200");
+              console.log(response);
+              this.pageArray = response.data;
+            } else if (response.status == 205) {
+              console.log("205");
+              alert("can not response");
+            }
+          })
+          .catch(error => {
+            alert(error);
+          });
+      },
+      sendMsgPpt: function(board) {
+        console.log(board);
+        let msg = prompt(board.userOID.nickname + '님 에게 메시지 보내기');
+        let sender = this.$store.getters.getUserID;
+        let receiver = board.userOID.id;
+        let created = Date.now();
+        this.$store.dispatch('sendMsg', {msg: msg, sender: sender, receiver: receiver, created: created});
+      },
+
     },
 
-      methods: {
-        getData: function (event) {
-          console.log('______________________---------------');
-          axios.post('http://localhost:3000/showPost/orderPage/' + this.currentPage,{
-              })
-            .then(
-              (response) => {
-                console.log('----------response----------');
-                console.log(response);
-                console.log(response.status);
-                if (response.status == 200) {
-                  console.log('200');
-                  console.log(response);
-                  this.pageArray = response.data;
-                } else if (response.status == 205) {
-                  console.log('205');
-                  alert('can not response');
-                }
-              },
-            )
-            .catch(error => {
-              alert(error);
-            })
-        },
-        singleBoard: function(event){
-          console.log('-_-_-___-_-___________-____');
-          axios.post('http://localhost:3000/showPost/singlePage/'+this.)
-         this.$router.push('/pos')
-        }
-      },
     created() {
-      console.log('router : ' + this.$route);
+      console.log("router : " + this.$route);
       this.getData();
-    },watch: {
-      currentPage: function(val,oldVal){
-        console.log('new : %s, old: %s',val, oldVal);
+    },
+    watch: {
+      currentPage: function(val, oldVal) {
+        console.log("new : %s, old: %s", val, oldVal);
         this.getData();
       }
-    },showInfo: function(event){
-      alert('hello');
-      if(event){}
-      alert(event.target.tagName);
     }
-  }
+  };
 </script>
-
 <style scoped>
-  .outer {
-    font-family: "Franklin Gothic Demi";
-    width: 100%;
-    text-align: center;
-  }
-  .inner {
-    display: inline-block;
-  }
-  .form_box {
-    margin-top: 150px;
-    text-align: left;
-  }
-  h1 {
-    margin: 10px ;
-  }
-  input {
-    width: 300px;
-    margin:10px;
-  }
-  button {
-    float:right;
-    margin:10px;
-    width:100px;
-  }
+.outer {
+  font-family: "Franklin Gothic Demi";
+  width: 100%;
+  text-align: center;
+}
+.inner {
+  display: inline-block;
+}
+.form_box {
+  margin-top: 150px;
+  text-align: left;
+}
+h1 {
+  margin: 10px;
+}
+input {
+  width: 300px;
+  margin: 10px;
+}
+button {
+  float: right;
+  margin: 10px;
+  width: 100px;
+}
+.pageList {
+  width: 300px;
+  margin: 10px auto;
+}
+
 </style>
 

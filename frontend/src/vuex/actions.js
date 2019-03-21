@@ -43,16 +43,14 @@ export default{
 
             ()=>{router.push('/');}
           )
-
       },
       fail:function(err){
         alert(JSON.stringify(err));
       },
+
       throughTalk:false, // 간편 로그인 사용 여부
       // persistAccessToken:true // 세션이 종료된 뒤에도 Access Token을 사용할 수 있도록 로컬 스토리지에 저장합니다.
     })
-
-
 
   },
   // 로그아웃
@@ -82,8 +80,12 @@ export default{
     Kakao.Auth.getStatus(
       function (statusObj) {
         // alert(JSON.stringify(statusObj));
+
+
+
         if(statusObj.status === 'connected'){
           context.commit('IsLogined', {isLogined:true}); // 로그인 되어 있다고 표시
+          context.commit('setUserID',{userID:statusObj.user.id});
         } else{
           context.commit('IsLogined', {isLogined:false}); // 로그인 안되어 있다고 표시
         }
@@ -98,9 +100,32 @@ export default{
     axios.post(url, body)
       .then(result=>{console.log(result)})
       .catch(err=>{console.log(err)})
-  }
+  },
 
+  sendMsg:(context, data)=>{
+    let msg = data.msg;
+    let sender = data.sender;
+    let receiver = data.receiver;
+    let created = data.created;
 
+    console.log(data);
+    console.log(msg);
+    console.log(sender);
+    console.log(receiver);
+    console.log(created);
+
+    const url = 'http://localhost:3000/chat/sendMsg';
+    const body = {msg: msg, sender: sender, receiver: receiver, created: created};
+
+    axios.post(url, body)
+      .then(res=>{
+        console.log(res);
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+      
+  },
 
 
 }

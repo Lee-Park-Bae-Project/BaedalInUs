@@ -15,6 +15,8 @@ const state = {
   /////////////////////////////////////////////////////////
   isLogined:'false', // 로그인 되어있는지
   /////////////////////////////////////////////////////////
+
+  userID:'',
   userToken:{
     access_token: '',
     expires_in: '',
@@ -40,6 +42,12 @@ const state = {
       has_birthday:'', //boolean
       has_gender:'', // boolean
     }
+  },
+
+  myPos:{
+    latitude:'', // 위도
+    longitude:'', // 경도
+    addr:'', // 실제 주소 ( 서울 서대문구 ~ )
   },
 };
 

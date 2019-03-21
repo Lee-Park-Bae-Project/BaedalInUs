@@ -1,10 +1,8 @@
 <template>
     <div class="outer">
       <div class="inner">
-
         <!--<p>{{chatRooms.length}}</p>-->
         <div id="chatRoomLists">
-
           <!--<img id=imgI src="../assets/profile_img.svg">-->
           <p v-if="chatRooms.length===0">참여중인 대화가 없습니다.</p>
           <table v-else="chatRooms.length===0">
@@ -26,7 +24,6 @@
         </div>
       </div>
     </div>
-
 </template>
 
 <script>
@@ -90,7 +87,6 @@
         EventBus.$emit('updateSumOfUncheckedMsg', newVal);
       },
       updateChatRoomList:function(){
-        // TODO : 채팅방 메시지 새로 받아와야함
         this.getChatRooms();
       }
     },

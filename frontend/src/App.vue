@@ -16,11 +16,12 @@
   import HeaderComponent from './components/Header.vue';
   import BottomComponent from './components/BottomVue.vue';
   import io from 'socket.io-client';
+  import store from './vuex/store'
 
   import {EventBus} from "./event-bus";
 
   let socket=io('localhost:3000', { transports: ['websocket'] });
-
+// TODO: 주문 목록 보고 메시지 보내는 기능 추가
   export default {
     name: 'App',
     components: {
@@ -38,6 +39,8 @@
       }
     },
     created() {
+      this.getCurrentPos(); // 현재 위치 받아오기
+
       EventBus.$on('sendNewMsg', this.emitNewMsgToServer);
       EventBus.$on('joinRoom', this.joinRoom);
       EventBus.$on('leaveRoom', this.leaveRoom); // chatRoom destroyed 에서 호출
@@ -104,6 +107,37 @@
         console.log(userID);
         socket.emit('joinToMyID', userID);
       },
+      getCurrentPos:function() {
+        console.log('sdf');
+        // Geolocation API에 액세스할 수 있는지를 확인
+        if (navigator.geolocation) {
+          //위치 정보를 얻기
+          navigator.geolocation.getCurrentPosition (function(pos) {
+            console.log('위도 : ' + pos.coords.latitude); // 위도
+            console.log('경도 : ' + pos.coords.longitude); // 경도
+
+            store.commit("setLatitude", {latitude:pos.coords.latitude});
+            store.commit("setLongitude", {longitude:pos.coords.longitude});
+
+            var geocoder = new daum.maps.services.Geocoder();
+
+            var coord = new daum.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+            var callback = function(result, status) {
+              if (status === daum.maps.services.Status.OK) {
+                console.log(result[0].address.address_name);
+
+                store.commit("setAddr", {addr:result[0].address.address_name});
+
+              }
+            };
+
+            geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+
+          });
+        } else {
+          alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.")
+        }
+      }
     },
 
   }
