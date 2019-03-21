@@ -28,6 +28,4 @@ module.exports = () => {
     require('./models/board');
     require('./models/rooms');
 
-
-
 };

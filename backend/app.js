@@ -81,7 +81,7 @@ app.use('/test', testRouter);
 app.use('/api', apiTestRouter);
 app.use('/auth', authRouter);
 app.use('/mail', mailRouter);
-app.use('/chat', chatRouter)
+app.use('/chat', chatRouter);
 app.use('/post',postRouter);
 app.use('/showPost',showPostRouter);
 

@@ -23,9 +23,6 @@
           <b-nav-item @click="chat">채팅
             <span v-if="sumOfUncheckedMsg!==0" class="badge badge-danger">{{this.sumOfUncheckedMsg}}</span>
           </b-nav-item>
-
-
-
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

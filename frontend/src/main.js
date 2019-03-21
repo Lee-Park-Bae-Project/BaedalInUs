@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import store from './vuex/store';
 import VueCookie from 'vue-cookie'
+import 'vuetify/dist/vuetify.min.css';
 
 Vue.use(BootstrapVue);
 Vue.use(VueCookie);

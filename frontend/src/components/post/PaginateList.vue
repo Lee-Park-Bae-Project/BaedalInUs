@@ -1,17 +1,62 @@
 <template>
   <div class="outer">
+    <div class="inner">
+      <p id="header">Order List</p>
+          <div v-for="board in pageArray" :key="board.no">
+            <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"> </v-img>
+            <v-card-title primary-title>
+              <div>
+                <div class="headline">Top</div>
+                <span class="grey--text">1,000 miles of wonder</span>
+              </div>
+            </v-card-title>
+            <v-card-text>
+              title:{{board.title}}
+              address:{{board.addr}}
+              order:{{board.content}}
+              dueDate:{{board.dueDate}}
+              fee:{{board.fee}}
+            </v-card-text>
+            <v-card-actions>
+            <v-btn flat color="green"
+                   @click="singleBoard(board.id)">View</v-btn>
+            </v-card-actions>
+          </div>
+
+
+        <div>
+          <v-pagination
+            size = "md" :length="100" :total-visible="10"
+            prev-icon="mdi-menu-left"
+            next-icon="mdi-menu-right"
+            v-model = "currentPage"
+            @click=""
+            circle
+          ></v-pagination>
+        </div>
+
+
+
+    </div>
+          </div>
+</template>
+<!-- <div class="outer">
     <div calss = "inner">
       <p id="header">Order List</p>
-     <div v-for="board in pageArray" :key="board.no">
-        <b-card title="hello">
+      <b-card-group deck>
+     <div v-for="board in pageArray" :key="board.no" >
+       <b-card-body v-on:click="showInfo">
         <b-card-text>
+          title:{{board.title}}
           address: {{board.addr}}
           order: {{board.content}}
           dueDate: {{board.dueDate}}
           fee: {{board.fee}}
         </b-card-text>
         </b-card>
+       </b-card-body>
       </div>
+      </b-card-group>
       <div class = "overflow-auto">
         <div>
           <b-pagination size = "md" :total-rows="100" v-model = "currentPage" @click="" :per-page="10"/>
@@ -19,9 +64,7 @@
         </div>
       </div>
       </div>
-    </div>
-</template>
-
+    </div>-->
 <script>
 import axios from 'axios'
   export default {
@@ -33,6 +76,7 @@ import axios from 'axios'
         pageArray:[]
       }
     },
+
       methods: {
         getData: function (event) {
           console.log('______________________---------------');
@@ -56,8 +100,12 @@ import axios from 'axios'
             .catch(error => {
               alert(error);
             })
-        }, /*,
-        }*/
+        },
+        singleBoard: function(event){
+          console.log('-_-_-___-_-___________-____');
+          axios.post('http://localhost:3000/showPost/singlePage/'+this.)
+         this.$router.push('/pos')
+        }
       },
     created() {
       console.log('router : ' + this.$route);
@@ -67,6 +115,10 @@ import axios from 'axios'
         console.log('new : %s, old: %s',val, oldVal);
         this.getData();
       }
+    },showInfo: function(event){
+      alert('hello');
+      if(event){}
+      alert(event.target.tagName);
     }
   }
 </script>

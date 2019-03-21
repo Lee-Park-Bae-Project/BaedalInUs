@@ -9,6 +9,16 @@ const board = require('../models/board');
 //     console.log(req.body);
 //     res.end('123');
 // });
+router.post('/singlePage/:ids',(req,res)=>{
+    console.log('123456789');
+    board.find({"id":ids}).exec(function(err,boards) {
+        if (err) {
+            res.status(208).json(err);
+        }
+        console.log(boards.title);
+        res.status(419).json(boards);
+    });
+});
 router.post('/orderPage/:page',(req,res)=>{
     var perPage= 10;
     let len=0;
@@ -18,7 +28,6 @@ router.post('/orderPage/:page',(req,res)=>{
         if (err) {
             res.status(205).json(err);
         }
-        //len = board.count();
         console.log(boards.title);
         res.status(200).json(boards);
     });

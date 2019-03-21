@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../vuex/store'
-Vue.use(Router)
+import Vuetify from 'vuetify'
+Vue.use(Router);
+Vue.use(Vuetify);
 
 
 import LoginPage from '@/components/auth/LoginPage.vue'
