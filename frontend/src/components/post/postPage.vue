@@ -60,6 +60,7 @@
               if (response.status === 200) {
                 console.log(response);
                 if(response.data.complete){
+                  alert('주문이 완료되었습니다.');
                   this.$router.push('/pagination');
                 } else {
                   //alert 띄우기

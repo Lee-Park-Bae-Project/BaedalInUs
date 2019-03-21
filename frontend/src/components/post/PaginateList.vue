@@ -5,7 +5,7 @@
      <div v-for="board in pageArray" :key="board.no">
         <b-card title="hello">
         <b-card-text>
-          address: {{board.addr}}
+          address: {{board.addr}} {{board.detailedAddr}}
           order: {{board.content}}
           dueDate: {{board.dueDate}}
           fee: {{board.fee}}

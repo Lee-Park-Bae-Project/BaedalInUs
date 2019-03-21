@@ -48,6 +48,7 @@ export default {
           }
           if (response.status === 201) {
             if(response.data.complete === true){
+              alert('회원가입이 완료되었습니다.');
               this.$router.push('/login') // Login 페이지로 보내줌
             }
           }
