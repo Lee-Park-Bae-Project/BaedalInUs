@@ -9,9 +9,9 @@
         <input v-model="board.content" placeholder="주문 내용"><br/>
         <input v-model="board.fee" placeholder="수수료"><br/>
         <input id="addrValue" @click="searchAddress" v-model="board.addr" placeholder="주소" readonly><br/>
-       <!-- <input id="addrValue" v-model="board.addr" placeholder="주소"><br/>-->
+        <!-- <input id="addrValue" v-model="board.addr" placeholder="주소"><br/>-->
 
-        <input id="detailedAddr" placeholder="상세 주소"><br/>
+        <input id="detailedAddr" v-model="board.detailedAddr" placeholder="상세 주소"><br/>
 
         <button @click="post">Submit</button>
 
@@ -37,31 +37,36 @@
           content: '',
           fee: '',
           addr: '',
-          dueDate: ''
+          detailedAddr:'',
+          dueDate: '',
+          lat:'',
+          lng:''
         },
       }
     },
     methods: {
       post: function (event) {
-        console.log(this.board);
+        let that = this;
+
+        if(this.board.detailedAddr.length === 0){
+          alert('상세 주소를 입력해주세요.');
+        }
+
         this.$http.post('http://localhost:3000/post/postOrder', {
           board: this.board
         })
           .then(
             (response) => {
-              console.log('----------------------response--------------')
-              console.log(response);
-              console.log(response.status);
               if (response.status === 200) {
-                console.log('200');
                 console.log(response);
-                if (!response.data.complete) {
+                if(response.data.complete){
+                  this.$router.push('/pagination');
+                } else {
                   //alert 띄우기
-                  alert('wrong');
+                  alert('잠시 후 다시 시도해주세요');
                 }
-              } else if (response.status === 201) {
-                console.log(`201`);
-                alert('no matching id');
+              } else if (response.status === 202) {
+                alert('데이터베이스 오류 \n 잠시 후 다시 시도해주세요');
               }
             },
             (error) => {
@@ -73,6 +78,7 @@
           })
       },
       searchAddress() {
+        let that = this;
         daum.postcode.load(function () {
           new daum.Postcode({
             oncomplete: function (data) {
@@ -88,15 +94,33 @@
               } else { // 사용자가 지번 주소를 선택했을 경우(J)
                 address = data.jibunAddress;
               }
+              that.board.addr = address;
+              that.setLatLng(address);
 
               // 우편번호와 주소 정보를 해당 필드에 넣는다.
               document.getElementById("addrValue").value = address;
 
               // 커서를 상세주소 필드로 이동한다.
               document.getElementById("detailedAddr").focus();
+
+
             }
           }).open();
         });
+      },
+      setLatLng:function(addr){
+        let that = this;
+        var geocoder = new daum.maps.services.Geocoder();
+
+        var callback = function(result, status) {
+          if (status === daum.maps.services.Status.OK) {
+            console.log(result);
+            that.board.lat = result[0].y;
+            that.board.lng = result[0].x;
+          }
+        };
+
+        geocoder.addressSearch(addr, callback);
       }
     }
   }
@@ -133,4 +157,3 @@
     width: 100px;
   }
 </style>
-
