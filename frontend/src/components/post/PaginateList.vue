@@ -9,7 +9,7 @@
             order: {{board.content}}
             dueDate: {{board.dueDate}}
             fee: {{board.fee}}
-            <span @click="sendMSG(board)">
+            <span @click="sendMsgPpt(board)">
               <i class="fas fa-sms" ></i>
             </span>
           </b-card-text>
@@ -59,10 +59,19 @@ export default {
           alert(error);
         });
     },
-    sendMSG: function(board) {
+    sendMsgPpt: function(board) {
       console.log(board);
       let msg = prompt(board.userOID.nickname + '님 에게 메시지 보내기');
+      let sender = this.$store.getters.getUserID;
+      let receiver = board.userOID.id;
+      let created = Date.now();
+
+      this.$store.dispatch('sendMsg', {msg: msg, sender: sender, receiver: receiver, created: created});
+
     },
+
+      
+
   },
   
   created() {

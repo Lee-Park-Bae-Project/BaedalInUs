@@ -102,6 +102,30 @@ export default{
       .catch(err=>{console.log(err)})
   },
 
+  sendMsg:(context, data)=>{
+    let msg = data.msg;
+    let sender = data.sender;
+    let receiver = data.receiver;
+    let created = data.created;
+
+    console.log(data);
+    console.log(msg);
+    console.log(sender);
+    console.log(receiver);
+    console.log(created);
+
+    const url = 'http://localhost:3000/chat/sendMsg';
+    const body = {msg: msg, sender: sender, receiver: receiver, created: created};
+
+    axios.post(url, body)
+      .then(res=>{
+        console.log(res);
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+      
+  },
 
 
 }

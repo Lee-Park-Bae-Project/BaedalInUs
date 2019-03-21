@@ -98,7 +98,6 @@
 
         let message = prompt('메시지를 입력하세여');  // 처음 보낼 메시지 입력
 
-
         this.sendMessage(senderOID, senderID, receiverOID, receiverID, message);
       }
     },
