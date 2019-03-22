@@ -394,24 +394,23 @@ router.post('/getSumOfUnCheckMsg', (req, res) => {
 
 
 router.post('/sendMsg', (req, res)=>{
+    console.log(req.body);
     let msg = req.body.msg;
     let sender = req.body.sender;
     let receiver = req.body.receiver;
     let created = req.body.created;
     let roomID='';
 
-    console.log('--------------------------------');
-    console.log(msg);
-    console.log(sender);
-    console.log(receiver);
-    console.log(created);
+    console.log('--------------받은 값-------------');
+    console.log('msg: ' + msg);
+    console.log('sender: ' + sender);
+    console.log('receiver: ' + receiver);
+    console.log('created: ' + created);
     console.log('--------------------------------');
 
     sender = String(sender);
     receiver = String(receiver);
 
-    console.log(typeof(sender));
-    console.log(typeof(receiver));
     if(sender > receiver){
         console.log(`sender 큼`);
         roomID = sender.concat(receiver);
@@ -419,62 +418,103 @@ router.post('/sendMsg', (req, res)=>{
         console.log(`receiver 큼`);
         roomID = receiver.concat('', sender);
     }
+    console.log('roomID : ' + roomID); // roomID 만듬. id는 유니크해서 이렇게 가능?
 
-    console.log('roomID : ' + roomID);
+    /**
+     * 새로운 roomID 생성
+     */
+    rooms.roomIDSHA256(roomID, (res, err)=>{
+        if(err) reject(new Error(err));
+        roomID = res;
+        console.log(roomID);
+    });
 
     /**
      * sender, receiver 로 특정 roomID 를 찾음
      * 방이 있냐 없냐를 리턴
      */
     const findRoom = ()=>{
-        rooms.findOne({'roomID' : roomID})
-            .then(res=>{
-                if(res){
-                    return true;
-                } else{
-                    return false;
-                }
-            })
-            .catch(err=>{
-                throw new Error('db error');
-            })
+        return new Promise(function (resolve, reject){
+            rooms.findOne({'roomID' : roomID})
+                .then(res=>{
+                    console.log('res: ' + res);
+                    if(res === null){
+                        console.log('res === null');
+                        // 결과가 없음, 방이 없음, 새로만들어야함
+                        resolve(false);
+                    } else{
+                        console.log('res !== null');
+                        // 겨로가가 있음, 방이 있음, 메시지 푸쉬만 하면댐
+                        resolve(true);
+                    }
+                })
+                .catch(err=>{
+                    reject(new Error('잠시 후 다시 시도해 주십시오'));
+                })
+        });
+        
     };
 
     /**
      * 새로운 메시지를 roomID에 저장
+     * isRoomExist가 true이면 새로운 메시지 추가만 하면댐
+     * isRoomExist가 false 이면 방을 만들고 메시지 추가해야함
      */
     const storeNewMsg = (isRoomExist)=>{
+        console.log('storeNewMsg');
+        console.log(isRoomExist);
         if(isRoomExist){
-            return true;
+            return new Promise(function(resolve, reject){
+                
+            });
+        } else{
+            return false;
         }
+
     };
 
     /**
      * 방이 없는 경우 방을 새로 만듬
      */
     const makeRoom = (isRoomExist)=>{
+        console.log('makeRoom');
 
         // 방을 생성하는 프로미스
-        let makeRoomPromise = new Promise(((resolve, reject)=>{
+        return new Promise(function(resolve, reject){
+            let newRoom = new rooms({
+                roomID: roomID,
+                user1: sender,    // 유저 1 아이디
+                user2: receiver,  // 유저 2 아이디
+                created: created, // 생성 시각
+                updated: created, // 마지막 업데이트 시각
+            })
 
-        }));
+            newRoom.save((res, err)=>{
+                if(err) reject(new Error('잠시 후 다시 시도해 주십시오'));
+                resolve();
+            });
 
-        return makeRoomPromise;
+
+
+        })
+
+
 
     };
 
 
     const onError = (error) => {
+        console.log('onError');
+        console.log(err.message);
         res.status(403).json({
-            success: false,
+            complete: false,
             message: error.message
         })
     }
 
     const respond = () => {
-        res.json({
-            success: true
-        })
+        console.log('respond');
+        res.status(200);
     }
 
     findRoom()
@@ -482,6 +522,8 @@ router.post('/sendMsg', (req, res)=>{
         .then(makeRoom)
         .then(respond)
         .catch(onError);
+
+
 
 
 });

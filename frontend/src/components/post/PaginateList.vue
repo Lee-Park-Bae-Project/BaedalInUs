@@ -79,10 +79,14 @@
       },
       sendMsgPpt: function(board) {
         console.log(board);
-        let msg = prompt(board.userOID.nickname + '님 에게 메시지 보내기');
-        let sender = this.$store.getters.getUserID;
-        let receiver = board.userOID.id;
-        let created = Date.now();
+        if(board.userOID.id === this.$store.getters.getUserID){
+          alert('자기자기에겐 메시지를 보낼 수 없습니다.');
+          return;
+        }
+        let msg = prompt(board.userOID.nickname + '님 에게 메시지 보내기'); // 메시지 내용
+        let sender = this.$store.getters.getUserID; // 보내는 사람
+        let receiver = board.userOID.id; // 받는사람
+        let created = Date.now(); // 현재시각
         this.$store.dispatch('sendMsg', {msg: msg, sender: sender, receiver: receiver, created: created});
       },
 

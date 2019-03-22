@@ -34,6 +34,7 @@ export default{
             }
             context.dispatch('setKakaoProperties', data);
 
+
           },
           fail: function(err){
             alert(JSON.stringify(err));
@@ -68,11 +69,13 @@ export default{
     console.log('local login');
     VueCookie.set('nickname',userID,10);
     context.commit('IsLogined',{isLogined:true});
+    context.commit('setUserID', {userID, userID});
   },
   localLogout:(context)=> {
     console.log('local logout');
     VueCookie.delete('access_token'); //액세스 토큰 삭제
     context.commit('IsLogined',{isLogined:false});
+    context.commit('setUserID', {setUserID:''});
   },
 
   isKakaoLogined:(context)=>{
@@ -81,11 +84,9 @@ export default{
       function (statusObj) {
         // alert(JSON.stringify(statusObj));
 
-
-
         if(statusObj.status === 'connected'){
           context.commit('IsLogined', {isLogined:true}); // 로그인 되어 있다고 표시
-          context.commit('setUserID',{userID:statusObj.user.id});
+          context.commit('setUserID',{userID:statusObj.user.id}); // 자기 아이디 vuex 에 저장
         } else{
           context.commit('IsLogined', {isLogined:false}); // 로그인 안되어 있다고 표시
         }
@@ -103,10 +104,10 @@ export default{
   },
 
   sendMsg:(context, data)=>{
-    let msg = data.msg;
-    let sender = data.sender;
-    let receiver = data.receiver;
-    let created = data.created;
+    let msg = data.msg; // 메시지 내용
+    let sender = data.sender; // 보내는 사람
+    let receiver = data.receiver; // 받는사람
+    let created = data.created; // 보낸시각
 
     console.log(data);
     console.log(msg);
@@ -122,6 +123,7 @@ export default{
         console.log(res);
       })
       .catch(err=>{
+        alert(err.message);
         console.log(err);
       })
       

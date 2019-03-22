@@ -11,6 +11,8 @@
              style="border-radius: 0; margin-top: -1px" required>
       <input v-model="user.email" placeholder="your-email@example.com" type="email"
              class="form-control" required>
+      <input v-model="user.nickname" placeholder="nickname" type="text"
+             class="form-control" required>
       <button v-on:click="signUp" class="submit btn btn-lg btn-success btn-block">Sign up</button>
     </form>
 
@@ -28,7 +30,8 @@
           id: '',
           pw: '',
           name: '',
-          email: ''
+          email: '',
+          nickname:'',
         },
 
       }

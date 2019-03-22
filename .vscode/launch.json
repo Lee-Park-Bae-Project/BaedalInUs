@@ -8,7 +8,8 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/backend/app.js"
+            // "program": "${workspaceFolder}/backend/app.js"
+            "program": "${workspaceFolder}\\bin\\www"
         }
     ]
 }

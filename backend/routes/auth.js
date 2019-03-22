@@ -240,6 +240,10 @@ router.post('/signUp', (req, res) => {
     let pw = req.body.user.pw.toString();
     let email = req.body.user.email.toString();
     let name = req.body.user.name.toString();
+    let nickname = req.body.user.nickname.toString();
+
+    console.log(nickname);
+
     //id 중복검사
     users.find({ id: id }, (err, result) => {
         if (err) return res.json(err);
@@ -249,7 +253,7 @@ router.post('/signUp', (req, res) => {
             // res.redirect('/signup');
         } else {
             console.log(`else`);
-            let newData = new users({ id: id, pw: pw, name: name, email: email });
+            let newData = new users({ id: id, pw: pw, name: name, email: email , nickname: nickname});
             newData.password = pw;
             newData.save();
             res.status(201).json({ complete: true });// 자원 생성 완료

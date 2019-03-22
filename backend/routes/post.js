@@ -28,59 +28,15 @@ router.post('/postOrder', (req, res) => {
     const lat = req.body.board.lat;
     const lng = req.body.board.lng;
 
-    //const dueDate = req.body.board.dueDate;
-    //const pirUrl = req.body.board.pirUrl.toString();
-    //const orderState = req.body.board.orderState;
-
     console.log(title);
     console.log(content);
     console.log(fee);
     console.log(addr);
-    console.log();
-    console.log(req.body);
+    console.log(detailedAddr);
+    console.log(due_date);
+    console.log(order_date);
+    console.log(userID);
 
-    /*if(title.length==0)
-    {
-        console.log('write your title');
-        res.status(200).json({complete:false}); // 실패 status code
-    }*/
-
-    var boardInfo = new Board({
-        title: title,
-        content: content,
-        fee: fee,
-        addr: addr,
-        dueDate: due_date,
-        order_date: order_date,
-        detailedAddr:detailedAddr,
-        location:{
-            coordinates:[lng, lat]
-        }
-    });
-    boardInfo.save()
-        .then(
-            ()=>{
-                res.status(200).json({complete:true});
-            }
-        )
-        .catch(
-            (err)=>{
-                res.status(202).json({coplete:false});
-            }
-        );
-
-
-    res.status(200).json({complete:true});
-    //console.log('asdfadf');
-   /* for( let i=0;i<10;i++) {
-        var boardInf = new Board({
-            title: 'go '+i,
-            content: 'fake '+i,
-            fee: 'money '+i,
-            addr: 'addr '+i
-        });
-        boardInf.save();
-    }*/
 
     /**
      * 
@@ -106,7 +62,8 @@ router.post('/postOrder', (req, res) => {
                 coordinates:[lng, lat]
             },
             userOID: userOID,
-            userID: userID
+            userID: userID,
+            nickname: userID
         });
 
         boardInfo.save()
@@ -141,43 +98,6 @@ router.post('/postOrder', (req, res) => {
     .then(respond)
     .catch(onError);
 
-
-    // var boardInfo = new Board({
-    //     title: title,
-    //     content: content,
-    //     fee: fee,
-    //     addr: addr,
-    //     dueDate: due_date,
-    //     order_date: order_date,
-    //     location:{
-    //         coordinates:[lng, lat]
-    //     }
-    // });
-    // boardInfo.save()
-    //     .then(
-    //         ()=>{
-    //             res.status(200).json({complete:true});
-    //         }
-    //     )
-    //     .catch(
-    //         (err)=>{
-    //             res.status(202).json({coplete:false});
-    //         }
-    //     );
-
-
-    // res.status(200).json({complete:true});
-
-    //console.log('asdfadf');
-    /* for( let i=0;i<10;i++) {
-         var boardInf = new Board({
-             title: 'go '+i,
-             content: 'fake '+i,
-             fee: 'money '+i,
-             addr: 'addr '+i
-         });
-         boardInf.save();
-     }*/
 });
 router.post('/postImage/:filename', (req, res, next) => {
 
