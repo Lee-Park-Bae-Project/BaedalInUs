@@ -18,11 +18,14 @@ export default{
 
         Kakao.Auth.setAccessToken(authObj.access_token); // 서버 측에서 새로 발급받은 Access Token을 JavaScript SDK에 설정합니다.
 
+
         Kakao.API.request({
           url:'/v2/user/me',
           success:function(res){
+            console.log(res);
             context.commit('setUserInfo', {userInfo:res}); // mutations의 setUserInfo 호출
             context.commit('IsLogined',{isLogined:true}); // 로그인 되어 있다고 표시
+            context.commit('setUserID', {userID: res.id});
             VueCookie.set('nickname',res.properties.nickname,10); // 카카오 닉네임을 쿠키에 저장함
             // context.dispatch('setKakaoUserToken', authObj, res.id);  // kakao token을 디비에 저장하기
             // context.dispatch('getAccessToken', res.id); // access token 가져오기
@@ -120,6 +123,7 @@ export default{
 
     axios.post(url, body)
       .then(res=>{
+        
         console.log(res);
       })
       .catch(err=>{

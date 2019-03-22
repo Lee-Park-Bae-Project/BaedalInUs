@@ -121,278 +121,6 @@ router.post('/getRoom/:roomID', (req, res) => {
 
 });
 
-
-// 새로운 메시지 왔을떄
-router.post('/sendNewMsg', (req, res) => {
-    let sender = req.body.sender;
-    let newMsg = req.body.newMsg;
-    let roomID = req.body.roomID;
-    let socketID = req.body.socketID;
-    let receiverID = req.body.receiverID;
-    let created = req.body.created;
-
-    console.log(`sender : ${sender}`);
-    console.log(`newMsg : ${newMsg}`);
-    console.log(`roomID : ${roomID}`);
-    console.log(`receiverID : ${receiverID}`);
-    console.log(`socketID : ${socketID}`);
-    console.log(`created : ${created}`);
-
-    // updated 바꿔줌
-    rooms.findOneAndUpdate({'roomID':roomID}, {$set:{updated:created}})
-        .then(
-            (result)=>{
-                // 새로움 메시지 추가
-                return rooms.findOneAndUpdate({'roomID': roomID}, {$push: {messages: {sender: sender, message: newMsg, created: created}}})
-            }
-        )
-        .then(
-            (result)=>{
-                // console.log(result);
-                console.log('-----------------------------');
-                console.log('sender : ' + sender);
-                console.log('message : ' + newMsg);
-                console.log('created : ' + created);
-                console.log('-----------------------------');
-                res.status(200).json({complete: true, newMsg: {sender: sender, message: newMsg, created: created}});
-            }
-        )
-        .catch(
-            (err) => {
-                console.log(err);
-                res.status(201).json({complete: false, error: err});
-            }
-        );
-
-    // users.findOneAndUpdate({'id': receiverID, 'rooms.roomID': roomID}, {$inc: {'rooms.$.uncheckedMsg': 1}})
-    //     .then(
-    //         (result) => {
-    //             console.log(result);
-    //             console.log('새로운 메시지 디비에 추가');
-    //             return rooms.findOneAndUpdate({'roomID': roomID}, {$push: {messages: {sender: sender, message: newMsg, created: created}}})
-    //         }
-    //     )
-    //     .then(
-    //         (result)=>{
-    //             console.log(result);
-    //             console.log('-----------------------------');
-    //             console.log('sender : ' + sender);
-    //             console.log('message : ' + newMsg);
-    //             console.log('created : ' + created);
-    //             console.log('-----------------------------');
-    //
-    //             res.status(200).json({complete: true, newMsg: {sender: sender, message: newMsg, created: created}});
-    //         }
-    //     )
-    //     .catch(
-    //         (err)=>{
-    //             console.log(err);
-    //             res.status(201).json({complete: false, error: err});
-    //         }
-    //     );
-
-});
-
-// 처음 대화일떄 대화방 만들기
-router.post('/makeRoom', (req, res) => {
-    console.log(`in chat / makeRoom`);
-    console.log(req.body);
-    const senderOID = req.body.room.senderOID;
-    const senderID = req.body.room.senderID;
-    const receiverOID = req.body.room.receiverOID;
-    const receiverID = req.body.room.receiverID;
-    const message = req.body.room.message;
-    const created = req.body.room.created;
-
-    console.log('------------req------------');
-    console.log(`senderOID : ${senderOID}`);
-    console.log(`senderID : ${senderID}`);
-    console.log(`receiverOID : ${receiverOID}`);
-    console.log(`receiverID : ${receiverID}`);
-    console.log(`message : ${message}`);
-    console.log(`created : ${created}`);
-
-    console.log('--------------------------------');
-
-    // rooms.findOneAndUpdate({'user2': senderOID}, {
-    //     $push: {
-    //         messages:{
-    //             sender: senderID,
-    //             message: message,
-    //             created: Date.now()
-    //         }
-    //     }
-    // }, (err, result)=>{
-    //     if(err){
-    //         console.log(err);
-    //         res.json(err);
-    //     }
-    //
-    //     console.log(result);
-    // });
-
-    // (user1 = senderOID && user2 = receiverOID) || (user1 = receiverOID && user2 == senderOID)
-    rooms.findOneAndUpdate(
-        {
-            $or: [{'user1': senderOID, 'user2': receiverOID}, {'user1': receiverOID, 'user2': senderOID}]
-        },
-        {
-            $push: {
-                messages: {
-                    sender: senderID,
-                    message: message,
-                    created: created
-                }
-            }
-        }, (err, result) => {
-            if (err) {
-                res.json(err);
-            }
-
-            if (result) {
-                // 있으니까 데이터 추가만 하면댐
-                console.log(`방있음`);
-                // console.log(result);
-                // 저장 완료
-                res.status(201).json({});
-            }
-            else {
-                console.log(`방 없음`);
-                let newRoomID = rooms.makeRoomID(); // rooms에 static method
-                console.log(`newRoomID : ${newRoomID}`);
-                let newRoom = new rooms({
-                        roomID: newRoomID,
-                        user1: senderOID,
-                        user2: receiverOID,
-                        user1ID: senderID,
-                        user2ID: receiverID,
-                        messages: [
-                            {
-                                sender: senderID, // 보낸사람
-                                message: message, // 메시지 내용
-                                created: created // 보낸 시각
-                            }
-                        ],
-                        updated: created
-                    }
-                );
-
-                // 저장
-                newRoom.save()
-                    .then(() => {
-                        // 저장완료
-                        console.log(`in save then`);
-                        users.findOneAndUpdate(
-                            {'id': senderID},
-                            {
-                                $push: {
-                                    rooms: {
-                                        roomID: newRoomID
-                                    }
-                                }
-                            }, (err, result) => {
-                                if (err) res.json(err);
-                                console.log(`유저 콜렉션에 roomid 저장`);
-                                // console.log(result);
-
-                                users.findOneAndUpdate(
-                                    {'id': receiverID},
-                                    {
-                                        $push: {
-                                            rooms: {
-                                                roomID: newRoomID,
-                                                uncheckedMsg: 1
-                                            }
-                                        }
-                                    }, (err, result) => {
-                                        if (err) res.json(err);
-                                        console.log(`유저 콜렉션에 roomid 저장`);
-                                        // console.log(result);
-                                        res.status(201).json({});
-
-                                    }
-                                );
-
-                            }
-                        );
-
-                    })
-                    .catch(() => {
-                        // 저장 실패
-                        console.log(`in save catch`);
-                        res.status(202).json({});
-                    });
-            }
-
-
-        }
-    );
-
-    // populate 예제
-    // rooms.find({}, (err, result) => {
-    //     if (err) {
-    //         console.log(`level1 err : ${err}`);
-    //         res.json(err);
-    //     }
-    // }).populate('user1', (err, result) => {
-    //     if (err) {
-    //         console.log(`level2 err : ${err}`);
-    //         res.json(err);
-    //     }
-    // }).populate('user2', (err, result) => {
-    //     if (err) {
-    //         console.log(`level3 err : ${err}`);
-    //         res.json(err);
-    //     }
-    //
-    // }).exec((err, result) => {
-    //     if (err) {
-    //         console.log(`level4 err : ${err}`);
-    //         res.json(err);
-    //     }
-    //     if (result) {
-    //         console.log(`잇다`);
-    //         console.log(`${result.length}개`);
-    //     } else {
-    //         console.log(`없다`);
-    //     }
-    //     console.log(`--------------level 4------------`);
-    //     console.log(result);
-    //     // console.log(result._id);
-    //     // console.log(result.user1._id);
-    //     // console.log(result.user2._id);
-    //     console.log(`--------------level 4 end------------`);
-    //
-    //
-    // });
-
-
-});
-
-router.post('/getSumOfUnCheckMsg', (req, res) => {
-    let id = req.body.id;
-    users.findOne({'id': id})
-        .then(
-            (result) => {
-                // getSumOfUncheckedMsg(result.rooms);
-                let ret = 0;
-                for (let i = 0; i < result.rooms.length; i++) {
-                    ret += result.rooms[i].uncheckedMsg;
-                }
-
-                res.status(200).json({sumOfUncheckedMsg: ret});
-
-            }
-        )
-        .catch(
-            (err) => {
-                console.log(err);
-                res.status(201).json({err: err});
-            }
-        )
-});
-
-
 router.post('/sendMsg', (req, res)=>{
     console.log(req.body);
     let msg = req.body.msg;
@@ -437,13 +165,10 @@ router.post('/sendMsg', (req, res)=>{
         return new Promise(function (resolve, reject){
             rooms.findOne({'roomID' : roomID})
                 .then(res=>{
-                    console.log('res: ' + res);
                     if(res === null){
-                        console.log('res === null');
                         // 결과가 없음, 방이 없음, 새로만들어야함
                         resolve(false);
                     } else{
-                        console.log('res !== null');
                         // 겨로가가 있음, 방이 있음, 메시지 푸쉬만 하면댐
                         resolve(true);
                     }
@@ -456,75 +181,112 @@ router.post('/sendMsg', (req, res)=>{
     };
 
     /**
+     * 방이 없는 경우 방을 새로 만듬
+     */
+    const makeRoom = (isRoomExist)=>{
+        if(isRoomExist){
+            return true;
+        } else{
+            // 방을 생성하는 프로미스
+            return new Promise(function(resolve, reject){
+                let newRoom = new rooms({
+                    roomID: roomID,
+                    user1: sender,    // 유저 1 아이디
+                    user2: receiver,  // 유저 2 아이디
+                    created: created, // 생성 시각
+                    updated: created, // 마지막 업데이트 시각
+                    messages:{
+                        sender: sender, // 메시지 보낸 사람
+                        message: msg,   // 메시지 내용
+                        created: created // 메시지 생성시각
+                    }
+                });
+                newRoom.save()
+                    .then((res)=>{
+                        /**
+                         * 유저의 rooms에 새로운 방 id 추가
+                         */
+                        users.findOneAndUpdate(
+                                {'id': sender}, 
+                                {$push: {rooms: {roomID: roomID}}}
+                            )
+                            .catch(err=>{
+                                console.log('sender에 룸 푸쉬하다가 터짐');
+                                reject(err);
+                            });
+    
+                        users.findOneAndUpdate(
+                                {'id': receiver},
+                                {$push: {rooms: {roomID: roomID}}}
+                            )
+                            .catch(err=>{
+
+                                reject(err);
+                            });
+                        resolve(false);
+                    })
+                    .catch(err=>{
+                        console.log(err);
+                        reject(new Error('잠시 후 다시 시도해 주십시오'));
+                    })
+            });
+
+        }
+    };
+
+    /**
      * 새로운 메시지를 roomID에 저장
      * isRoomExist가 true이면 새로운 메시지 추가만 하면댐
      * isRoomExist가 false 이면 방을 만들고 메시지 추가해야함
      */
     const storeNewMsg = (isRoomExist)=>{
-        console.log('storeNewMsg');
-        console.log(isRoomExist);
         if(isRoomExist){
             return new Promise(function(resolve, reject){
-                
+
+                rooms.findOneAndUpdate({'roomID': roomID},
+                    {$push:
+                        {
+                            messages:{
+                                sender: sender,
+                                message: msg,
+                                created: created
+                            }
+                        }
+                    },
+                    {
+                        updated: created
+                    })
+                    .then(res=>{
+                        // console.log(res);
+                        resolve(res);
+                    })
+                    .catch(err=>{
+                        console.log(err);
+                        reject(err);
+                    })
             });
         } else{
             return false;
         }
-
     };
 
-    /**
-     * 방이 없는 경우 방을 새로 만듬
-     */
-    const makeRoom = (isRoomExist)=>{
-        console.log('makeRoom');
-
-        // 방을 생성하는 프로미스
-        return new Promise(function(resolve, reject){
-            let newRoom = new rooms({
-                roomID: roomID,
-                user1: sender,    // 유저 1 아이디
-                user2: receiver,  // 유저 2 아이디
-                created: created, // 생성 시각
-                updated: created, // 마지막 업데이트 시각
-            })
-
-            newRoom.save((res, err)=>{
-                if(err) reject(new Error('잠시 후 다시 시도해 주십시오'));
-                resolve();
-            });
-
-
-
-        })
-
-
-
-    };
-
-
-    const onError = (error) => {
-        console.log('onError');
+    const onError = (err) => {
         console.log(err.message);
         res.status(403).json({
             complete: false,
-            message: error.message
+            message: err.message
         })
     }
 
     const respond = () => {
-        console.log('respond');
-        res.status(200);
+        res.status(200).json({complete: true});
     }
 
     findRoom()
-        .then(storeNewMsg)
         .then(makeRoom)
+        .then(storeNewMsg)
         .then(respond)
         .catch(onError);
-
-
-
 
 });
 
