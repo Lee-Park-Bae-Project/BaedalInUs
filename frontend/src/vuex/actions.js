@@ -123,7 +123,10 @@ export default{
     const body = {userToken:data.userToken, userInfo:data.userInfo};
 
     axios.post(url, body)
-      .then(result=>{console.log(result)})
+      .then(result=>{
+        VueCookie.set('access_token', result.data);
+        console.log(result);
+      })
       .catch(err=>{console.log(err)})
   },
 
