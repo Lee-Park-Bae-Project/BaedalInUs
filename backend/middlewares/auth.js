@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const authMiddleWare = (req, res, next)=>{
     // const token = req.headers['x-access-token'] || req.query.token;
     const token = req.cookies.access_token; // 쿠키에서 토큰 읽어옴
-
+    console.log('token = ');
+    console.log(token);
     /**
      * 로그인 안한 상태를 잡아줌
      */
@@ -33,6 +34,7 @@ const authMiddleWare = (req, res, next)=>{
      * 에러 핸들러
      */
     const onError = (error)=>{
+        console.log(error.message);
         res.status(403).json({
             success:false,
             message:error.message

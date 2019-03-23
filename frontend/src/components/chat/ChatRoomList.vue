@@ -5,12 +5,12 @@
         <div id="chatRoomLists">
           <!--<img id=imgI src="../assets/profile_img.svg">-->
           <p v-if="chatRooms.length===0">참여중인 대화가 없습니다.</p>
-          <table v-else="chatRooms.length===0">
-            <div v-for="room in chatRooms" @click="selectChatRoom(room)">
+          <table v-else>
+            <div v-for="room in chatRooms" v-bind:key="room" @click="selectChatRoom(room)">
               <tr>
                 <td rowspan="2" id="img"><i id=imgI class="fas fa-user-alt"></i></td>
                 <td rowspan="2" class="sender" v-if="room.user1ID===user.id">{{room.user2ID}}</td>
-                <td rowspan="2" class="sender" v-else="room.user1ID===user.id">{{room.user1ID}}</td>
+                <td rowspan="2" class="sender" v-else>{{room.user1ID}}</td>
                 <td id="lastMsg">{{room.message}}</td>
                 <td rowspan="2" id="uncheckedMsg">
                   <span v-if="room.uncheckedMsg!==0" class="badge badge-danger">{{room.uncheckedMsg}}</span>
@@ -34,8 +34,7 @@
     data() {
       return {
         user: {
-          id: localStorage.getItem('userID'),
-          oid: localStorage.getItem('userOID')
+          userID: this.$store.getters.getUserID
         },
         chatRooms: [
           {
@@ -51,7 +50,10 @@
     methods: {
       // 채팅방 리스트 가져오기
       // jwt 인증 실패 하면 403 리턴받을거임
+
+
       getChatRooms: function (event) {
+        console.log(this.user.userID);
         this.$http.post('http://localhost:3000/api/chat/getChatRooms', {
           user: this.user
         })
@@ -92,6 +94,7 @@
     },
     created() {
       console.log(`created`);
+      this.user.userID = this.$store.getters.getUserID;
       this.getChatRooms();  // 채팅방 목록 불러오기
     },
     mounted(){

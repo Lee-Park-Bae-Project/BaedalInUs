@@ -27,6 +27,9 @@ export default{
             context.commit('IsLogined',{isLogined:true}); // 로그인 되어 있다고 표시
             context.commit('setUserID', {userID: res.id});
             VueCookie.set('nickname',res.properties.nickname,10); // 카카오 닉네임을 쿠키에 저장함
+            
+            // context.dispatch('kakaoLoginGetAccessToken', {userID: res.id}); // 숫자로 된 아이디 ex)1029473743 를 토큰에 저장해서 받아옴
+
             // context.dispatch('setKakaoUserToken', authObj, res.id);  // kakao token을 디비에 저장하기
             // context.dispatch('getAccessToken', res.id); // access token 가져오기
             // context.dispatch('setKakaoUserInfo', res); // 카카오 유저정보를 디비에 저장하기
@@ -37,19 +40,17 @@ export default{
             }
             context.dispatch('setKakaoProperties', data);
 
-
           },
           fail: function(err){
             alert(JSON.stringify(err));
           }
         })
           .then(
-
             ()=>{router.push('/');}
           )
       },
       fail:function(err){
-        alert(JSON.stringify(err));
+        alert(JSON.stringify(err));ㄴ
       },
 
       throughTalk:false, // 간편 로그인 사용 여부
@@ -63,9 +64,8 @@ export default{
     Kakao.Auth.logout(function(){
       context.commit('IsLogined', {isLogined:false}); // 로그인 안되어 있다고 표시
       VueCookie.delete('nickname');
-
+      VueCookie.delete('access_token'); // 액세스 토큰 삭제 
     })
-
   },
 
   localLogin:(context,userID)=> {
@@ -92,10 +92,31 @@ export default{
           context.commit('setUserID',{userID:statusObj.user.id}); // 자기 아이디 vuex 에 저장
         } else{
           context.commit('IsLogined', {isLogined:false}); // 로그인 안되어 있다고 표시
+          context.commit('setUserID', {userID:''}); // 아이디 없애버림
         }
       }
     )
   },
+
+  kakaoLoginGetAccessToken:(context, data)=>{
+    const url = 'http://localhost:3000/auth/kakaologin';
+    const body = {userID: data.userID};
+    axios
+      .post(url, body)
+      .then(
+        (res)=>{
+          console.log(res);
+          router.push('/');
+        }
+      )
+      .catch(
+        err=>{
+          alert(err.message);
+        }
+      )
+  },
+
+
 
   setKakaoProperties:(context, data)=>{
     const url = 'http://localhost:3000/auth/setKakaoProperties';
@@ -132,6 +153,7 @@ export default{
       })
       
   },
+
 
 
 }

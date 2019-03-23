@@ -16,7 +16,6 @@ function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
         roomID: roomID,
         uncheckedMsg: uncheckedMsg
     };
-
     return ret;
 }
 
@@ -56,7 +55,6 @@ router.post('/getChatRooms', (req, res) => {
         } catch (error) {
             res.status(202).json({err:error});
         }
-
         // console.log('정렬 전');
         // console.log(ret);
         // updated 내림차순 정렬
@@ -68,10 +66,7 @@ router.post('/getChatRooms', (req, res) => {
 
         res.status(200).json({ret, sumOfUncheckedMsg});
 
-
     }
-
-
 
     // 유저가 가진 방들 찾음
     users.findOne({'id': userID}, (err, result) => {

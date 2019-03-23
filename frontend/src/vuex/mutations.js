@@ -1,6 +1,5 @@
 export default {
   setUserID: (state, payload) => {
-    console.log(payload);
     state.userID = payload.userID;
   },
   setAuthorize_code: (state, payload) => {

@@ -23,8 +23,9 @@ function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
 // 채팅 목록 반환
 // TODO : 새로운 메시지가 왔을때 chatRooms에서 목록에서 빼서 맨앞으로 넣기 (), 페이지 네이션 추가
 router.post('/getChatRooms', (req, res) => {
-    let userID = req.body.user.id;
-    // let userOID = req.body.user.oid;
+    let userID = req.body.user.userID;
+    console.log(userID);
+
     let ret = [];
     let sumOfUncheckedMsg = 0;
     console.log(`userID : ${userID}`);

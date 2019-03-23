@@ -19,8 +19,9 @@ router.get('/login', (req, res) => {
 });
 
 //
+
+
 router.post('/login', (req, res) => {
-    console.log(`in /login post`);
     const id = req.body.user.id.toString();
     const pw = req.body.user.pw.toString();
     const secret = req.app.get('jwt-secret');
@@ -29,7 +30,7 @@ router.post('/login', (req, res) => {
     console.log(`pw: ${pw}`);
 
     // res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html');
+    // res.setHeader('Content-Type', 'text/html');
     // res.setHeader("Access-Control-Allow-Origin", "*");     //허용할 Origin(요청 url) : "*" 의 경우 모두 허용
     // res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");     //허용할 request http METHOD : POST, GET, DELETE, PUT
     // res.setHeader("Access-Control-Max-Age", "3600");     //브라우저 캐시 시간(단위: 초) : "3600" 이면 최소 1시간 안에는 서버로 재요청 되지 않음
@@ -86,7 +87,8 @@ router.post('/login', (req, res) => {
      * 마지막으로 응답해주는 함수
      */
     const respond = (token) => {
-        res.cookie('access_token', token, { maxAge: 1000 * 60 * 60, httpOnly: false });
+        console.log(token);
+        res.cookie('access_token', token, { maxAge: 1000 * 60 * 60, httpOnly: false }); // 쿠키에 액세스 토큰 저장
         res.status(200).json(token);
     };
 
@@ -108,45 +110,18 @@ router.post('/login', (req, res) => {
 
 });
 
+
 router.post('/setKakaoProperties', (req, res) => {
     const userToken = req.body.userToken;
     const userInfo = req.body.userInfo;
     const kakaoid = req.body.userInfo.id;
     const secret = req.app.get('jwt-secret');
-
-    console.log(userInfo);
-
-    const respond = (token) => {
-        res.cookie('access_token', token, { maxAge: 1000 * 60 * 60, httpOnly: true });
-        res.status(200).json(token);
-    };
-
-    /**
-     *
-     * @param error
-     * 에러받는 함수
-     */
-    const onError = (error) => {
-        console.log(error);
-        res.status(201).json({ message: error.message });
-    };
-
-    // const findkakaoid = () => {
-    //     console.log('findkakaoid');
-    //     users.find({ id: kakaoid }, (err, result) => {
-    //         if (err) {
-    //             console.log('시발 에러다');
-    //             throw new Error(err);
-    //         }
-    //         return result.length;
-    //     });
-    // };
+    
 
     const t1 = (result) => {
         if (result.length === 0) {
-            console.log('hihi');
-
-            let makeNewUserPromise = new Promise(((resolve, reject) => {
+            console.log('result.length === 0');
+            return new Promise(((resolve, reject) => {
                 var newUser = new users({ id: kakaoid, nickname: userInfo.properties.nickname });
 
                 newUser.save()
@@ -155,15 +130,15 @@ router.post('/setKakaoProperties', (req, res) => {
             }
             ));
 
-            return makeNewUserPromise;
-
         } else {
             return true;
         }
     };
     const t2 = (tf) => {
-        console.log('t2');
-        if (tf) {
+        // console.log('t2');
+        console.log('카카오 정보 업데이트하고 토큰 만듬');
+
+        return new Promise(function(resolve, reject){
             users.findOneAndUpdate({ id: kakaoid },
                 {
                     $set:
@@ -185,7 +160,7 @@ router.post('/setKakaoProperties', (req, res) => {
                             },
                             kakao_account: {
                                 has_email: userInfo.kakao_account.has_email,
-                                is_email_vaild: userInfo.kakao_account.is_email_vaild,
+                                is_email_vaild: userInfo.kakao_account.is_email_valid,
                                 is_email_verified: userInfo.kakao_account.is_email_verified,
                                 email: userInfo.kakao_account.email,
                                 has_age_range: userInfo.kakao_account.has_age_range,
@@ -193,38 +168,65 @@ router.post('/setKakaoProperties', (req, res) => {
                                 has_gender: userInfo.kakao_account.has_gender
                             }
                         }
-
+    
                     }
                 })
                 .then(result => {
-                    let tokenGeneratePromise = new Promise(((resolve, reject) => {
-                        jwt.sign(
-                            {
-                                userID: kakaoid
-                            },
-                            secret,
-                            {
-                                expiresIn: '7d',
-                                issuer: 'hoodadak',
-                                subject: 'userInfo'
-                            },
-                            (err, token) => {
-                                if (err) reject(err);
-                                resolve(token);
-                            }
-                        )
-                    }));
-                    // 토큰을 생성하는 promise를 리턴
-                    return tokenGeneratePromise;
+                    console.log('카카오 정보 업데이트 완료');
+                    console.log(result);
+                    resolve();
                 })
-                .catch(err => { throw new Error(err) })
-        }
+                .catch(err => { 
+                    console.log('find and update 하다가 reject');
+                    reject(new Error(err));
+                })
+        });
+        
+
     };
 
+    const generateToken = ()=>{
+        console.log('저장하고 토큰 생성하는 부분');
+        return new Promise(((resolve, reject) => {
+            jwt.sign(
+                {
+                    userID: kakaoid
+                },
+                secret,
+                {
+                    expiresIn: '7d',
+                    issuer: 'hoodadak',
+                    subject: 'userInfo'
+                },
+                (err, token) => {
+                    if (err) {
+                        console.log('jwt 만들다가 터짐');
+                        reject(err);
+                    }
+                    console.log('토큰 제대로 만듬 ' + token);
+                    resolve(token);
+                }
+            )
+        }))
+
+
+    };
+
+    const respond = (token) => {
+        console.log('respond임');
+        res.cookie('access_token', token, { maxAge: 1000 * 60 * 60, httpOnly: false });
+        res.status(200).json(token);
+    };
+
+    const onError = (error) => {
+        console.log('error임' + error);
+        res.status(403).json({ message: error.message });
+    };
 
     users.find({ id: kakaoid })
         .then(t1)
         .then(t2)
+        .then(generateToken)
         .then(respond)
         .catch(onError);
 
@@ -242,7 +244,7 @@ router.post('/signUp', (req, res) => {
     let name = req.body.user.name.toString();
     let nickname = req.body.user.nickname.toString();
 
-    console.log(nickname);
+    // console.log(nickname);
 
     //id 중복검사
     users.find({ id: id }, (err, result) => {
@@ -252,7 +254,7 @@ router.post('/signUp', (req, res) => {
             res.status(204).json({ complete: false }); // 204 - 자원 생성 실패, 아이디 중복임
             // res.redirect('/signup');
         } else {
-            console.log(`else`);
+            // console.log(`else`);
             let newData = new users({ id: id, pw: pw, name: name, email: email , nickname: nickname});
             newData.password = pw;
             newData.save();
