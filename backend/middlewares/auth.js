@@ -1,23 +1,24 @@
 const jwt = require('jsonwebtoken');
-
+const cookieparser = require('cookie-parser');
 
 const authMiddleWare = (req, res, next)=>{
     // const token = req.headers['x-access-token'] || req.query.token;
-    const token = req.cookies.access_token; // 쿠키에서 토큰 읽어옴
+    // 쿠키에서 토큰 읽어옴
+    const token = req.headers['x-access-token'] || req.cookies.access_token;
     console.log('token = ');
-    console.log(token);
+    console.log('Cookies: ', req.cookies)
+
     /**
      * 로그인 안한 상태를 잡아줌
      */
     if(!token){
         return res.status(403).json({
             success:false,
-            message:'not logged in'
+            message:'다시 로그인 해주세요'
         })
     };
 
     /**
-     * @type {Promise<any>}
      * 토큰 생성하는 Promise
      */
     const tokenVerifyPromise = new Promise(
@@ -41,10 +42,12 @@ const authMiddleWare = (req, res, next)=>{
         })
     };
 
-    tokenVerifyPromise.then((decoded)=>{
-        req.decoded = decoded;
-        next()
-    }).catch(onError)
+    tokenVerifyPromise
+        .then((decoded)=>{
+            req.decoded = decoded;
+            next()
+        })
+        .catch(onError)
 };
 
 module.exports = authMiddleWare;

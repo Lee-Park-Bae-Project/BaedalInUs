@@ -28,6 +28,7 @@
 
 <script>
   import {EventBus} from "../../event-bus";
+  import VueCookie from 'vue-cookie';
 
   export default {
     name: "ChatRoomList",
@@ -54,22 +55,22 @@
 
       getChatRooms: function (event) {
         console.log(this.user.userID);
-        this.$http.post('http://localhost:3000/api/chat/getChatRooms', {
-          user: this.user
-        })
+        let config = {
+          headers:{
+            'x-access-token':VueCookie.get('access_token')
+          }
+        };
+        this.$http.post('http://localhost:3000/api/chat/getChatRooms', {user: this.user}, config)
           .then(
             (res) => {
               // this.busUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg); 일단 보류 (2/25)
               if (res.status === 200) {
                 this.chatRooms = res.data.ret;
                 console.log(this.chatRooms);
-              } else if (res.status === 204) {
-                // 방없음
-                console.log(`no chat rooms`);
-              } else if (res.status === 202) {
+              } else{
                 // 에러
-                console.log(res.data.err);
-                alert(res.data.err);
+                console.log('res: ' + res);
+                alert(res.data.message);
               }
             },
             (error) => {

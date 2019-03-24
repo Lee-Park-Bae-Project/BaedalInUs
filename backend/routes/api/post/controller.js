@@ -1,19 +1,7 @@
-var express = require('express');
-var router = express.Router();
-const mongoose = require('mongoose');
-const multer = require('multer');
-const Board = require('../models/board');
-const moment = require('moment');
-const upload = multer({dest: 'uploads/', limits:{fileSize: 5 * 1024 *1024}});
-var faker = require('faker');
-const users = require('../models/user');
+const Board = require('../../../models/board');
+const users = require('../../../models/user');
 
-router.post('/imageLoad', upload.single('img'), (req, res) => {
-    console.log(req.file);
-});
-
-router.post('/postOrder', (req, res) => {
-
+exports.postOrder = (req, res)=>{
     //const no = req.body.no;
     //const id = req.body.board.id.toString();
     const title = req.body.board.title.toString();
@@ -39,7 +27,7 @@ router.post('/postOrder', (req, res) => {
 
 
     /**
-     * 
+     *
      * @param {*} user : userID로 검색한 결과 object
      * oid 값, userID 값을 board collection에 넣어줌
      */
@@ -48,7 +36,7 @@ router.post('/postOrder', (req, res) => {
         if(user.length === 0){
             throw new Error('잘못된 접근입니다.'); // user collection에 해당하는 아이디가 없다는 것
         }
-        
+
         let userOID = user[0]._id;
 
         var boardInfo = new Board({
@@ -85,8 +73,8 @@ router.post('/postOrder', (req, res) => {
     };
 
     /**
-     * 
-     * @param {*} error 
+     *
+     * @param {*} error
      */
     const onError = (error)=>{
         console.log(error);
@@ -94,28 +82,12 @@ router.post('/postOrder', (req, res) => {
     }
 
     users.find({id:userID})
-    .then(setBoard)
-    .then(respond)
-    .catch(onError);
+        .then(setBoard)
+        .then(respond)
+        .catch(onError);
+}
 
-});
-router.post('/postImage/:filename', (req, res, next) => {
-
-});
-router.post('/postUpdate/:id', (req, res, next) => {
-
-    var id = req.params.id;
-    Board.findByIdAndRemove(id, function (err, board) {
-        if (err) {
-            return next(new Error("There is no board match with id"))
-        }
-        res.json('Successfully removed')
-    })
-});
-router.post('/postImage/:filename',(req,res,next)=>{
-
-});
-router.post('/postUpdate/:id',(req,res,next)=>{
+exports.postUpdate = (req, res)=>{
     var id=req.params.id;
     Board.findByIdAndRemove(id,function (err,board) {
         if(err){
@@ -137,6 +109,4 @@ router.post('/postUpdate/:id',(req,res,next)=>{
             })
         }
     });
-});
-
-module.exports = router;
+}

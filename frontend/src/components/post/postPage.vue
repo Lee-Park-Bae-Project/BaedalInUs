@@ -73,7 +73,7 @@
           alert('상세 주소를 입력해주세요.');
         }
 
-        this.$http.post('http://localhost:3000/post/postOrder', {
+        this.$http.post('http://localhost:3000/api/post/postOrder', {
           board: this.board
         })
           .then(

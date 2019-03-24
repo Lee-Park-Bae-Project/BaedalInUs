@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const controller = require('./controller');
 
 router.post('/', (req, res) => {
     console.log('Cookies: ', req.cookies.access_token);

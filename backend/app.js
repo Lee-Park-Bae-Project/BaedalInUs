@@ -15,19 +15,17 @@ const testRouter = require('./routes/test');
 const apiTestRouter = require('./routes/apiTest');
 const authRouter = require('./routes/auth');
 const mailRouter = require('./routes/mail');
-const chatRouter = require('./routes/chat');
-const postRouter= require('./routes/post');
+// const chatRouter = require('./routes/chat');
+// const postRouter= require('./routes/post');
 const showPostRouter = require('./routes/showPost');
 const searchRouter = require('./routes/search');
 
-const apiRouter = require('./routes/api/api'); // 인증 받아야하는 라우터
+const apiRouter = require('./routes/api'); // 인증 받아야하는 라우터
 
-const test = require('./routes/test/test');
 
 var app = express();
 app.use(cookieParser());
 
-app.use('/test', test);
 
 var cors = require('cors');
 var connect = require('./mongo');
@@ -50,10 +48,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
 
 // app.use(cookieParser('1234'));
 // app.use(session({
@@ -81,8 +77,8 @@ app.use('/test', testRouter);
 app.use('/api', apiTestRouter);
 app.use('/auth', authRouter);
 app.use('/mail', mailRouter);
-app.use('/chat', chatRouter);
-app.use('/post',postRouter);
+// app.use('/chat', chatRouter);
+// app.use('/post',postRouter);
 app.use('/showPost',showPostRouter);
 app.use('/search', searchRouter);
 
