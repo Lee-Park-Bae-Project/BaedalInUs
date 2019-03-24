@@ -1,73 +1,73 @@
-const rooms = require('../../models/rooms');
-const users = require('../../models/user');
+const rooms = require('../../../models/rooms');
+const users = require('../../../models/user');
 
 
 exports.getChatRooms = (req, res)=>{
     console.log('ok');
     let userID = req.body.user.id;
-    // let userOID = req.body.user.oid;
-    let ret = [];
-    let sumOfUncheckedMsg = 0;
-    function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
-        let ret = {
-            user1ID: user1,
-            user2ID: user2,
-            sender: sender,
-            message: msg,
-            updated: updated,
-            roomID: roomID,
-            uncheckedMsg: uncheckedMsg
-        };
-        return ret;
-    }
-    console.log(`userID : ${userID}`);
-    // console.log(`userOID : ${userOID}`);
 
-    // 받은 roomID로 방목록 만듬
-    function getRoomInfoPromise(roomID, uncheckedMsg) {
-        return new Promise(function (resolve, reject) {
-            rooms.findOne({'roomID': roomID}, (err, result) => {
-                if (err) reject(err);
-
-                let len = result.messages.length;
-                resolve(makeRet(result.user1ID, result.user2ID, result.messages[len - 1].sender, result.messages[len - 1].message, result.updated, roomID, uncheckedMsg));
-            })
-        })
-    }
-
-    // roomID 하나씪 getRoomInfoPromise에 넘겨줌
-    async function getRoomInfo(rooms) {
-        let len = rooms.length;
-        try {
-
-            for (let i = 0; i < len; i++) {
-                let t = await getRoomInfoPromise(rooms[i].roomID, rooms[i].uncheckedMsg);
-                // console.log(t);
-                ret.push(t);
-
-                sumOfUncheckedMsg += rooms[i].uncheckedMsg;
-            }
-        } catch (error) {
-            res.status(202).json({err:error});
-        }
-        // console.log('정렬 전');
-        // console.log(ret);
-        // updated 내림차순 정렬
-        ret.sort(function(a,b){
-            return a.updated > b.updated ? -1 : a.updated < b.updated ? 1 : 0;
-        });
-        // console.log('정렬 후');
-        // console.log(ret);
-
-        res.status(200).json({ret, sumOfUncheckedMsg});
-
-    }
-
-    // 유저가 가진 방들 찾음
-    users.findOne({'id': userID}, (err, result) => {
-        if (err) res.status(204).json(err);
-        getRoomInfo(result.rooms);
-    });
+    // let ret = [];
+    // let sumOfUncheckedMsg = 0;
+    // function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
+    //     let ret = {
+    //         user1ID: user1,
+    //         user2ID: user2,
+    //         sender: sender,
+    //         message: msg,
+    //         updated: updated,
+    //         roomID: roomID,
+    //         uncheckedMsg: uncheckedMsg
+    //     };
+    //     return ret;
+    // }
+    // console.log(`userID : ${userID}`);
+    // // console.log(`userOID : ${userOID}`);
+    //
+    // // 받은 roomID로 방목록 만듬
+    // function getRoomInfoPromise(roomID, uncheckedMsg) {
+    //     return new Promise(function (resolve, reject) {
+    //         rooms.findOne({'roomID': roomID}, (err, result) => {
+    //             if (err) reject(err);
+    //
+    //             let len = result.messages.length;
+    //             resolve(makeRet(result.user1ID, result.user2ID, result.messages[len - 1].sender, result.messages[len - 1].message, result.updated, roomID, uncheckedMsg));
+    //         })
+    //     })
+    // }
+    //
+    // // roomID 하나씪 getRoomInfoPromise에 넘겨줌
+    // async function getRoomInfo(rooms) {
+    //     let len = rooms.length;
+    //     try {
+    //
+    //         for (let i = 0; i < len; i++) {
+    //             let t = await getRoomInfoPromise(rooms[i].roomID, rooms[i].uncheckedMsg);
+    //             // console.log(t);
+    //             ret.push(t);
+    //
+    //             sumOfUncheckedMsg += rooms[i].uncheckedMsg;
+    //         }
+    //     } catch (error) {
+    //         res.status(202).json({err:error});
+    //     }
+    //     // console.log('정렬 전');
+    //     // console.log(ret);
+    //     // updated 내림차순 정렬
+    //     ret.sort(function(a,b){
+    //         return a.updated > b.updated ? -1 : a.updated < b.updated ? 1 : 0;
+    //     });
+    //     // console.log('정렬 후');
+    //     // console.log(ret);
+    //
+    //     res.status(200).json({ret, sumOfUncheckedMsg});
+    //
+    // }
+    //
+    // // 유저가 가진 방들 찾음
+    // users.findOne({'id': userID}, (err, result) => {
+    //     if (err) res.status(204).json(err);
+    //     getRoomInfo(result.rooms);
+    // });
 }
 
 exports.getRoom = (req, res)=>{

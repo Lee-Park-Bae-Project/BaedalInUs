@@ -6,12 +6,13 @@ const authMiddleWare = (req, res, next)=>{
     // 쿠키에서 토큰 읽어옴
     const token = req.headers['x-access-token'] || req.cookies.access_token;
     console.log('token = ');
-    console.log('Cookies: ', req.cookies)
+    console.log(token);
 
     /**
      * 로그인 안한 상태를 잡아줌
      */
     if(!token){
+        console.log('여기 걸림');
         return res.status(403).json({
             success:false,
             message:'다시 로그인 해주세요'
@@ -44,6 +45,7 @@ const authMiddleWare = (req, res, next)=>{
 
     tokenVerifyPromise
         .then((decoded)=>{
+            console.log('decode 완료.');
             req.decoded = decoded;
             next()
         })

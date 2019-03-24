@@ -59,7 +59,12 @@
     methods: {
       // 채팅방 불러옴
       getChatRoom: function (roomid) {
-        this.$http.post(`http://localhost:3000/api/chat/getRoom/${this.roomID}`, {userID: this.user.id})
+        let config = {
+          headers:{
+            'x-access-token':this.$cookie.get('access_token')
+          }
+        };
+        this.$http.post(`http://localhost:3000/api/chat/getRoom/${this.roomID}`, {userID: this.user.id}, config)
           .then(
             (res) => {
               if (res.status === 200) {

@@ -27,7 +27,7 @@ export default{
             context.commit('IsLogined',{isLogined:true}); // 로그인 되어 있다고 표시
             context.commit('setUserID', {userID: res.id});
             VueCookie.set('nickname',res.properties.nickname,10); // 카카오 닉네임을 쿠키에 저장함
-            
+
             // context.dispatch('kakaoLoginGetAccessToken', {userID: res.id}); // 숫자로 된 아이디 ex)1029473743 를 토큰에 저장해서 받아옴
 
             // context.dispatch('setKakaoUserToken', authObj, res.id);  // kakao token을 디비에 저장하기
@@ -64,7 +64,7 @@ export default{
     Kakao.Auth.logout(function(){
       context.commit('IsLogined', {isLogined:false}); // 로그인 안되어 있다고 표시
       VueCookie.delete('nickname');
-      VueCookie.delete('access_token'); // 액세스 토큰 삭제 
+      VueCookie.delete('access_token'); // 액세스 토큰 삭제
     })
   },
 
@@ -72,13 +72,13 @@ export default{
     console.log('local login');
     VueCookie.set('nickname',userID,10);
     context.commit('IsLogined',{isLogined:true});
-    context.commit('setUserID', {userID, userID});
+    context.commit('setUserID',{userID: userID});
   },
   localLogout:(context)=> {
     console.log('local logout');
     VueCookie.delete('access_token'); //액세스 토큰 삭제
     context.commit('IsLogined',{isLogined:false});
-    context.commit('setUserID', {setUserID:''});
+    context.commit('setUserID', {userID:''});
   },
 
   isKakaoLogined:(context)=>{
@@ -147,14 +147,14 @@ export default{
 
     axios.post(url, body)
       .then(res=>{
-        
+
         console.log(res);
       })
       .catch(err=>{
         alert(err.message);
         console.log(err);
       })
-      
+
   },
 
 

@@ -116,7 +116,7 @@ router.post('/setKakaoProperties', (req, res) => {
     const userInfo = req.body.userInfo;
     const kakaoid = req.body.userInfo.id;
     const secret = req.app.get('jwt-secret');
-    
+
 
     const t1 = (result) => {
         if (result.length === 0) {
@@ -168,20 +168,19 @@ router.post('/setKakaoProperties', (req, res) => {
                                 has_gender: userInfo.kakao_account.has_gender
                             }
                         }
-    
+
                     }
                 })
                 .then(result => {
                     console.log('카카오 정보 업데이트 완료');
-                    console.log(result);
                     resolve();
                 })
-                .catch(err => { 
+                .catch(err => {
                     console.log('find and update 하다가 reject');
                     reject(new Error(err));
                 })
         });
-        
+
 
     };
 

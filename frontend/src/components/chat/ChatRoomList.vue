@@ -1,34 +1,33 @@
 <template>
-    <div class="outer">
-      <div class="inner">
-        <!--<p>{{chatRooms.length}}</p>-->
-        <div id="chatRoomLists">
-          <!--<img id=imgI src="../assets/profile_img.svg">-->
-          <p v-if="chatRooms.length===0">참여중인 대화가 없습니다.</p>
-          <table v-else>
-            <div v-for="room in chatRooms" v-bind:key="room" @click="selectChatRoom(room)">
-              <tr>
-                <td rowspan="2" id="img"><i id=imgI class="fas fa-user-alt"></i></td>
-                <td rowspan="2" class="sender" v-if="room.user1ID===user.id">{{room.user2ID}}</td>
-                <td rowspan="2" class="sender" v-else>{{room.user1ID}}</td>
-                <td id="lastMsg">{{room.message}}</td>
-                <td rowspan="2" id="uncheckedMsg">
-                  <span v-if="room.uncheckedMsg!==0" class="badge badge-danger">{{room.uncheckedMsg}}</span>
-                </td>
-              </tr>
-              <tr>
-                <td id="lastModified">{{room.updated.substring(0,10)}}</td>
-              </tr>
-            </div>
-          </table>
-        </div>
-      </div>
-    </div>
+    <!--<div class="outer">-->
+      <!--<div class="inner">-->
+        <!--&lt;!&ndash;<p>{{chatRooms.length}}</p>&ndash;&gt;-->
+        <!--<div id="chatRoomLists">-->
+          <!--&lt;!&ndash;<img id=imgI src="../assets/profile_img.svg">&ndash;&gt;-->
+          <!--<p v-if="chatRooms.length===0">참여중인 대화가 없습니다.</p>-->
+          <!--<table v-else>-->
+            <!--<div v-for="room in chatRooms" v-bind:key="room" @click="selectChatRoom(room)">-->
+              <!--<tr>-->
+                <!--<td rowspan="2" id="img"><i id=imgI class="fas fa-user-alt"></i></td>-->
+                <!--<td rowspan="2" class="sender" v-if="room.user1ID===user.id">{{room.user2ID}}</td>-->
+                <!--<td rowspan="2" class="sender" v-else>{{room.user1ID}}</td>-->
+                <!--<td id="lastMsg">{{room.message}}</td>-->
+                <!--<td rowspan="2" id="uncheckedMsg">-->
+                  <!--<span v-if="room.uncheckedMsg!==0" class="badge badge-danger">{{room.uncheckedMsg}}</span>-->
+                <!--</td>-->
+              <!--</tr>-->
+              <!--<tr>-->
+                <!--<td id="lastModified">{{room.updated.substring(0,10)}}</td>-->
+              <!--</tr>-->
+            <!--</div>-->
+          <!--</table>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
 </template>
 
 <script>
   import {EventBus} from "../../event-bus";
-  import VueCookie from 'vue-cookie';
 
   export default {
     name: "ChatRoomList",
@@ -54,27 +53,24 @@
 
 
       getChatRooms: function (event) {
-        console.log(this.user.userID);
+        // TODO /api 경로 들어갈떄 config 설정 해놔야함
         let config = {
           headers:{
-            'x-access-token':VueCookie.get('access_token')
+            'x-access-token':this.$cookie.get('access_token')
           }
         };
         this.$http.post('http://localhost:3000/api/chat/getChatRooms', {user: this.user}, config)
           .then(
             (res) => {
               // this.busUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg); 일단 보류 (2/25)
+              console.log(res);
               if (res.status === 200) {
                 this.chatRooms = res.data.ret;
                 console.log(this.chatRooms);
-              } else{
-                // 에러
-                console.log('res: ' + res);
-                alert(res.data.message);
               }
             },
             (error) => {
-              alert(error.response.data.error)
+              alert('다시 로그인 해주세요');
             }
           )
           .catch(error => {

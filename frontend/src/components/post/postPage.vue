@@ -72,10 +72,12 @@
         if (this.board.detailedAddr.length === 0) {
           alert('상세 주소를 입력해주세요.');
         }
-
-        this.$http.post('http://localhost:3000/api/post/postOrder', {
-          board: this.board
-        })
+        let config = {
+          headers:{
+            'x-access-token':this.$cookie.get('access_token')
+          }
+        };
+        this.$http.post('http://localhost:3000/api/post/postOrder', {board: this.board}, config)
           .then(
             (response) => {
               if (response.status === 200) {
