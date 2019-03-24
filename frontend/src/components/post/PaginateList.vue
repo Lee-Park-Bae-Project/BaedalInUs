@@ -1,48 +1,44 @@
 <template>
-  <div class="outer">
-    <div class="inner">
-      <p id="header">Order List</p>
-          <div v-for="board in pageArray" :key="board.no">
-            <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"> </v-img>
-            <v-card-title primary-title>
-              <div>
-                <div class="headline">Top</div>
-                <span class="grey--text">1,000 miles of wonder</span>
-              </div>
-            </v-card-title>
-            <v-card-text>
-              address: {{board.addr}} {{board.detailedAddr}}
-              order: {{board.content}}
-              dueDate: {{board.dueDate}}
-              fee: {{board.fee}}
-              <span @click="sendMsgPpt(board)">
-              <i class="fas fa-sms" ></i>
+  <body>
+  <div id="container" style="background:#F8F8F9">
+    <div id="header">Main</div>
+    <div id="menu" style="float:left; padding-left:20px">
+      <div v-for="board in pageArray" style="background: #ffffff">
+        <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="300px" style="width:300px"></v-img>
+        <v-card-title primary-title>
+          <div>
+            <div class="headline">Top</div>
+            <span class="grey--text">1,000 miles of wonder</span>
+          </div>
+        </v-card-title>
+        <v-card-text>
+          address: {{board.addr}} {{board.detailedAddr}}
+          <br>
+          order: {{board.content}}
+          <br>
+          dueDate: {{board.dueDate}}
+          <br>
+          fee: {{board.fee}}
+          <br>
+          <span @click="sendMsgPpt(board)">
+              <i class="fas fa-sms"></i>
             </span>
-            </v-card-text>
-            <v-card-actions>
-            <v-btn flat color="green"
-                   @click="singleBoard(board.id)">View</v-btn>
-            </v-card-actions>
-          </div>
-
-        <div>
-          <v-pagination
-            size = "md" :length="100" :total-visible="10"
-            prev-icon="mdi-menu-left"
-            next-icon="mdi-menu-right"
-            v-model = "currentPage"
-            @click=""
-            circle
-          ></v-pagination>
-
-        </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn flat color="green"
+                 @click="singleBoard(board.id)">View
+          </v-btn>
+        </v-card-actions>
+      </div>
     </div>
-          </div>
-
+    <div id="content" style="padding:50px"><h1>여기에 상세정보 들어갈거임</h1></div>
+  </div>
+  </body>
 </template>
 
 <script>
   import axios from "axios";
+
   export default {
     name: "PaginateList",
     data() {
@@ -53,7 +49,7 @@
       };
     },
     methods: {
-      getData: function(event) {
+      getData: function (event) {
         console.log("______________________---------------");
         axios
           .post(
@@ -77,7 +73,7 @@
             alert(error);
           });
       },
-      sendMsgPpt: function(board) {
+      sendMsgPpt: function (board) {
         console.log(board);
         let msg = prompt(board.userOID.nickname + '님 에게 메시지 보내기');
         let sender = this.$store.getters.getUserID;
@@ -93,7 +89,7 @@
       this.getData();
     },
     watch: {
-      currentPage: function(val, oldVal) {
+      currentPage: function (val, oldVal) {
         console.log("new : %s, old: %s", val, oldVal);
         this.getData();
       }
@@ -101,34 +97,40 @@
   };
 </script>
 <style scoped>
-.outer {
-  font-family: "Franklin Gothic Demi";
-  width: 100%;
-  text-align: center;
-}
-.inner {
-  display: inline-block;
-}
-.form_box {
-  margin-top: 150px;
-  text-align: left;
-}
-h1 {
-  margin: 10px;
-}
-input {
-  width: 300px;
-  margin: 10px;
-}
-button {
-  float: right;
-  margin: 10px;
-  width: 100px;
-}
-.pageList {
-  width: 300px;
-  margin: 10px auto;
-}
+  .outer {
+    font-family: "Franklin Gothic Demi";
+    width: 100%;
+    text-align: center;
+  }
+
+  .inner {
+    display: inline-block;
+  }
+
+  .form_box {
+    margin-top: 150px;
+    text-align: left;
+  }
+
+  h1 {
+    margin: 10px;
+  }
+
+  input {
+    width: 300px;
+    margin: 10px;
+  }
+
+  button {
+    float: right;
+    margin: 10px;
+    width: 100px;
+  }
+
+  .pageList {
+    width: 300px;
+    margin: 10px auto;
+  }
 
 </style>
 
