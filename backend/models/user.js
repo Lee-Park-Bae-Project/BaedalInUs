@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     lock:Boolean,
     rooms:[
         {
-            roomID:{type:String}, // 유저가 참여중인 방 목록
+            roomID:{type:String}, // 유저가 참여중인 방 목록 TODO: ref rooms 로 바꿔주기
             uncheckedMsg:{type:Number, default:0}
         }
     ],

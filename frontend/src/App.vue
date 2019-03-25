@@ -21,7 +21,6 @@
   import {EventBus} from "./event-bus";
 
   let socket=io('localhost:3000', { transports: ['websocket'] });
-// TODO: 주문 목록 보고 메시지 보내는 기능 추가
   export default {
     name: 'App',
     components: {

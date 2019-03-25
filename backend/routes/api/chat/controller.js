@@ -5,7 +5,7 @@ const users = require('../../../models/user');
 exports.getChatRooms = (req, res)=>{
     console.log('ok');
     let userID = req.body.user.id;
-
+    // TODO: 필요한것 - 상대방 아이디, 마지막 업데이트 시각, 마지막 메시지 --
     // let ret = [];
     // let sumOfUncheckedMsg = 0;
     // function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {

@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
 
-const config = require('./config');
+const config = require('./config/config');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
