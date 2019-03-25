@@ -1,12 +1,0 @@
-
-Msquid:S2093;"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ8·‡÷ÚŠ-
-nsquid:CommentedOutCodeLine<"<This block of commented-out lines of code should be removed.(Ü©ÊØûÿÿÿÿ8·‡÷ÚŠ-
-Xsquid:S1141;"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8·‡÷ÚŠ-
-Xsquid:S1141d"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8·‡÷ÚŠ-
-bsquid:S2147^"DCombine this catch with the one at line 92, which has the same body.(ï­£Ä8·‡÷ÚŠ-
-Fsquid:S1148]"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8·‡÷ÚŠ-
-Fsquid:S1148_"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8·‡÷ÚŠ-
-Fsquid:S1148i"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8·‡÷ÚŠ-
-Fsquid:S1148m"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8·‡÷ÚŠ-
-‚squid:S1149T"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(¨âàøÿÿÿÿ8·‡÷ÚŠ-
-‚squid:S1149T"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(¨âàøÿÿÿÿ8·‡÷ÚŠ-
