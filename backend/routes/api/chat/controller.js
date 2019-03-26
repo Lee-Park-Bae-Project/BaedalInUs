@@ -3,37 +3,58 @@ const users = require('../../../models/user');
 
 
 exports.getChatRooms = (req, res)=>{
-    console.log('ok');
-    let userID = req.body.user.id;
+
+    let userID = req.decoded.userID;
+    let ret=[];
+    console.log('userID: ' + userID);
+
+
+    const makeRet = (res)=>{
+        return new Promise(((resolve, reject) =>{
+            if(!res){
+                reject();
+            }
+            let len = res.rooms.length;
+            console.log('room :' + len); // number of rooms
+
+            for(i=0;i<len;i++){
+                ret.push({
+                    'sender': res.rooms[i].room.messages[0].sender,
+                    'message': res.rooms[i].room.messages[0].message,
+                    'updated': res.rooms[i].room.messages[0].created,
+                    'user1ID': res.rooms[i].room.user1,
+                    'user2ID': res.rooms[i].room.user2
+                })
+                console.log('ret: ' + ret);
+            }
+            resolve();
+
+        }))
+
+    }
+    const onError = (err) => {
+        console.log(err.message);
+        res.status(403).json({
+            complete: false,
+            message: err.message
+        })
+    }
+
+    const respond = () => {
+        res.status(200).json({chatRooms: ret});
+    }
+
+    users.findOne({'id':userID})
+        .populate({path:'rooms.room'})
+        .then(res=>{
+            return res;
+        })
+        .then(makeRet)
+        .then(respond)
+        .catch(onError)
+
+
     // TODO: 필요한것 - 상대방 아이디, 마지막 업데이트 시각, 마지막 메시지 --
-    // let ret = [];
-    // let sumOfUncheckedMsg = 0;
-    // function makeRet(user1, user2, sender, msg, updated, roomID, uncheckedMsg) {
-    //     let ret = {
-    //         user1ID: user1,
-    //         user2ID: user2,
-    //         sender: sender,
-    //         message: msg,
-    //         updated: updated,
-    //         roomID: roomID,
-    //         uncheckedMsg: uncheckedMsg
-    //     };
-    //     return ret;
-    // }
-    // console.log(`userID : ${userID}`);
-    // // console.log(`userOID : ${userOID}`);
-    //
-    // // 받은 roomID로 방목록 만듬
-    // function getRoomInfoPromise(roomID, uncheckedMsg) {
-    //     return new Promise(function (resolve, reject) {
-    //         rooms.findOne({'roomID': roomID}, (err, result) => {
-    //             if (err) reject(err);
-    //
-    //             let len = result.messages.length;
-    //             resolve(makeRet(result.user1ID, result.user2ID, result.messages[len - 1].sender, result.messages[len - 1].message, result.updated, roomID, uncheckedMsg));
-    //         })
-    //     })
-    // }
     //
     // // roomID 하나씪 getRoomInfoPromise에 넘겨줌
     // async function getRoomInfo(rooms) {
@@ -130,7 +151,7 @@ exports.sendMsg = (req, res)=>{
         console.log(`receiver 큼`);
         roomID = receiver.concat('', sender);
     }
-    console.log('roomID : ' + roomID); // roomID 만듬. id는 유니크해서 이렇게 가능?
+    console.log('roomID : ' + roomID); // roomID 만듬. id는 유니크해서 이렇게 가능
 
     /**
      * 새로운 roomID 생성
@@ -174,7 +195,7 @@ exports.sendMsg = (req, res)=>{
             // 방을 생성하는 프로미스
             return new Promise(function(resolve, reject){
                 let newRoom = new rooms({
-                    roomID: roomID,
+                    // roomID: roomID,
                     user1: sender,    // 유저 1 아이디
                     user2: receiver,  // 유저 2 아이디
                     created: created, // 생성 시각
@@ -190,18 +211,21 @@ exports.sendMsg = (req, res)=>{
                         /**
                          * 유저의 rooms에 새로운 방 id 추가
                          */
+                        console.log('====================');
+                        console.log(res);
+                        console.log('====================');
+
                         users.findOneAndUpdate(
                             {'id': sender},
-                            {$push: {rooms: {roomID: roomID}}}
+                            {$push: {rooms: {roomID: roomID, room:res._id}}}
                         )
                             .catch(err=>{
-                                console.log('sender에 룸 푸쉬하다가 터짐');
                                 reject(err);
                             });
 
                         users.findOneAndUpdate(
                             {'id': receiver},
-                            {$push: {rooms: {roomID: roomID}}}
+                            {$push: {rooms: {roomID: roomID, room:res._id}}}
                         )
                             .catch(err=>{
 

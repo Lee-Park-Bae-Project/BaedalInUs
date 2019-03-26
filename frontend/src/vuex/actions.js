@@ -142,10 +142,14 @@ export default{
     console.log(receiver);
     console.log(created);
 
-    const url = 'http://localhost:3000/chat/sendMsg';
+    const url = 'http://localhost:3000/api/chat/sendMsg';
     const body = {msg: msg, sender: sender, receiver: receiver, created: created};
-
-    axios.post(url, body)
+    const config = {
+      headers:{
+        'x-access-token':VueCookie.get('access_token')
+      }
+    }
+    axios.post(url, body, config)
       .then(res=>{
 
         console.log(res);

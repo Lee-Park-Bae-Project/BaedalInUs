@@ -1,30 +1,31 @@
 <template>
-    <!--<div class="outer">-->
-      <!--<div class="inner">-->
-        <!--&lt;!&ndash;<p>{{chatRooms.length}}</p>&ndash;&gt;-->
-        <!--<div id="chatRoomLists">-->
-          <!--&lt;!&ndash;<img id=imgI src="../assets/profile_img.svg">&ndash;&gt;-->
-          <!--<p v-if="chatRooms.length===0">참여중인 대화가 없습니다.</p>-->
-          <!--<table v-else>-->
-            <!--<div v-for="room in chatRooms" v-bind:key="room" @click="selectChatRoom(room)">-->
-              <!--<tr>-->
-                <!--<td rowspan="2" id="img"><i id=imgI class="fas fa-user-alt"></i></td>-->
-                <!--<td rowspan="2" class="sender" v-if="room.user1ID===user.id">{{room.user2ID}}</td>-->
-                <!--<td rowspan="2" class="sender" v-else>{{room.user1ID}}</td>-->
-                <!--<td id="lastMsg">{{room.message}}</td>-->
-                <!--<td rowspan="2" id="uncheckedMsg">-->
-                  <!--<span v-if="room.uncheckedMsg!==0" class="badge badge-danger">{{room.uncheckedMsg}}</span>-->
-                <!--</td>-->
-              <!--</tr>-->
-              <!--<tr>-->
-                <!--<td id="lastModified">{{room.updated.substring(0,10)}}</td>-->
-              <!--</tr>-->
-            <!--</div>-->
-          <!--</table>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
+    <div class="outer">
+      <div class="inner">
+
+        <div id="chatRoomLists">
+          <!--<img id=imgI src="../assets/profile_img.svg">-->
+          <p v-if="chatRooms.length===0">참여중인 대화가 없습니다.</p> <!-- no chat rooms-->
+          <table v-else>
+            <div v-for="room in chatRooms" @click="selectChatRoom(room)">
+              <tr>
+                <td rowspan="2" id="img"><i id=imgI class="fas fa-user-alt"></i></td>
+                <td rowspan="2" class="sender" v-if="room.user1ID===user.id">{{room.user2ID}}</td>
+                <td rowspan="2" class="sender" v-else>{{room.user1ID}}</td>
+                <td id="lastMsg">{{room.message}}</td>
+                <td rowspan="2" id="uncheckedMsg">
+                  <span v-if="room.uncheckedMsg!==0" class="badge badge-danger">{{room.uncheckedMsg}}</span>
+                </td>
+              </tr>
+              <tr>
+                <td id="lastModified">{{room.updated.substring(0,10)}}</td>
+              </tr>
+            </div>
+          </table>
+        </div>
+      </div>
+    </div>
 </template>
+
 
 <script>
   import {EventBus} from "../../event-bus";
@@ -37,20 +38,19 @@
           userID: this.$store.getters.getUserID
         },
         chatRooms: [
-          {
-            sender: '',
-            message: '',
-            updated: '',
-            user1ID: '',
-            user2ID: '',
-          }
+
+            // sender: '',
+            // message: '',
+            // updated: '',
+            // user1ID: '',
+            // user2ID: '',
+
         ], // 채팅방 리스트들
       }
     },
     methods: {
       // 채팅방 리스트 가져오기
       // jwt 인증 실패 하면 403 리턴받을거임
-
 
       getChatRooms: function (event) {
         // TODO /api 경로 들어갈떄 config 설정 해놔야함
@@ -65,7 +65,8 @@
               // this.busUpdateSumOfUncheckedMsg(res.data.sumOfUncheckedMsg); 일단 보류 (2/25)
               console.log(res);
               if (res.status === 200) {
-                this.chatRooms = res.data.ret;
+                console.log(res.data);
+                this.chatRooms = res.data.chatRooms;
                 console.log(this.chatRooms);
               }
             },
@@ -79,7 +80,6 @@
       },
       selectChatRoom:function(room){
         this.$router.push(`/chatroom/${room.roomID}`); // 유저목록 페이지로 보내줌
-        this.busUpdateSumOfUncheckedMsg(-room.uncheckedMsg);
       },
       busUpdateSumOfUncheckedMsg:function(newVal){
         // app.vue에서 받음

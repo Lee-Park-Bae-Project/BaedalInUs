@@ -76,6 +76,7 @@
               if(response.status === 200){
 
                 this.$store.dispatch('localLogin',this.user.id);
+                this.$cookie.set('access_token', response.data);
                 console.log(response);
                 this.$router.push('/') // 메인 페이지로 보내줌
               } else{
