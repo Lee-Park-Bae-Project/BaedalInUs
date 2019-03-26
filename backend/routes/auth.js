@@ -60,8 +60,8 @@ router.post('/login', (req, res) => {
             let tokenGeneratePromise = new Promise(((resolve, reject) => {
                 jwt.sign(
                     {
-                        _id: result._id,
-                        userID: result.id,
+                        _id: result[0]._id,
+                        userID: result[0].id,
                     },
                     secret,
                     {

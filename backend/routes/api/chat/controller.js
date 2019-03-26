@@ -4,7 +4,8 @@ const users = require('../../../models/user');
 
 exports.getChatRooms = (req, res) => {
 
-    let userID = req.decoded.userID;
+    let userID = req.decoded.userID;    
+    console.log(req.decoded);
     let ret = [];
     console.log('userID: ' + userID);
 
@@ -21,8 +22,8 @@ exports.getChatRooms = (req, res) => {
                     'sender': res.rooms[i].room.messages[0].sender,     // 보낸사람
                     'message': res.rooms[i].room.messages[0].message,   // 마지막 메시지
                     'updated': res.rooms[i].room.messages[0].created,   // 마지막 업데이트 시각
-                    'user1ID': res.rooms[i].room.user1,                 // 참여자 1
-                    'user2ID': res.rooms[i].room.user2                  // 참여자 2
+                    'user1ID': res.rooms[i].room.user1Nickname,                 // 참여자 1
+                    'user2ID': res.rooms[i].room.user2Nickname                  // 참여자 2
                 })
                 console.log('ret: ' + ret);
             }

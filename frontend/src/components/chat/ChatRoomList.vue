@@ -9,8 +9,8 @@
             <div v-for="room in chatRooms" @click="selectChatRoom(room)">
               <tr>
                 <td rowspan="2" id="img"><i id=imgI class="fas fa-user-alt"></i></td>
-                <td rowspan="2" class="sender" v-if="room.user1ID===user.id">{{room.user2ID}}</td>
-                <td rowspan="2" class="sender" v-else>{{room.user1ID}}</td>
+                <td rowspan="2" class="sender" v-if="room.user1ID===user.userID">{{room.user2ID}}</td>
+                <td rowspan="2" class="sender" v-else="room.user1ID===user.userID">{{room.user1ID}}</td>
                 <td id="lastMsg">{{room.message}}</td>
                 <td rowspan="2" id="uncheckedMsg">
                   <span v-if="room.uncheckedMsg!==0" class="badge badge-danger">{{room.uncheckedMsg}}</span>
