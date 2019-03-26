@@ -2,28 +2,27 @@ const rooms = require('../../../models/rooms');
 const users = require('../../../models/user');
 
 
-exports.getChatRooms = (req, res)=>{
+exports.getChatRooms = (req, res) => {
 
     let userID = req.decoded.userID;
-    let ret=[];
+    let ret = [];
     console.log('userID: ' + userID);
 
-
-    const makeRet = (res)=>{
-        return new Promise(((resolve, reject) =>{
-            if(!res){
+    const makeRet = (res) => {
+        return new Promise(((resolve, reject) => {
+            if (!res) {
                 reject();
             }
             let len = res.rooms.length;
             console.log('room :' + len); // number of rooms
 
-            for(i=0;i<len;i++){
+            for (i = 0; i < len; i++) {
                 ret.push({
-                    'sender': res.rooms[i].room.messages[0].sender,
-                    'message': res.rooms[i].room.messages[0].message,
-                    'updated': res.rooms[i].room.messages[0].created,
-                    'user1ID': res.rooms[i].room.user1,
-                    'user2ID': res.rooms[i].room.user2
+                    'sender': res.rooms[i].room.messages[0].sender,     // 보낸사람
+                    'message': res.rooms[i].room.messages[0].message,   // 마지막 메시지
+                    'updated': res.rooms[i].room.messages[0].created,   // 마지막 업데이트 시각
+                    'user1ID': res.rooms[i].room.user1,                 // 참여자 1
+                    'user2ID': res.rooms[i].room.user2                  // 참여자 2
                 })
                 console.log('ret: ' + ret);
             }
@@ -44,12 +43,12 @@ exports.getChatRooms = (req, res)=>{
         res.status(200).json({chatRooms: ret});
     }
 
-    users.findOne({'id':userID})
-        .populate({path:'rooms.room'})
-        .then(res=>{
+    users.findOne({'id': userID})
+        .populate({path: 'rooms.room'})
+        .then(res => {
             return res;
-        })
-        .then(makeRet)
+        }) // userID 로 방 목록 찾음
+        .then(makeRet)            // 리턴값 (배열) 만듬
         .then(respond)
         .catch(onError)
 
@@ -91,7 +90,7 @@ exports.getChatRooms = (req, res)=>{
     // });
 }
 
-exports.getRoom = (req, res)=>{
+exports.getRoom = (req, res) => {
     console.log('get room');
     console.log(req.params);
     console.log(req.body);
@@ -126,13 +125,15 @@ exports.getRoom = (req, res)=>{
 
 }
 
-exports.sendMsg = (req, res)=>{
+exports.sendMsg = (req, res) => {
     console.log(req.body);
     let msg = req.body.msg;
     let sender = req.body.sender;
     let receiver = req.body.receiver;
     let created = req.body.created;
-    let roomID='';
+    let roomID = '';
+    let user1Nickname = '';
+    let user2Nickname = '';
 
     console.log('--------------받은 값-------------');
     console.log('msg: ' + msg);
@@ -144,41 +145,75 @@ exports.sendMsg = (req, res)=>{
     sender = String(sender);
     receiver = String(receiver);
 
-    if(sender > receiver){
+    if (sender > receiver) {
         console.log(`sender 큼`);
         roomID = sender.concat(receiver);
-    } else{
+    } else {
         console.log(`receiver 큼`);
         roomID = receiver.concat('', sender);
     }
     console.log('roomID : ' + roomID); // roomID 만듬. id는 유니크해서 이렇게 가능
 
+
     /**
      * 새로운 roomID 생성
      */
-    rooms.roomIDSHA256(roomID, (res, err)=>{
-        if(err) reject(new Error(err));
+    rooms.roomIDSHA256(roomID, (res, err) => {
+        if (err) reject(new Error(err));
         roomID = res;
         console.log(roomID);
     });
 
+
+    const findUser1Nick = () => {
+        return new Promise((resolve, reject) => {
+                users.findOne({'id': sender})
+                    .then(res => {
+                        console.log(res);
+                        user1Nickname = res.nickname;
+                        resolve();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        reject(new Error('해당하는 유저가 없습니다.'));
+                    })
+            }
+        )
+
+    }
+
+    const findUser2Nick = () => {
+        return new Promise((resolve, reject) => {
+            users.findOne({'id': receiver})
+                .then(res => {
+                    console.log(res);
+                    user2Nickname = res.nickname;
+                    resolve();
+                })
+                .catch(err => {
+                    console.log(err);
+                    reject(new Error('해당하는 유저가 없습니다.'));
+                })
+        })
+
+    }
     /**
      * sender, receiver 로 특정 roomID 를 찾음
      * 방이 있냐 없냐를 리턴
      */
-    const findRoom = ()=>{
-        return new Promise(function (resolve, reject){
-            rooms.findOne({'roomID' : roomID})
-                .then(res=>{
-                    if(res === null){
+    const findRoom = () => {
+        return new Promise(function (resolve, reject) {
+            rooms.findOne({'roomID': roomID})
+                .then(res => {
+                    if (res === null) {
                         // 결과가 없음, 방이 없음, 새로만들어야함
                         resolve(false);
-                    } else{
+                    } else {
                         // 겨로가가 있음, 방이 있음, 메시지 푸쉬만 하면댐
                         resolve(true);
                     }
                 })
-                .catch(err=>{
+                .catch(err => {
                     reject(new Error('잠시 후 다시 시도해 주십시오'));
                 })
         });
@@ -188,26 +223,31 @@ exports.sendMsg = (req, res)=>{
     /**
      * 방이 없는 경우 방을 새로 만듬
      */
-    const makeRoom = (isRoomExist)=>{
-        if(isRoomExist){
+    const makeRoom = (isRoomExist) => {
+        if (isRoomExist) {
+            // 방이 있는 경우
+            // 걍 넘어감
             return true;
-        } else{
+        } else {
+            // 방이 없는 경우
             // 방을 생성하는 프로미스
-            return new Promise(function(resolve, reject){
+            return new Promise(function (resolve, reject) {
                 let newRoom = new rooms({
                     // roomID: roomID,
                     user1: sender,    // 유저 1 아이디
                     user2: receiver,  // 유저 2 아이디
                     created: created, // 생성 시각
                     updated: created, // 마지막 업데이트 시각
-                    messages:{
+                    messages: {
                         sender: sender, // 메시지 보낸 사람
                         message: msg,   // 메시지 내용
                         created: created // 메시지 생성시각
-                    }
+                    },
+                    user1Nickname: user1Nickname,
+                    user2Nickname: user2Nickname
                 });
                 newRoom.save()
-                    .then((res)=>{
+                    .then((res) => {
                         /**
                          * 유저의 rooms에 새로운 방 id 추가
                          */
@@ -217,23 +257,23 @@ exports.sendMsg = (req, res)=>{
 
                         users.findOneAndUpdate(
                             {'id': sender},
-                            {$push: {rooms: {roomID: roomID, room:res._id}}}
+                            {$push: {rooms: {roomID: roomID, room: res._id}}}
                         )
-                            .catch(err=>{
+                            .catch(err => {
                                 reject(err);
                             });
 
                         users.findOneAndUpdate(
                             {'id': receiver},
-                            {$push: {rooms: {roomID: roomID, room:res._id}}}
+                            {$push: {rooms: {roomID: roomID, room: res._id}}}
                         )
-                            .catch(err=>{
+                            .catch(err => {
 
                                 reject(err);
                             });
                         resolve(false);
                     })
-                    .catch(err=>{
+                    .catch(err => {
                         console.log(err);
                         reject(new Error('잠시 후 다시 시도해 주십시오'));
                     })
@@ -247,14 +287,15 @@ exports.sendMsg = (req, res)=>{
      * isRoomExist가 true이면 새로운 메시지 추가만 하면댐
      * isRoomExist가 false 이면 방을 만들고 메시지 추가해야함
      */
-    const storeNewMsg = (isRoomExist)=>{
-        if(isRoomExist){
-            return new Promise(function(resolve, reject){
+    const storeNewMsg = (isRoomExist) => {
+        if (isRoomExist) {
+            return new Promise(function (resolve, reject) {
 
                 rooms.findOneAndUpdate({'roomID': roomID},
-                    {$push:
+                    {
+                        $push:
                             {
-                                messages:{
+                                messages: {
                                     sender: sender,
                                     message: msg,
                                     created: created
@@ -264,16 +305,16 @@ exports.sendMsg = (req, res)=>{
                     {
                         updated: created
                     })
-                    .then(res=>{
+                    .then(res => {
                         // console.log(res);
                         resolve(res);
                     })
-                    .catch(err=>{
+                    .catch(err => {
                         console.log(err);
                         reject(err);
                     })
             });
-        } else{
+        } else {
             return false;
         }
     };
@@ -290,7 +331,10 @@ exports.sendMsg = (req, res)=>{
         res.status(200).json({complete: true});
     }
 
-    findRoom()
+    //TODO nickname 설정이 안되는 경우가 있었음
+    findUser1Nick()
+        .then(findUser2Nick())
+        .then(findRoom)
         .then(makeRoom)
         .then(storeNewMsg)
         .then(respond)
@@ -298,7 +342,7 @@ exports.sendMsg = (req, res)=>{
 
 }
 
-exports.makeRoom = (req, res)=>{
+exports.makeRoom = (req, res) => {
     console.log(`in chat / makeRoom`);
     console.log(req.body);
     const senderOID = req.body.room.senderOID;
@@ -472,7 +516,7 @@ exports.makeRoom = (req, res)=>{
 
 }
 
-exports.getSumOfUnCheckMsg = (req, res)=>{
+exports.getSumOfUnCheckMsg = (req, res) => {
     console.log('ok');
 
     let id = req.body.id;

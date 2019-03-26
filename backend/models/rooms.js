@@ -7,8 +7,10 @@ const roomsSchema = mongoose.Schema({
     roomID: {type: String}, // 참여자1 id, 참여자2 id 조합
     // user1: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, // 참여자1
     // user2: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, // 참여자2
-    user1: {type: String},
+    user1: {type: String},        // 유저의 아이디
     user2: {type: String},
+    user1Nickname: {type:String}, // 유저의 닉네임
+    user2Nickname: {type:String},
     messages: [
         {
             sender: {type: String, required: true}, // 보낸사람

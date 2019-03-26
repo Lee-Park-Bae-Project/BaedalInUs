@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
     rooms:[
         {
             room:{type: mongoose.Schema.Types.ObjectId, ref: 'Room'}, // 유저가 참여중인 방 목록
-            roomID:{type:String},
+            roomID:{type:String}, // 찾을떄 이걸로 id1, id2 조합
             uncheckedMsg:{type:Number, default:0}
         }
     ],
