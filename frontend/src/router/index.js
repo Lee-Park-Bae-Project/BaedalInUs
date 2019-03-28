@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../vuex/store'
 import Vuetify from 'vuetify'
+import VueCooke from 'vue-cookie'
 Vue.use(Router);
 Vue.use(Vuetify);
 
@@ -24,7 +25,9 @@ import auth from '@/components/auth/auth.vue'
 // 로그인 확인하기
 const requireAuth = ()=>(from, to, next)=>{
   if(store.getters.IsLogined) return next();
+  console.log('requireAuth');
   alert('로그인이 필요한 서비스입니다');
+  VueCooke.delete('access_token');
   next('/login');
 };
 

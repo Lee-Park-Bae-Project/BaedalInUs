@@ -22,15 +22,16 @@ exports.getChatRooms = (req, res) => {
                     'sender': res.rooms[i].room.messages[0].sender,     // 보낸사람
                     'message': res.rooms[i].room.messages[0].message,   // 마지막 메시지
                     'updated': res.rooms[i].room.messages[0].created,   // 마지막 업데이트 시각
-                    'user1ID': res.rooms[i].room.user1Nickname,                 // 참여자 1
-                    'user2ID': res.rooms[i].room.user2Nickname                  // 참여자 2
+                    'user1ID': res.rooms[i].room.user1Nickname,         // 참여자 1
+                    'user2ID': res.rooms[i].room.user2Nickname,         // 참여자 2
+                    'roomID': res.rooms[i].room.roomID                  // roomID 테스트 해야함
                 })
+
                 console.log('ret: ' + ret);
+
             }
             resolve();
-
         }))
-
     }
     const onError = (err) => {
         console.log(err.message);
@@ -96,7 +97,25 @@ exports.getRoom = (req, res) => {
     console.log(req.params);
     console.log(req.body);
     let roomID = req.params.roomID;
-    let userID = req.body.userID;
+    // let userID = req.decoded.userID; // 토큰 분해한 값
+    let user1 = req.body.user1;
+    let user2 = req.body.user2;
+
+
+    //////////////////////////////////////////////////////
+    user1 = String(user1);
+    user2 = String(user2);
+
+    if (user1 > user2) {
+        console.log(`sender 큼`);
+        roomID = user1.concat(user2);
+    } else {
+        console.log(`receiver 큼`);
+        roomID = user2.concat('', user1);
+    }
+    console.log('roomID : ' + roomID); // roomID 만듬. id는 유니크해서 이렇게 가능
+    //////////////////////////////////////////////////////
+
 
     console.log('--------------------------------------------');
     console.log(`req.params : ${req.params}`);
@@ -123,6 +142,23 @@ exports.getRoom = (req, res) => {
                 console.log(err);
             }
         )
+
+
+    const onError = (err) => {
+        console.log(err.message);
+        res.status(403).json({
+            complete: false,
+            message: err.message
+        })
+    }
+
+    const respond = () => {
+        res.status(200).json({chatRooms: ret});
+    }
+
+
+
+
 
 }
 
@@ -180,7 +216,6 @@ exports.sendMsg = (req, res) => {
                     })
             }
         )
-
     }
 
     const findUser2Nick = () => {
@@ -234,7 +269,7 @@ exports.sendMsg = (req, res) => {
             // 방을 생성하는 프로미스
             return new Promise(function (resolve, reject) {
                 let newRoom = new rooms({
-                    // roomID: roomID,
+                    roomID: roomID,   // roomID 생성 테스트 해야함
                     user1: sender,    // 유저 1 아이디
                     user2: receiver,  // 유저 2 아이디
                     created: created, // 생성 시각
