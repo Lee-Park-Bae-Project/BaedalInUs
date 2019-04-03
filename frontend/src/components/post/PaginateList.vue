@@ -79,6 +79,8 @@
       },
       sendMsgPpt: function(board) {
         console.log(board);
+        console.log(board.userOID.id);
+        console.log(this.$store.getters.getUserID);
         if(board.userOID.id == this.$store.getters.getUserID){
           alert('자기자기에겐 메시지를 보낼 수 없습니다.');
           return;
@@ -88,10 +90,13 @@
         let receiver = board.userOID.id; // 받는사람
         let created = Date.now(); // 현재시각
 
+        console.log('sender: ' + sender);
+        console.log('receiver: ' + receiver);
         if(msg === null){
           // 취소 누른경우
           return;
         }
+
         this.$store.dispatch('sendMsg', {msg: msg, sender: sender, receiver: receiver, created: created});
       },
 

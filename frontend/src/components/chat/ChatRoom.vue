@@ -49,8 +49,7 @@
         receiverID: '',
         chats: {},
         user: {
-          id: localStorage.getItem('userID'),
-          oid: localStorage.getItem('userOID'),
+          id : this.$store.getters.getUserID
         },
         socketID: localStorage.getItem('socketID'),
         newMsg: '',
@@ -59,6 +58,7 @@
     methods: {
       // 채팅방 불러옴
       getChatRoom: function (roomid) {
+        console.log(this.user);
         let config = {
           headers:{
             'x-access-token':this.$cookie.get('access_token')
@@ -86,11 +86,11 @@
         if (this.newMsg.length === 0) {
         } else {
           const created = Date.now(); // 바꾸면 안댐
-          // console.log(`in sendNewMsg`);
-          // console.log(`newMsg : ${this.newMsg}`);
-          // console.log(`sender : ${this.user.id}`);
-          // console.log(`receiver : ${this.receiverID}`);
-          // console.log(`created : ${created}`);
+          console.log(`in sendNewMsg`);
+          console.log(`newMsg : ${this.newMsg}`);
+          console.log(`sender : ${this.user.id}`);
+          console.log(`receiver : ${this.receiverID}`);
+          console.log(`created : ${created}`);
 
           this.busEmitSendMsg(this.newMsg, this.user.id, created, this.roomID, this.receiverID); // 소켓으로 보내는 요청
           this.sendNewMsgToServer(this.newMsg, this.user.id, created); // 서버에 저장하라고 보내는 요청
@@ -107,14 +107,22 @@
         EventBus.$emit('sendNewMsg', newMsg, sender, created, roomID, receiver);
       },
       sendNewMsgToServer: function (newMsg, sender, created) {
-        this.$http.post('http://localhost:3000/api/chat/sendNewMsg', {
-          sender: sender,
-          newMsg: newMsg,
-          roomID: this.chats.roomID,
-          socketID: this.socketID,
-          receiverID: (this.user.id === this.chats.user1ID) ? this.chats.user2ID : this.chats.user1ID,
+
+        let config = {
+          headers:{
+            'x-access-token':this.$cookie.get('access_token')
+          }
+        };
+        let body = {
+          msg: newMsg,
+          user1: this.chats.user1,
+          user2: this.chats.user2,
           created: created,
-        })
+          user1Nickname: this.chats.user1Nickname,
+          user2Nickname: this.chats.user2Nickname
+
+        }
+        this.$http.post('http://localhost:3000/api/chat/sendMsg', body, config)
           .then(
             (res) => {
               console.log(res);
@@ -160,11 +168,11 @@
       getIso(time){
         let t1 = new Date().getTimezoneOffset() * 60000;
         let t2 = new Date(time - t1);
-        console.log('------------------------------------------------');
-        console.log(time);
-        console.log(t1);
-        console.log(t2);
-        console.log('------------------------------------------------');
+        // console.log('------------------------------------------------');
+        // console.log(time);
+        // console.log(t1);
+        // console.log(t2);
+        // console.log('------------------------------------------------');
 
         return t2.toISOString();
       },
@@ -215,8 +223,10 @@
       }
     },
     created() {
+      console.log('crated');
       this.getChatRoom(this.roomID);
       EventBus.$emit('joinRoom', this.roomID);
+      this.user.id = this.$store.getters.getUserID;
 
     },
     mounted() {
@@ -233,11 +243,11 @@
     },
     watch: {
       chats: function (data) {
-        console.log('chats is modified');
+        // console.log('chats is modified');
         this.stdDate='1970-01-01';
       },
       propsNewMsg: function () {
-        console.log('propsNewMsg is modified');
+        // console.log('propsNewMsg is modified');
         this.chats.messages.push(this.propsNewMsg); // props로 메시지 전달받음
         this.stdDate='1970-01-01';
 

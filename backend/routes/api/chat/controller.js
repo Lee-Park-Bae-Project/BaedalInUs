@@ -4,7 +4,7 @@ const users = require('../../../models/user');
 
 exports.getChatRooms = (req, res) => {
 
-    let userID = req.decoded.userID;    
+    let userID = req.decoded.userID;
     console.log(req.decoded);
     let ret = [];
     console.log('userID: ' + userID);
@@ -94,83 +94,44 @@ exports.getChatRooms = (req, res) => {
 
 exports.getRoom = (req, res) => {
     console.log('get room');
-    console.log(req.params);
+    console.log(req.params); // room id
     console.log(req.body);
     let roomID = req.params.roomID;
-    // let userID = req.decoded.userID; // 토큰 분해한 값
-    let user1 = req.body.user1;
-    let user2 = req.body.user2;
 
+    // let userID = req.decoded.userID; // 토큰 분해한 값
+    // let user1 = req.body.user1;
+    // let user2 = req.body.user2;
 
     //////////////////////////////////////////////////////
-    user1 = String(user1);
-    user2 = String(user2);
-
-    if (user1 > user2) {
-        console.log(`sender 큼`);
-        roomID = user1.concat(user2);
-    } else {
-        console.log(`receiver 큼`);
-        roomID = user2.concat('', user1);
-    }
     console.log('roomID : ' + roomID); // roomID 만듬. id는 유니크해서 이렇게 가능
     //////////////////////////////////////////////////////
 
-
-    console.log('--------------------------------------------');
-    console.log(`req.params : ${req.params}`);
-    console.log(`roomID : ${roomID}`);
-    console.log(`userID : ${userID}`);
-    console.log('--------------------------------------------');
-
     rooms.findOne({'roomID': roomID}, (err, result) => {
-        if (err) res.status(202);
-
+        if (err) res.status(403).json({message: err});
         // console.log(result);
         res.status(200).json(result);
     });
 
-    // 확인 안한 메시지 0 개로 맞춤
-    users.findOneAndUpdate({'id': userID, 'rooms.roomID': roomID}, {$set: {'rooms.$.uncheckedMsg': 0}})
-        .then(
-            (result) => {
-                // console.log(result);
-            }
-        )
-        .catch(
-            (err) => {
-                console.log(err);
-            }
-        )
 
-
-    const onError = (err) => {
-        console.log(err.message);
-        res.status(403).json({
-            complete: false,
-            message: err.message
-        })
-    }
-
-    const respond = () => {
-        res.status(200).json({chatRooms: ret});
-    }
-
-
-
-
-
-}
+};
 
 exports.sendMsg = (req, res) => {
     console.log(req.body);
+
     let msg = req.body.msg;
-    let sender = req.body.sender;
+    let sender = req.decoded.userID; // 토큰 해독한 값
     let receiver = req.body.receiver;
+
     let created = req.body.created;
-    let roomID = '';
+    let roomID = req.body.roomID;
     let user1Nickname = '';
     let user2Nickname = '';
+
+    if(receiver === undefined){
+        receiver = (sender === req.body.user1ID)? req.body.user2: req.body.user1
+    }
+
+
 
     console.log('--------------받은 값-------------');
     console.log('msg: ' + msg);
@@ -253,7 +214,6 @@ exports.sendMsg = (req, res) => {
                     reject(new Error('잠시 후 다시 시도해 주십시오'));
                 })
         });
-
     };
 
     /**

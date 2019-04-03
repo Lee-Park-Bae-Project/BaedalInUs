@@ -38,7 +38,6 @@
           userID: this.$store.getters.getUserID
         },
         chatRooms: [
-
             // sender: '',
             // message: '',
             // updated: '',
@@ -79,6 +78,7 @@
           })
       },
       selectChatRoom:function(room){
+        console.log('--------------------------' + room.roomID);
         this.$router.push(`/chatroom/${room.roomID}`); // 유저목록 페이지로 보내줌
       },
       busUpdateSumOfUncheckedMsg:function(newVal){
